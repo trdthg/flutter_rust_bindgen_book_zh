@@ -134,21 +134,22 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="concurrency"><a class="header" href="#concurrency">Concurrency</a></h1>
-<p>Multiple Rust functions can be running at the same time, and they will be running concurrently. This is because by default we use a thread pool to execute the Rust functions. However, you can fully customize this behavior (and even throw away the thread pool).</p>
-<h2 id="example"><a class="header" href="#example">Example</a></h2>
-<p>Consider the following Rust code:</p>
+                        <h1 id="并发"><a class="header" href="#并发">并发</a></h1>
+<p>多个 Rust 函数能够同时运行，它们会并发的运行。因为我们默认会使用一个线程池去执行 Rust
+代码。但是，你可以完全自定义这里的行为（甚至是完全舍弃线程池）。</p>
+<h2 id="示例"><a class="header" href="#示例">示例</a></h2>
+<p>看一下下面的例子：</p>
 <pre><code class="language-rust noplayground">pub fn compute() {
   thread::sleep(Duration::from_millis(1000));
 }
 </code></pre>
-<p>And the following Dart code using it:</p>
+<p>下面的 Dart 代码使用了它：</p>
 <pre><code class="language-dart">var a = compute();
 var b = compute();
 var c = compute();
-await Future.wait([a, b, c]); // You may need to learn `Future` and `async` in Dart to understand this
+await Future.wait([a, b, c]); // 你可能需要提前学习 Dart 中的 `Future` and `async` 读懂这行代码
 </code></pre>
-<p>Then it will take 1 second instead of 3 seconds to complete the code, because multiple <code>compute</code> can run concurrently.</p>
+<p>总体运行时间是 1s 而不是 3s，因为多个 <code>compute</code> 函数是并发执行的。</p>
 
                     </main>
 

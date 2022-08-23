@@ -134,10 +134,12 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="synchronous-in-dart"><a class="header" href="#synchronous-in-dart">Synchronous in Dart</a></h1>
-<p>If you really need to generate synchronous functions in Dart, you can use the <code>SyncReturn&lt;Vec&lt;u8&gt;&gt;</code> as the return type.</p>
-<p>We suggest only do this for very quick Rust functions, or the Dart UI will be blocked.</p>
-<p>Currently, due to the lack of need, the only type supported is <code>Vec&lt;u8&gt;</code>, and the workaround of using other types is by using a serialization approach such as JSON or Protobuf. Notice that this is <em>only needed</em> in <em>this</em> very tiny part, and 99% of <code>flutter_rust_bridge</code> does not need this bare-matel approach. Moreover, please open an issue if you need other types.</p>
+                        <h1 id="dart-中的同步"><a class="header" href="#dart-中的同步">Dart 中的同步</a></h1>
+<p>如果你真的需要生成同步的 Dart 函数，你可以使用 <code>SyncReturn&lt;Vec&lt;u8&gt;&gt;</code> 作为返回值类型。</p>
+<p>我们建议只在非常快的 Rust 函数上这样做，否则 Dart UI 将被阻塞。</p>
+<p>因为同步 Dart 函数很少使用，所以现在仅支持 <code>Vec&lt;u8&gt;</code> 一种类型，其他类型可以通过序列化实现，例如 JSON 和
+Protobuf。注意，这种方法极少用到，99% 的 <code>flutter_rust_bridge</code> 都不需要使用这种方法。如果你需要其他类型支持，请提交一个
+issue.</p>
 
                     </main>
 
