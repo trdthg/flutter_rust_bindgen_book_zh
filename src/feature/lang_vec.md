@@ -1,28 +1,31 @@
-# Vec and array
+# Vec and 数组
 
 ## `Vec<u8>`, `Vec<i8>`, ...
 
-In Dart, when you want to express a long byte array such as a big image or some binary blob, people normally use `Uint8List` instead of `List<int>` since the former is much performant. `flutter_rust_bridge` takes this into consideration for you. When you have `Vec<u8>` (or `Vec<i8>`, or `Vec<i32>`, etc), it will be translated it into `Uint8List` or its friends.
+在 Dart 中，当你想表达一个长字节数组，例如大图片或一些二进制 blob，人们通常会使用 `Uint8List` 而不是
+`List<int>`，因为前者的性能更好。
+
+`flutter_rust_bridge` 也为你考虑到了这一点。当你使用到 `Vec<u8>`（或
+`Vec<i8>`，`Vec<i32>`，等）时，它将被翻译成 `Uint8List` 或其它类似的结构。
 
 ## `Vec<T>`
 
-When you have normal `Vec<T>` for `T` types other than `u8`, `i8` etc, it will be converted to normal `List<T>`.
+当你使用 `Vec<T>`，并且 T 是 `u8`、`i8` 等以外的类型时，它将被转换成正常的 `List<T>`。
 
 ## `[T; N]`
 
-Since Dart does not have special treatment for static-sized arrays, it is converted to `List<T>` as well.
+由于 Dart 没有对静态大小的数组进行特殊处理，所以它也会被转换为 `List<T>`。
 
-## Example
+## 例子
 
 ```rust,noplayground
 pub fn draw_tree(tree: Vec<TreeNode>) -> Vec<u8> { ... }
 ```
 
-Becomes:
+转换为：
 
 ```Dart
 Future<Uint8List> drawTree({required List<TreeNode> tree});
 ```
 
-Remark: If you are curious about `Future`, have a look at [this](async_dart.md).
-
+注意：如果你对 `Future` 感兴趣，请看 [这里](async_dart.md).

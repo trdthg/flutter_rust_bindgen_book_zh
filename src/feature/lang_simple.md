@@ -1,6 +1,6 @@
-# Simple correspondence
+# 简单的对应关系
 
-Here is a brief glance showing what the code generator can generate (non-exhaustive). Some rows have hyper-links pointing to more detailed explanations.
+下面是一个简短的概览，显示了代码生成器可以生成的内容（并非完备）。有些行附带超链接，里面有更详细的解释。
 
 | Rust                                              | Dart                        |
 | ------------------------------------------------- | --------------------------- |
@@ -20,4 +20,3 @@ Here is a brief glance showing what the code generator can generate (non-exhaust
 | `bool`                                            | `bool`                      |
 | `String`                                          | `String`                    |
 | `()`                                              | `void`                      |
-

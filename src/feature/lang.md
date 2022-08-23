@@ -1,3 +1,3 @@
-# Language translations
+# 语言间转换
 
-In this section, we will show how various language features are translated between Rust and Dart.
+这一部分我们将展示 Rust 和 Dart 语言间的特性是如何转换。

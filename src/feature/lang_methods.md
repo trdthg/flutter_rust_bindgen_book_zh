@@ -1,8 +1,8 @@
-# Methods
+# 方法
 
-There is support for structs with methods. Both static methods, and non-static methods are supported.
+支持带有方法的结构体。包括静态方法和非静态方法。
 
-## Example
+## 示例
 
 ```rust,noplayground
 pub struct SumWith { pub x: u32 }
@@ -13,7 +13,7 @@ impl SumWith {
 }
 ```
 
-Becomes:
+转换为
 
 ```Dart
 class SumWith {
@@ -30,5 +30,4 @@ class SumWith {
 }
 ```
 
-Remark: If you are curious about `Future`, have a look at [this](async_dart.md).
-
+注意：如果你对 `Future` 感兴趣，请看 [这里](async_dart.md).

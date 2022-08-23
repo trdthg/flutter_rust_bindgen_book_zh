@@ -1,10 +1,11 @@
-# External types
+# 外部类型
 
-## Types in other files within the same crate
+## 定义在相同 crate 其他文件中的类型
 
-Imported symbols can be used normally. For example, with `use crate::data::{MyEnum, MyStruct};`, you can use `MyEnum` or `MyStruct` in your code normally.
+`use` 语句可以正常使用。例如：添加 `use crate::data::{MyEnum, MyStruct};`后，你可以正常的使用 `MyEnum` 和
+`MyStruct`。
 
-### Example
+### 示例
 
 ```rust,noplayground
 use crate::data::{MyEnum, MyStruct};
@@ -12,24 +13,28 @@ use crate::data::{MyEnum, MyStruct};
 pub fn use_imported_things(my_struct: MyStruct, my_enum: MyEnum) { ... }
 ```
 
-Becomes:
+转换为：
 
 ```Dart
 // Well it just behaves normally as you expect
 Future<void> useImportedThings({required MyStruct myStruct, required MyEnum myEnum});
 ```
 
-Remark: If you are curious about `Future`, have a look at [this](async_dart.md).
+注意：如果你对 `Future` 感兴趣，请看 [这里](async_dart.md).
 
-## Types in other crates
+## 其他 crate 中的类型
 
-The feature is called "mirroring". In short, you need to define the type again mirroring the external type that you want to use. That definition is only used at code-generation time to tell `flutter_rust_bridge` type information. To see exact grammar, have a look at the example below.
+这个功能被称为 "镜像". 简单来说，对于你想使用的外部类型，你需要重新编写该类型作为镜像。这个镜像只会在代码生成时负责告知
+`flutter_rust_bridge` 所需的类型信息。下面的例子里有详细的语法。
 
-No need to worry whether this breaks the DRY principle, or what happens when you accidentially write down a wrong field. This is because *compile errors will happen* if your mirrored type is not exactly same as the original type.
+不用担心它会打破 DRY (Don’t Repeat Yourself)
+原则，或者是你可能偶然写下一个错误的字段。因为如果镜像和原始类型不完全一致就会导致编译错误。
 
-More information: [#352](https://github.com/fzyzcjy/flutter_rust_bridge/pull/352)
+更多信息： [#352](https://github.com/fzyzcjy/flutter_rust_bridge/pull/352)
 
-When multiple structs have the same fields, you can mirror them *once* using grammar like `#[frb(mirror(FirstStruct, SecondStruct, ThirdStruct))]`. ([#619](https://github.com/fzyzcjy/flutter_rust_bridge/pull/619))
+当多个结构体有相同的字段时，你可以使用下面的语法只镜像一遍。
+`#[frb(mirror(FirstStruct, SecondStruct, ThirdStruct))]`.
+([#619](https://github.com/fzyzcjy/flutter_rust_bridge/pull/619))
 
 ### Example
 
@@ -78,8 +83,7 @@ pub fn is_app_embedded(app_settings: ApplicationSettings) -> bool {
 }
 ```
 
-Another example using one struct to mirror multiple structs:
-
+用一个结构体去镜像多个结构体：
 
 ```rust,noplayground
 // *no* need to do these

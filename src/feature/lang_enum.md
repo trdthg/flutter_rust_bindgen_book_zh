@@ -1,8 +1,10 @@
-# `enum`s
+# 枚举
 
-Rust's `enum` are known to be very expressive and powerful - it allows each enum variant to have different associated data. Dart does not have such things in built-in enums, but no worries - we will automatically translate it into the equivalent using the `freezed` Dart library. The syntax for `freezed` may look a bit strange at the first glance, but please look at [its doc](https://pub.dev/packages/freezed) and see its powerfulness.
+众所周知，Rust 的 `enum` 功能强且表达力强 - 它允许每一个枚举的变体关联不同的数据。Dart 没有内置这种枚举，但是不用担心 - 我们会使用
+Dart 中的 `freezed` 库自动翻译为等价的结构。第一眼看上去，`freezed` 的语法可能看上去很奇怪，但是请阅读一下
+[它的文档](https://pub.dev/packages/freezed), 看看它的强大之处。
 
-## Example
+## 示例
 
 ```rust,noplayground
 pub enum KitchenSink {
@@ -24,7 +26,7 @@ pub enum KitchenSink {
 }
 ```
 
-Becomes:
+转换为：
 
 ```Dart
 @freezed
@@ -54,7 +56,4 @@ class KitchenSink with _$KitchenSink {
 }
 ```
 
-And they are powered with [all functionalities](https://pub.dev/packages/freezed) of `freezed`.
-
-Remark: If you are curious about `Future`, have a look at [this](async_dart.md).
-
+它们由 freezed 中的 [all functionalities](https://pub.dev/packages/freezed) 驱动。

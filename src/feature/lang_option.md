@@ -1,10 +1,12 @@
-# `Option`s
+# Option
 
-Dart has special syntaxs for nullable variables - the `?` symbol, and we translate `Option` into `?` automatically. You may refer to [the official doc](https://dart.dev/null-safety) for more information. 
+Dart 对于可能为空的字段有特殊的语法 - `?`，我们会自动把 `Option` 翻译为 `?`。你可以查看
+[官方文档](https://dart.dev/null-safety) 了解更多。
 
-In addition, `flutter_rust_bridge` also understands the `required` keyword in Dart: If an argument is not-null, it is marked as `required` since you have to provide a value. On the other hand, if it is nullable, no `required` is needed since by Dart's convention a null is there in absence of manually providing a value.
+此外，`flutter_rust_bridge` 也能够处理 Dart 中的 `required` 关键字：如果一个参数不能为空，它就会被标记为
+`required`，同时你必须提供一个值。如果它可以为空，那就不需要 `required`，Dart 的惯例是默认为 null。
 
-## Example
+## 示例
 
 ```rust,noplayground
 pub struct Element {
@@ -17,7 +19,7 @@ pub struct Element {
 pub fn parse(mode: String, document: Option<String>) -> Option<Element> { ... }
 ```
 
-Becomes:
+转换为：
 
 ```Dart
 Future<Element?> handleOptionalStruct({required String mode, String? document});
@@ -31,5 +33,4 @@ class Element {
 }
 ```
 
-Remark: If you are curious about `Future`, have a look at [this](async_dart.md).
-
+注意：如果你对 `Future` 感兴趣，请看 [这里](async_dart.md).
