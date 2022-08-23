@@ -1,6 +1,7 @@
-# Run in `build.rs`
+# 在 `build.rs` 中运行
 
-There are basically two approaches to execute the code generator. The first and most evident approach is to directly execute the `flutter_rust_bridge` in command line.
+执行代码生成器有两种方法。第一种也是最明显的方法是直接在命令行中执行 `flutter_rust_bridge`。
 
-The second approach is to integrate it into `build.rs` of your project. With this approach, the code generator is automatically triggered whenever you build your Rust project. For example configuration, have a look at this [build.rs](https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/frb_example/pure_dart/rust/build.rs) file.
-
+另一种方法时集成到 `build.rs` 里。通过这种方法，代码生成器会在编译 Rust 项目时自动触发。更多信息请看
+[build.rs](https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/frb_example/pure_dart/rust/build.rs)
+文件。

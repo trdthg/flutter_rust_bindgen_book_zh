@@ -1,11 +1,15 @@
-# Asynchronous in Dart
+# Dart 中的异步
 
-This library generates functions that are *asynchronous* in Dart by default. So you will see `fn f(..) -> String` 转换为 `Future<String> f(..)` with that interesting `Future`.
+默认情况下，生成的代码都是异步的。所以 `fn f(..) -> String` 将被转换为 `Future<String> f(..)`，多了一个
+`Future`。
 
-Why? Flutter UI is single-threaded. If you use the intuitive synchronous approach, just like what you will (have to) do with plain-old Flutter bindings, your UI will be *stuck* as long as your Rust code is executing. If your Rust code run for 100ms for a heavy computation, your UI will fully freeze for 100ms and the users will not be happy.
+为什么？Flutter UI 是单线程的。如果你使用同步方法（一些老的 binding 就是这样的），在 Rust 代码执行时，UI 渲染将被阻塞。如果你的
+Rust 代码进行一次复杂运算需要耗时 100ms，那么你的 UI 就会完全冻结 100ms，用户就不乐意了 😡。
 
-On the other hand, with the generated asynchronous bindings in Dart, you can simply call functions directly in main isolate (thread) of Dart/Flutter, and Rust code will not block the Flutter UI.
+另一方面，有了生成的异步 Dart 绑定，你就可以在 Dart/Flutter 的主隔离区直接调用，Rust 代码不会阻塞 Flutter UI。
 
-Indeed async and `Future`s is almost everywhere in Flutter/Dart, and it has very good built-in support. So no worries about it ;)
+async 和 `Future` 在 Flutter/Dart 中几乎无处不在，并且有着非常好的内部支持，完全不用担心 :D。
 
-Remark: A common mistake is to call Rust code in *another* Dart isolate (i.e. "thread") instead of the main isolate. That is completely not needed, and will only make your life harder. As is described above, even if your Rust code computes for 100ms, the async call will only take, say, 0.1ms, and will not block your UI.
+注意：一个常见的误解是在 Dart 的其他隔离区调用 Rust 代码（例如
+"线程"），而不是主隔离区。这是完全没必要的，只会徒增你的心智负担。如上所述，即使你的 Rust 只用 100ms 就能完成，async 也只需要花费 0.1
+ms，并且不会阻塞你的 UI。

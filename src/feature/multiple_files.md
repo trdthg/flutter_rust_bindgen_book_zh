@@ -1,8 +1,9 @@
-# Multiple files
+# 多文件
 
-When having a large project, it is often insufficient to put everything in a single `api.rs`, but instead we may want to separate it into `api_of_one_module.rs`, `api_of_another_module.rs`, etc. That is why we have this feature.
+在大型项目中，把所有的文件都放在一个 `api.rs` 是不够的，我们通常想把它分离到 `api_of_one_module.rs`,
+`api_of_another_module.rs` 等多个文件里。
 
-Basically, just specify all input Rust files and all output locations and we are done. Here is an example:
+你只需要指定所有的 Rust 输入文件以及输出位置即可，这里有一个例子：
 
 ```shell
 flutter_rust_bridge_codegen \
@@ -12,5 +13,4 @@ flutter_rust_bridge_codegen \
   --rust-output generated_api_1 generated_api_2
 ```
 
-For more details, have a look at [this article](../article/generate_multiple_files.md).
-
+更多信息在 [这篇文章](../article/generate_multiple_files.md)。

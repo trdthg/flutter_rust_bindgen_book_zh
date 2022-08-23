@@ -1,4 +1,4 @@
-# Initialization
+# 初始化
 
-If you want that feature, have a look at `FlutterRustBridgeSetupMixin` in the Dart side. (More documentaions to be added; you can create an issue if you have questions now.)
-
+如果你需要这个特性，去看一下 Flutter 侧的 `FlutterRustBridgeSetupMixin` （文档尚未完成，如果你有问题，记得创建一个
+issue）。

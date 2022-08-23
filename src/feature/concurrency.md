@@ -1,10 +1,11 @@
-# Concurrency
+# 并发
 
-Multiple Rust functions can be running at the same time, and they will be running concurrently. This is because by default we use a thread pool to execute the Rust functions. However, you can fully customize this behavior (and even throw away the thread pool).
+多个 Rust 函数能够同时运行，它们会并发的运行。因为我们默认会使用一个线程池去执行 Rust
+代码。但是，你可以完全自定义这里的行为（甚至是完全舍弃线程池）。
 
-## Example
+## 示例
 
-Consider the following Rust code:
+看一下下面的例子：
 
 ```rust,noplayground
 pub fn compute() {
@@ -12,13 +13,13 @@ pub fn compute() {
 }
 ```
 
-And the following Dart code using it:
+下面的 Dart 代码使用了它：
 
 ```dart
 var a = compute();
 var b = compute();
 var c = compute();
-await Future.wait([a, b, c]); // You may need to learn `Future` and `async` in Dart to understand this
+await Future.wait([a, b, c]); // 你可能需要提前学习 Dart 中的 `Future` and `async` 读懂这行代码
 ```
 
-Then it will take 1 second instead of 3 seconds to complete the code, because multiple `compute` can run concurrently.
+总体运行时间是 1s 而不是 3s，因为多个 `compute` 函数是并发执行的。

@@ -1,10 +1,12 @@
 # Handler
 
-By default, the `DefaultHandler` is used. You can implement your own `Handler` doing whatever you want. In order to do this, create a variable named `FLUTTER_RUST_BRIDGE_HANDLER` in the Rust input file (probably using `lazy_static`). You may not need to create a brand new struct implementing `Handler`, but instead, use the `SimpleHandler` and customize its generic arguments such as its `Executor`.
+默认情况下，frb 使用 `DefaultHandler`，你可以实现你自己的 `Handler` 做你想做的事情。首先，你需要在 Rust 文件中创建一个名为
+`FLUTTER_RUST_BRIDGE_HANDLER` 的变量（可能会用到 `lazy_static`）。接着，你不一定需要创建一个新的实现了
+`Handler` 的结构体，只需要利用现有的 `SimpleHandler`，并自定义它的泛型参数，例如`Executor`。
 
-## Examples
+## 示例
 
-### Example: Report errors to your backend in addition to telling Dart
+### Example: 除了 Dart 之外，同时向你的后端报告错误
 
 ```rust,noplayground
 pub struct MyErrorHandler(ReportDartErrorHandler);
@@ -14,12 +16,12 @@ impl ErrorHandler for MyErrorHandler {
         send_error_to_your_backend(&error);
         self.0.handle_error(port, error)
     }
-    
+
     ...
 }
 ```
 
-### Example: Log when execution starts and ends
+### Example: 记录执行开始和结束的时间
 
 ```rust,noplayground
 pub struct MyExecutor(ThreadPoolExecutor<MyErrorHandler>);
@@ -44,4 +46,3 @@ impl MyExecutor {
     }
 }
 ```
-

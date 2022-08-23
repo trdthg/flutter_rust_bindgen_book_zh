@@ -1,5 +1,6 @@
-# Object pools
+# 对象池
 
-When there are some big objects in the Rust side, you may not want to copy them between Rust and Dart over and over again. That is when object pools become useful: You only pass around a "object handle" (indeed just a few integers) between Rust and Dart, and the Rust side will convert that handle from and to the real object.
+当你的 Rust 侧有一些大型的对象时，你可能不想让它在 Rust 和 Dart 之间反复复制。这是，对象池就派上用场了：你只需要在 Rust 和 Dart
+之间传递一个 "对象句柄"（实际上只是几个整数），Rust 侧会把这个句柄转换为真实的对象。
 
-Installation: Same as [cancelable tasks](cancelable_task.md), please see doc there.
+安装：和 [cancelable tasks](cancelable_task.md) 一样，请查看文档。

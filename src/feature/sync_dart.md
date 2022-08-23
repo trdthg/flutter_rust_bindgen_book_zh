@@ -1,7 +1,9 @@
-# Synchronous in Dart
+# Dart 中的同步
 
-If you really need to generate synchronous functions in Dart, you can use the `SyncReturn<Vec<u8>>` as the return type.
+如果你真的需要生成同步的 Dart 函数，你可以使用 `SyncReturn<Vec<u8>>` 作为返回值类型。
 
-We suggest only do this for very quick Rust functions, or the Dart UI will be blocked.
+我们建议只在非常快的 Rust 函数上这样做，否则 Dart UI 将被阻塞。
 
-Currently, due to the lack of need, the only type supported is `Vec<u8>`, and the workaround of using other types is by using a serialization approach such as JSON or Protobuf. Notice that this is *only needed* in *this* very tiny part, and 99% of `flutter_rust_bridge` does not need this bare-matel approach. Moreover, please open an issue if you need other types.
+因为同步 Dart 函数很少使用，所以现在仅支持 `Vec<u8>` 一种类型，其他类型可以通过序列化实现，例如 JSON 和
+Protobuf。注意，这种方法极少用到，99% 的 `flutter_rust_bridge` 都不需要使用这种方法。如果你需要其他类型支持，请提交一个
+issue.
