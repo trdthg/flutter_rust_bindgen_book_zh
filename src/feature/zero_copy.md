@@ -1,6 +1,7 @@
 # Zero copy
 
-`ZeroCopyBuffer<Vec<u8>>` (and its friends like `ZeroCopyBuffer<Vec<i8>>`) sends the data from Rust to Dart without making copies. Thus, you save the time of copying data, which can be large if your data is big (such as a high-resolution image).
+`ZeroCopyBuffer<Vec<u8>>` (以及与它类似的东西，比如 `ZeroCopyBuffer<Vec<i8>>`) 可以无需拷贝将数据从
+Rust 发送到 Dart. 因此，可以节约拷贝数据的开销，如果你的数据很大（比如一张高分辨率图像），开销可能会很高。
 
 ## Example
 
@@ -8,12 +9,12 @@
 pub fn draw_tree(tree: Vec<TreeNode>) -> ZeroCopyBuffer<Vec<u8>> { ... }
 ```
 
-Becomes:
+转换为：
 
 ```Dart
 Future<Uint8List> drawTree({required List<TreeNode> tree});
 ```
 
-The generated Dart code looks exactly the same as the case without `ZeroCopyBuffer`. However, the internal implementation changes and there is no memory copy at all!
+生成的 Dart 代码看起来和没有用 `ZeroCopyBuffer` 的几乎一样。但是它的内部实现已经改变，完全不需要内存拷贝！
 
-Remark: If you are curious about `Future`, have a look at [this](async_dart.md).
+注意：如果你对 `Future` 感兴趣，请看 [这里](async_dart.md).
