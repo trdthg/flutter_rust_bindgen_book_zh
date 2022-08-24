@@ -975,18 +975,17 @@ issue）。</p>
 <p>生成的 <code>bridge_generated.dart</code> 文件默认情况下会包含 API 的定义和实现。在生成时，加上 <code>--dart-decl-output</code>
 参数，它们就会被分开，并且定义中不会包含任何类似于 <code>dart:ffi</code> 的东西。</p>
 <p>更多信息：<a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/298">#298</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="create-new-projects-from-a-template"><a class="header" href="#create-new-projects-from-a-template">Create new projects from a template</a></h1>
-<p>In this chapter, we are going to use create your own project from a code template. It seems a bit long, but it is just because we have tried to describe <em>every detail</em> that you may encounter.</p>
-<p><strong>Remark:</strong> Most complexity does <em>not</em> come from this library, <code>flutter_rust_bridge</code> - it is as same complex as using raw Dart/Flutter FFI with Rust. In other words, it is the Dart/Flutter + Rust toolchain that takes time to set up.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="creating-a-new-project"><a class="header" href="#creating-a-new-project">Creating a new project</a></h1>
-<p>Start by creating a repository using the template from <a href="https://github.com/Desdaemon/flutter_rust_bridge_template">flutter_rust_bridge_template</a>
-and cloning it. This template is set up to be able to <code>flutter run</code> for most platforms
-that Flutter supports.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="android-setup"><a class="header" href="#android-setup">Android setup</a></h1>
-<p>For Android, a few components are required to get started:</p>
-<h2 id="rust-targets"><a class="header" href="#rust-targets">Rust targets</a></h2>
-<p>If you have not already done so, cross-compiling to Android requires some additional
-targets which can easily be added:</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="从模板创建新项目"><a class="header" href="#从模板创建新项目">从模板创建新项目</a></h1>
+<p>在这一章里，我们将从模板创建你自己的项目。看起来有点长，但是这只是因为我们想讲清楚你可能遇到的每个细节。</p>
+<p><strong>注意:</strong> 虽然过程很复杂，但是绝大多数原因都不是来源于该库本身，因为它和使用原始的 Rust/Flutter FFI 一样复杂。换句话说，是建立
+Dart/Flutter + Rust 工具链需要费些时间。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="创建一个新项目"><a class="header" href="#创建一个新项目">创建一个新项目</a></h1>
+<p>首先使用 <a href="https://github.com/Desdaemon/flutter_rust_bridge_template">flutter_rust_bridge_template</a> 的模板创建一个仓库。这个模板在大多数 Flutter 支持的平台应该可以通过
+<code>flutter run</code> 直接运行。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="安卓设置"><a class="header" href="#安卓设置">安卓设置</a></h1>
+<p>对于安卓平台，你需要安装一部分组件：</p>
+<h2 id="rust-编译目标"><a class="header" href="#rust-编译目标">Rust 编译目标</a></h2>
+<p>交叉编译到安卓需要一些额外的组件，你可以通过下面的命令安装：</p>
 <pre><code class="language-shell">rustup target add \
     aarch64-linux-android \
     armv7-linux-androideabi \
@@ -994,50 +993,58 @@ targets which can easily be added:</p>
     i686-linux-android
 </code></pre>
 <h2 id="jdk-8"><a class="header" href="#jdk-8">JDK 8</a></h2>
-<p>Android Studio depends on the <code>javax</code> library being present in the Java runtime, and the only reliable way to ensure this is to install an older version of Java. On Unix-like systems, you can use <a href="https://asdf-vm.com/">asdf</a> or similar tools to manage your Java versions, and the template defines a known working version of Java in the <code>.tool-versions</code> file.</p>
-<h2 id="android-ndk"><a class="header" href="#android-ndk">Android NDK</a></h2>
+<p>Android Studio 依赖于 <code>javax</code> 库存在于 Java 运行时，验证安装成功的唯一可靠的方法是安装一个老版本的 Java。在类 Unix
+系统上，你可以使用 <a href="https://asdf-vm.com/">asdf</a> 或者类似的工具去管理你的 Java 版本。模板在 <code>.tool-versions</code>
+文件中定义了一个已知的可以正常运行的 Java 版本。</p>
 <blockquote>
-<p>Android Studio &gt; SDK Manager &gt; SDK Tools &gt; uncheck Hide Obsolete Packages &gt; NDK (version 22)</p>
+<p>译者注：<code>.tool-versions</code> 是 asdf 的配置文件</p>
 </blockquote>
-<p>The <a href="https://developer.android.com/ndk">Android NDK</a>, or Native Development Kit, enables code written in other
-languages to be run on the JVM via the <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/jniTOC.html">Java Native Interface</a>, or JNI for short. In this case, we would like to pass the dynamic libraries created by Cargo to be included in the bundle when we run or build the project.</p>
-<p>After following the instructions above, the NDK should be installed in your <code>$ANDROID_SDK_HOME/ndk</code> folder, where ANDROID_SDK_HOME usually is:</p>
+<h2 id="android-ndk"><a class="header" href="#android-ndk"><a href="https://developer.android.com/ndk">Android NDK</a></a></h2>
+<p>安装：</p>
+<blockquote>
+<p>Android Studio &gt; SDK Manager &gt; SDK Tools &gt; uncheck Hide Obsolete Packages &gt;
+NDK (version 22)</p>
+</blockquote>
+<blockquote>
+<p>译者注：用户也可以不下载 Android Studio，直接通过 sdkmanager 在命令行安装。</p>
+</blockquote>
+<p><a href="https://developer.android.com/ndk">Android NDK</a>, 或者说 Native Development Kit, 确保了使用其他语言编写的代码可以通过 JNI 或者说
+<a href="https://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/jniTOC.html">Java Native Interface</a> 运行在 JVM 上。我们会将 Cargo 创建的动态连接库和项目的打包结果打包在一起。</p>
+<p>跟着上面的步骤，你应该会把 NDK 安装到了 <code>$ANDROID_SDK_HOME/ndk</code> 文件夹，ANDROID_SDK_HOME 通常是：</p>
 <ul>
-<li>on Windows: <code>%APPDATA%\Local\Android\sdk</code></li>
-<li>on MacOS: <code>~/Library/Android/sdk</code></li>
-<li>on Linux: set via the environment variable ANDROID_SDK_HOME, or <code>~/Android/sdk</code></li>
+<li>Windows: <code>%APPDATA%\Local\Android\sdk</code></li>
+<li>MacOS: <code>~/Library/Android/sdk</code></li>
+<li>Linux: 通过设置环境变量 ANDROID_SDK_HOME, 或者 <code>~/Android/sdk</code></li>
 </ul>
-<p><a href="https://github.com/rust-lang/rust/pull/85806">An issue</a> regarding building Rust's <code>core</code> library against the latest NDK means that as of writing only NDK versions 22 and older can be used.</p>
-<h2 id="android_ndk-gradle-property"><a class="header" href="#android_ndk-gradle-property"><code>ANDROID_NDK</code> Gradle property</a></h2>
+<p><a href="https://github.com/rust-lang/rust/pull/85806">An issue</a> 在构建 Rust <code>core</code> 库时，只有 NDK 22 和更早版本可以使用。</p>
+<h2 id="android_ndk-gradle-配置"><a class="header" href="#android_ndk-gradle-配置"><code>ANDROID_NDK</code> Gradle 配置</a></h2>
 <pre><code class="language-shell">echo &quot;ANDROID_NDK=(path to NDK)&quot; &gt;&gt; ~/.gradle/gradle.properties
 </code></pre>
-<p>Next, you need to make this NDK visible to Gradle. The way to do this depends on your current system and is unlikely to be portable, but generally you can add a <code>gradle.properties</code> in your <code>~/.gradle</code> folder like this:</p>
+<p>下一步，你需要设置 NDK 对 Gradle 可见。根据你的系统有不同的设置方法，但是一般都可以在 <code>~/.gradle/gradle.properties</code>
+里配置以下内容：</p>
 <pre><code>ANDROID_NDK=(path to NDK)
 </code></pre>
-<p>or edit one of the <code>gradle.properties</code> that resides within the <code>android</code> folder.</p>
+<p>或者是修改当前项目文件夹，android 目录里的同名文件。</p>
 <h2 id="cargo-ndk"><a class="header" href="#cargo-ndk"><a href="https://github.com/bbqsrc/cargo-ndk">cargo-ndk</a></a></h2>
 <pre><code class="language-shell">cargo install cargo-ndk --version 2.6.0
 </code></pre>
-<p><a href="https://github.com/bbqsrc/cargo-ndk">cargo-ndk</a> is a Cargo plugin for compiling code suitable for plugging into
-the JNI without additional configuration. Run the above command to install.
-Version 2.7.0 of cargo-ndk introduced changes that breaked support for NDK
-version 22 so 2.6.0 must be used for now.</p>
-<h2 id="alternative-ndk-setup"><a class="header" href="#alternative-ndk-setup">Alternative NDK setup</a></h2>
-<p>You can alternatively use the latest version of the Android NDK which is greater than 22.
-However, this requires a hack to prevent the <a href="https://github.com/bbqsrc/cargo-ndk/issues/22">unable to find library -lgcc error</a>.</p>
+<p><a href="https://github.com/bbqsrc/cargo-ndk">cargo-ndk</a> 是一个 cargo 插件，它能够将代码编译到适合的 JNI 而不需要额外的配置。运行上述命令进行安装。cargo-ndk 2.7.0
+版本引入了一些变化，破坏了对 NDK 22 版本的支持，所以 目前必须使用 2.6.0。</p>
+<h2 id="可选的-ndk-设置"><a class="header" href="#可选的-ndk-设置">可选的 NDK 设置</a></h2>
+<p>你也可以选择最新版本的 NDK，它比 22 版本要好。但是你需要 Hack
+部分代码去解决一个报错：<a href="https://github.com/bbqsrc/cargo-ndk/issues/22">unable to find library -lgcc error</a>.</p>
 <h3 id="android-ndk-1"><a class="header" href="#android-ndk-1">Android NDK</a></h3>
-<p>Install the latest NDK:</p>
+<p>安装最新版本的 NDK:</p>
 <blockquote>
 <p>Android Studio &gt; SDK Manager &gt; SDK Tools &gt; NDK (Side by side)</p>
 </blockquote>
-<p>Click on OK at the bottom right corner to start the installation.</p>
 <h3 id="cargo-ndk-1"><a class="header" href="#cargo-ndk-1"><a href="https://github.com/bbqsrc/cargo-ndk">cargo-ndk</a></a></h3>
-<p>You should install <code>cargo-ndk</code> version 2.7.0 or above which works for
-Android NDK versions greater than 22.</p>
+<p>如果你使用的是版本高于 22 的 NDK，那么你需要 <code>cargo-ndk</code> 2.7.0 或者更新版本。</p>
 <pre><code>cargo install cargo-ndk --version ^2.7.0
 </code></pre>
-<p>A workaround may be under development in the cargo-ndk project. Until it is finished,
-you need to manually create four text files to redirect calls from libgcc to libunwind (<a href="https://github.com/rust-lang/rust/pull/85806#issuecomment-1096266946">reference</a>):</p>
+<p>A workaround may be under development in the cargo-ndk project. Until it is
+finished, you need to manually create four text files to redirect calls from
+libgcc to libunwind (<a href="https://github.com/rust-lang/rust/pull/85806#issuecomment-1096266946">reference</a>):</p>
 <ol>
 <li>
 <p>Find out all the 4 folders containing file <code>libunwind.a</code>.</p>
@@ -1053,29 +1060,33 @@ you need to manually create four text files to redirect calls from libgcc to lib
 </code></pre>
 </li>
 </ul>
-<p>The three other folders end with <code>aarch64</code>, <code>arm</code>,    <code>i386</code> instead of <code>x86_64</code>.</p>
+<p>The three other folders end with <code>aarch64</code>, <code>arm</code>, <code>i386</code> instead of
+<code>x86_64</code>.</p>
 </li>
 <li>
-<p>Create 4 text files named <code>libgcc.a</code> in the four folders mentioned above with this contents</p>
+<p>Create 4 text files named <code>libgcc.a</code> in the four folders mentioned above with
+this contents</p>
 <pre><code>INPUT(-lunwind)
 </code></pre>
 </li>
 </ol>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="ios-setup"><a class="header" href="#ios-setup">iOS setup</a></h1>
-<p>iOS requires some additional Rust targets for cross-compilation:</p>
-<pre><code class="language-bash"># 64 bit targets (real device &amp; simulator):
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ios-设置"><a class="header" href="#ios-设置">iOS 设置</a></h1>
+<p>iOS 需要一些额外的交叉编译目标：</p>
+<pre><code class="language-bash"># 64 bit targets (真机 &amp; 模拟器):
 rustup target add aarch64-apple-ios x86_64-apple-ios
 # New simulator target for Xcode 12 and later
 rustup target add aarch64-apple-ios-sim
-# 32 bit targets (you probably don't need these):
+# 32 bit targets (你应该不需要这个):
 rustup target add armv7-apple-ios i386-apple-ios
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="web-setup"><a class="header" href="#web-setup">Web setup</a></h1>
-<p>As of writing, Web support is underway and tracked by <a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/315">fzyzcjy/flutter_rust_bridge#315</a>.
-Consider leaving comments and reactions to let us know of the demand for this feature!</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="windows-and-linux"><a class="header" href="#windows-and-linux">Windows and Linux</a></h1>
-<p>Windows and Linux share the same build system (CMake), making setup for these two
-platforms the easiest even from scratch. The template uses <a href="https://github.com/corrosion-rs/corrosion">Corrosion</a> to expedite the process, which has to clone and initialize the builder first. If you are running builds continuously, it might be a good idea to follow <a href="https://github.com/corrosion-rs/corrosion#installation">this guide</a> to learn how to install <a href="https://github.com/corrosion-rs/corrosion">Corrosion</a> permanently onto your system. Once that's done, go ahead and modify <code>rust.cmake</code> in <code>windows</code> and <code>linux</code>:</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="web-设置"><a class="header" href="#web-设置">Web 设置</a></h1>
+<p>目前为止，Web 支持尚未完成
+<a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/315">fzyzcjy/flutter_rust_bridge#315</a>。</p>
+<p>考虑一下评论或者建议让我们了解您对该功能的需求！</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="windows-和-linux"><a class="header" href="#windows-和-linux">Windows 和 Linux</a></h1>
+<p>Windows 和 Linux 共享同一套编译系统（CMake），从零开始设置这两个平台也非常简单。模板该模板使用到了 <a href="https://github.com/corrosion-rs/corrosion">Corrosion</a>
+库来加快这一过程，安装 Corrosion 需要先克隆代码，并初始化。跟着 <a href="https://github.com/corrosion-rs/corrosion#installation">本指南</a> 学习如何将 <a href="https://github.com/corrosion-rs/corrosion">Corrosion</a>
+安装到你的系统上。安装完成后，请继续修改 <code>rust.cmake</code>。</p>
 <pre><code class="language-diff">-# find_package(Corrosion REQUIRED)
 +find_package(Corrosion REQUIRED)
 
@@ -1090,22 +1101,21 @@ platforms the easiest even from scratch. The template uses <a href="https://gith
 -FetchContent_MakeAvailable(Corrosion)
 </code></pre>
 <h2 id="troubleshooting-cmake-on-linux"><a class="header" href="#troubleshooting-cmake-on-linux">Troubleshooting: CMake on Linux</a></h2>
-<p>The minimum version of CMake required to use <a href="https://github.com/corrosion-rs/corrosion">Corrosion</a> is 3.12, which is not the version set
-by default in <code>CMakeLists.txt</code>. You will need to modify this line in <code>linux/CMakeLists.txt</code>:</p>
+<p><a href="https://github.com/corrosion-rs/corrosion">Corrosion</a> 对 CMake 的最低版本需求是 3.12，这不是 <code>CMakeLists.txt</code> 的默认版本。所以你需要手动修改
+<code>linux/CMakeLists.txt</code>:</p>
 <pre><code class="language-diff">-cmake_minimum_required(VERSION 3.10)
 +cmake_minimum_required(VERSION 3.12)
 </code></pre>
-<p>However, this has a separate issue of disallowing Flutter SDK installations via Snap to build,
-as these are bundled with a non-upgradeable CMake 3.10. If possible, it is recommended to install
-Flutter manually using the command line. This issue may be resolved once
-<a href="https://github.com/canonical/flutter-snap/pull/61">canonical/flutter-snap#61</a> lands.</p>
-<p>A workaround is to ignore <code>rust.cmake</code> and manually configure CMake to build and bundle the Rust library, as suggested by
-<a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/318#issuecomment-1038751426">this comment</a>
-in the case of Flutter on ARM Linux.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="other-platforms"><a class="header" href="#other-platforms">Other platforms</a></h1>
-<p>For all remaining platforms, there are no required setup steps to take, apart from those listed in <a href="https://docs.flutter.dev/desktop">Desktop support for Flutter</a>. If you need to check your progress, run <code>flutter doctor -v</code> and it will display the status of your toolchain and any actionable steps. The rest of this page
-documents additional hints for each of the platforms that might be useful for newcomers to
-Flutter and/or Rust.</p>
+<p>但是它带来了另一个问题，它不允许你通过 Flutter SDK 通过 Snap 构建，因为他的构建过程和 CMake 3.10
+绑定。可能的话，建议使用命令行手动安装
+Flutter。<a href="https://github.com/canonical/flutter-snap/pull/61">canonical/flutter-snap#61</a>
+地。</p>
+<p>一个变通的方法是忽略 <code>rust.cmake</code> 并手动配置 CMake 来构建和捆绑 Rust 库。例如
+<a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/318#issuecomment-1038751426">本评论</a>
+是在 ARM Linux 上使用 Flutter。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="其他平台"><a class="header" href="#其他平台">其他平台</a></h1>
+<p>对于所有剩下的平台，基本没有需要设置的步骤。除了在下面列表中标注的。<a href="https://docs.flutter.dev/desktop">Desktop support for Flutter</a>。如果你要查看当前进展，运行
+<code>flutter -v</code> 它会显示你的工具链的状态和任何可操作的步骤。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="template-tour"><a class="header" href="#template-tour">Template tour</a></h1>
 <p><img src="template/success.png" alt="success-screen" /></p>
 <p>Congratulations! 🎉 You should have a working Flutter app equipped with

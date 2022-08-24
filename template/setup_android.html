@@ -134,11 +134,10 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="android-setup"><a class="header" href="#android-setup">Android setup</a></h1>
-<p>For Android, a few components are required to get started:</p>
-<h2 id="rust-targets"><a class="header" href="#rust-targets">Rust targets</a></h2>
-<p>If you have not already done so, cross-compiling to Android requires some additional
-targets which can easily be added:</p>
+                        <h1 id="安卓设置"><a class="header" href="#安卓设置">安卓设置</a></h1>
+<p>对于安卓平台，你需要安装一部分组件：</p>
+<h2 id="rust-编译目标"><a class="header" href="#rust-编译目标">Rust 编译目标</a></h2>
+<p>交叉编译到安卓需要一些额外的组件，你可以通过下面的命令安装：</p>
 <pre><code class="language-shell">rustup target add \
     aarch64-linux-android \
     armv7-linux-androideabi \
@@ -146,50 +145,58 @@ targets which can easily be added:</p>
     i686-linux-android
 </code></pre>
 <h2 id="jdk-8"><a class="header" href="#jdk-8">JDK 8</a></h2>
-<p>Android Studio depends on the <code>javax</code> library being present in the Java runtime, and the only reliable way to ensure this is to install an older version of Java. On Unix-like systems, you can use <a href="https://asdf-vm.com/">asdf</a> or similar tools to manage your Java versions, and the template defines a known working version of Java in the <code>.tool-versions</code> file.</p>
-<h2 id="android-ndk"><a class="header" href="#android-ndk">Android NDK</a></h2>
+<p>Android Studio 依赖于 <code>javax</code> 库存在于 Java 运行时，验证安装成功的唯一可靠的方法是安装一个老版本的 Java。在类 Unix
+系统上，你可以使用 <a href="https://asdf-vm.com/">asdf</a> 或者类似的工具去管理你的 Java 版本。模板在 <code>.tool-versions</code>
+文件中定义了一个已知的可以正常运行的 Java 版本。</p>
 <blockquote>
-<p>Android Studio &gt; SDK Manager &gt; SDK Tools &gt; uncheck Hide Obsolete Packages &gt; NDK (version 22)</p>
+<p>译者注：<code>.tool-versions</code> 是 asdf 的配置文件</p>
 </blockquote>
-<p>The <a href="https://developer.android.com/ndk">Android NDK</a>, or Native Development Kit, enables code written in other
-languages to be run on the JVM via the <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/jniTOC.html">Java Native Interface</a>, or JNI for short. In this case, we would like to pass the dynamic libraries created by Cargo to be included in the bundle when we run or build the project.</p>
-<p>After following the instructions above, the NDK should be installed in your <code>$ANDROID_SDK_HOME/ndk</code> folder, where ANDROID_SDK_HOME usually is:</p>
+<h2 id="android-ndk"><a class="header" href="#android-ndk"><a href="https://developer.android.com/ndk">Android NDK</a></a></h2>
+<p>安装：</p>
+<blockquote>
+<p>Android Studio &gt; SDK Manager &gt; SDK Tools &gt; uncheck Hide Obsolete Packages &gt;
+NDK (version 22)</p>
+</blockquote>
+<blockquote>
+<p>译者注：用户也可以不下载 Android Studio，直接通过 sdkmanager 在命令行安装。</p>
+</blockquote>
+<p><a href="https://developer.android.com/ndk">Android NDK</a>, 或者说 Native Development Kit, 确保了使用其他语言编写的代码可以通过 JNI 或者说
+<a href="https://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/jniTOC.html">Java Native Interface</a> 运行在 JVM 上。我们会将 Cargo 创建的动态连接库和项目的打包结果打包在一起。</p>
+<p>跟着上面的步骤，你应该会把 NDK 安装到了 <code>$ANDROID_SDK_HOME/ndk</code> 文件夹，ANDROID_SDK_HOME 通常是：</p>
 <ul>
-<li>on Windows: <code>%APPDATA%\Local\Android\sdk</code></li>
-<li>on MacOS: <code>~/Library/Android/sdk</code></li>
-<li>on Linux: set via the environment variable ANDROID_SDK_HOME, or <code>~/Android/sdk</code></li>
+<li>Windows: <code>%APPDATA%\Local\Android\sdk</code></li>
+<li>MacOS: <code>~/Library/Android/sdk</code></li>
+<li>Linux: 通过设置环境变量 ANDROID_SDK_HOME, 或者 <code>~/Android/sdk</code></li>
 </ul>
-<p><a href="https://github.com/rust-lang/rust/pull/85806">An issue</a> regarding building Rust's <code>core</code> library against the latest NDK means that as of writing only NDK versions 22 and older can be used.</p>
-<h2 id="android_ndk-gradle-property"><a class="header" href="#android_ndk-gradle-property"><code>ANDROID_NDK</code> Gradle property</a></h2>
+<p><a href="https://github.com/rust-lang/rust/pull/85806">An issue</a> 在构建 Rust <code>core</code> 库时，只有 NDK 22 和更早版本可以使用。</p>
+<h2 id="android_ndk-gradle-配置"><a class="header" href="#android_ndk-gradle-配置"><code>ANDROID_NDK</code> Gradle 配置</a></h2>
 <pre><code class="language-shell">echo &quot;ANDROID_NDK=(path to NDK)&quot; &gt;&gt; ~/.gradle/gradle.properties
 </code></pre>
-<p>Next, you need to make this NDK visible to Gradle. The way to do this depends on your current system and is unlikely to be portable, but generally you can add a <code>gradle.properties</code> in your <code>~/.gradle</code> folder like this:</p>
+<p>下一步，你需要设置 NDK 对 Gradle 可见。根据你的系统有不同的设置方法，但是一般都可以在 <code>~/.gradle/gradle.properties</code>
+里配置以下内容：</p>
 <pre><code>ANDROID_NDK=(path to NDK)
 </code></pre>
-<p>or edit one of the <code>gradle.properties</code> that resides within the <code>android</code> folder.</p>
+<p>或者是修改当前项目文件夹，android 目录里的同名文件。</p>
 <h2 id="cargo-ndk"><a class="header" href="#cargo-ndk"><a href="https://github.com/bbqsrc/cargo-ndk">cargo-ndk</a></a></h2>
 <pre><code class="language-shell">cargo install cargo-ndk --version 2.6.0
 </code></pre>
-<p><a href="https://github.com/bbqsrc/cargo-ndk">cargo-ndk</a> is a Cargo plugin for compiling code suitable for plugging into
-the JNI without additional configuration. Run the above command to install.
-Version 2.7.0 of cargo-ndk introduced changes that breaked support for NDK
-version 22 so 2.6.0 must be used for now.</p>
-<h2 id="alternative-ndk-setup"><a class="header" href="#alternative-ndk-setup">Alternative NDK setup</a></h2>
-<p>You can alternatively use the latest version of the Android NDK which is greater than 22.
-However, this requires a hack to prevent the <a href="https://github.com/bbqsrc/cargo-ndk/issues/22">unable to find library -lgcc error</a>.</p>
+<p><a href="https://github.com/bbqsrc/cargo-ndk">cargo-ndk</a> 是一个 cargo 插件，它能够将代码编译到适合的 JNI 而不需要额外的配置。运行上述命令进行安装。cargo-ndk 2.7.0
+版本引入了一些变化，破坏了对 NDK 22 版本的支持，所以 目前必须使用 2.6.0。</p>
+<h2 id="可选的-ndk-设置"><a class="header" href="#可选的-ndk-设置">可选的 NDK 设置</a></h2>
+<p>你也可以选择最新版本的 NDK，它比 22 版本要好。但是你需要 Hack
+部分代码去解决一个报错：<a href="https://github.com/bbqsrc/cargo-ndk/issues/22">unable to find library -lgcc error</a>.</p>
 <h3 id="android-ndk-1"><a class="header" href="#android-ndk-1">Android NDK</a></h3>
-<p>Install the latest NDK:</p>
+<p>安装最新版本的 NDK:</p>
 <blockquote>
 <p>Android Studio &gt; SDK Manager &gt; SDK Tools &gt; NDK (Side by side)</p>
 </blockquote>
-<p>Click on OK at the bottom right corner to start the installation.</p>
 <h3 id="cargo-ndk-1"><a class="header" href="#cargo-ndk-1"><a href="https://github.com/bbqsrc/cargo-ndk">cargo-ndk</a></a></h3>
-<p>You should install <code>cargo-ndk</code> version 2.7.0 or above which works for
-Android NDK versions greater than 22.</p>
+<p>如果你使用的是版本高于 22 的 NDK，那么你需要 <code>cargo-ndk</code> 2.7.0 或者更新版本。</p>
 <pre><code>cargo install cargo-ndk --version ^2.7.0
 </code></pre>
-<p>A workaround may be under development in the cargo-ndk project. Until it is finished,
-you need to manually create four text files to redirect calls from libgcc to libunwind (<a href="https://github.com/rust-lang/rust/pull/85806#issuecomment-1096266946">reference</a>):</p>
+<p>A workaround may be under development in the cargo-ndk project. Until it is
+finished, you need to manually create four text files to redirect calls from
+libgcc to libunwind (<a href="https://github.com/rust-lang/rust/pull/85806#issuecomment-1096266946">reference</a>):</p>
 <ol>
 <li>
 <p>Find out all the 4 folders containing file <code>libunwind.a</code>.</p>
@@ -205,10 +212,12 @@ you need to manually create four text files to redirect calls from libgcc to lib
 </code></pre>
 </li>
 </ul>
-<p>The three other folders end with <code>aarch64</code>, <code>arm</code>,    <code>i386</code> instead of <code>x86_64</code>.</p>
+<p>The three other folders end with <code>aarch64</code>, <code>arm</code>, <code>i386</code> instead of
+<code>x86_64</code>.</p>
 </li>
 <li>
-<p>Create 4 text files named <code>libgcc.a</code> in the four folders mentioned above with this contents</p>
+<p>Create 4 text files named <code>libgcc.a</code> in the four folders mentioned above with
+this contents</p>
 <pre><code>INPUT(-lunwind)
 </code></pre>
 </li>
