@@ -1,9 +1,8 @@
-# Wrapping up
+# 收尾
 
-With our new definition of `Platform` in place, we can rewrite the previous code to make use
-of it! Here is an example of what you can do with freezed enums.
+有了对 "平台" 的新定义，我们可以重写以前的代码去使用它！下面是一个例子，展示了 freezed 枚举的使用技巧。
 
-In `lib/main.dart`:
+在 `lib/main.dart` 里：
 
 ```diff
 - final text = const {
@@ -26,7 +25,7 @@ In `lib/main.dart`:
 + );
 ```
 
-In `native/src/api.rs`:
+在 `native/src/api.rs` 里：
 
 ```diff
      } else if cfg!(target_os = "ios") {
@@ -42,5 +41,4 @@ In `native/src/api.rs`:
      } else if cfg!(unix) {
 ```
 
-When you `flutter run`, you should get something like this:
-![macos-intel](macos_intel.png)
+当你运行 `flutter run` 后，你应该能看到： ![macos-intel](macos_intel.png)

@@ -1,10 +1,8 @@
-# Adding new code
+# 添加新代码
 
-Let's say we need to change `Platform` such that we don't really care about whether it
-is running on Intel or Apple Silicon, but we would like to keep this information so
-downlevel code can act on it. We would like to merge `MacApple` and `MacIntel` into a
-single `MacOs(String)` that contains the current CPU architecture. Go ahead and update
-`native/src/api.rs`:
+我们想要跨平台，因此我们并不关心代码到底是在 Inter 还是 Apple Silicon
+上运行。但是我们需要保留平台信息，以便底层代码能够作出对应的响应。我们可以把 `MacApple` 和 `MacIntel` 归为一个
+`MacOs(String)`，里面包含了当前 CPU 架构。现在更新 `native/src/api.rs`:
 
 ```diff
  pub enum Platform {
@@ -16,13 +14,12 @@ single `MacOs(String)` that contains the current CPU architecture. Go ahead and 
  }
 ```
 
-Now run `just` and see that your binding code now has changed.
+现在运行 `just`，看看生成的绑定代码会如何变化。
 
 ## Troubleshooting: "Please supply one or more path/to/llvm..."
 
-A common issue with `ffigen` is that its detection of the LLVM installation is not reliable
-across platforms. Especially for MacOS and the split between x86-64 and arm64 binaries,
-you might have to modify `justfile` to explicitly point to its location:
+对 LLVM 安装的检测在不同平台上并不可靠。特别是对于 MacOS 和 x86-64 和 arm64 的二进制文件，你可能需要修改 `justfile`
+以明确指向它的位置：
 
 ```
 llvm_path := if os() == "macos" {

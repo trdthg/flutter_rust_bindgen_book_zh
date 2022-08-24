@@ -1,5 +1,6 @@
-# Generating code
+# 代码生成
 
-This section assumes you followed the instructions in [Creating a new project](template.md), and has successfully `flutter run` on your target device.
+这一部分假设您已经跟随 [创建一个新项目](template.md) 成功运行了 `flutter run` 到您的设备上。
 
-Up until now, all the code necessary for executing the program has been supplied for you, so there was no need to install anything. We will now look at how to create new Rust code, generate the necessary glue code and use them in Dart.
+到目前为止，程序运行的所有必要代码都提供给你了，没有额外的东西需要安装。现在我们将注意力集中在如何编写 Rust 代码，生成必要的胶水代码并在 Dart
+中使用。

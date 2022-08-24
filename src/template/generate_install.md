@@ -1,3 +1,3 @@
-# Installing codegen
+# 安装代码生成器
 
-More informations in the [Installing dependencies](../integrate/deps.md) section.
+更多信息在 [安装依赖](../integrate/deps.md) 部分。

@@ -32,7 +32,7 @@ Android Studio 依赖于 `javax` 库存在于 Java 运行时，验证安装成�
 > 译者注：用户也可以不下载 Android Studio，直接通过 sdkmanager 在命令行安装。
 
 [Android NDK], 或者说 Native Development Kit, 确保了使用其他语言编写的代码可以通过 JNI 或者说
-[Java Native Interface] 运行在 JVM 上。我们会将 Cargo 创建的动态连接库和项目的打包结果打包在一起。
+[Java Native Interface] 运行在 JVM 上。我们会把 Cargo 创建的动态连接库和项目的打包结果打包在一起。
 
 跟着上面的步骤，你应该会把 NDK 安装到了 `$ANDROID_SDK_HOME/ndk` 文件夹，ANDROID_SDK_HOME 通常是：
 
@@ -63,8 +63,10 @@ ANDROID_NDK=(path to NDK)
 cargo install cargo-ndk --version 2.6.0
 ```
 
-[cargo-ndk] 是一个 cargo 插件，它能够将代码编译到适合的 JNI 而不需要额外的配置。运行上述命令进行安装。cargo-ndk 2.7.0
-版本引入了一些变化，破坏了对 NDK 22 版本的支持，所以 目前必须使用 2.6.0。
+[cargo-ndk] 是一个 cargo 插件，它能够将代码编译到适合的 JNI 而 typedef DartPostCObjectFnType =
+ffi.Pointer< ffi.NativeFunction<ffi.Bool Function(DartPort,
+ffi.Pointer<ffi.Void>)>>; typedef DartPort = ffi.Int64;c
+不需要额外的配置。运行上述命令进行安装。cargo-ndk 2.7.0 版本引入了一些变化，破坏了对 NDK 22 版本的支持，所以 目前必须使用 2.6.0。
 
 ## 可选的 NDK 设置
 

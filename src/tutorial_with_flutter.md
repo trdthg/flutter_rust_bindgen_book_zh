@@ -21,11 +21,11 @@ Rust 算法生成，并在 Flutter 中绘制，通过这个库通信。
 
 </details>
 
-## 获取代码
+## 获取源代码
 
-请[安装 Flutter](https://flutter.dev/docs/get-started/install) (可以选择
-[桌面支持](https://flutter.dev/desktop)，如果你想把程序运行在桌面上而不是手机),
-[安装 Rust](https://www.rust-lang.org/learn/get-started), 熟悉一下之后，接着克隆样例代码：
+请 [安装 Flutter](https://flutter.dev/docs/get-started/install)
+(如果你想把程序运行在桌面上，可以选择添加 [桌面支持](https://flutter.dev/desktop)),
+[安装 Rust](https://www.rust-lang.org/learn/get-started), 接着克隆样例代码：
 
 ```shell
 git clone https://github.com/fzyzcjy/flutter_rust_bridge && cd flutter_rust_bridge/frb_example/with_flutter
@@ -33,7 +33,7 @@ git clone https://github.com/fzyzcjy/flutter_rust_bridge && cd flutter_rust_brid
 
 ## 可选：运行代码生成器
 
-这一步是可选的，因为我已经在 [快速入门](./quickstart.md) 时生成了源代码，你是你再次运行也不会看到任何改变。
+这一步是可选的，因为我已经在 [快速入门](./quickstart.md) 时生成了源代码，再次运行也不会产生任何改变。
 
 一旦你修改了 `api.rs`，就需要再次运行代码生成。代码生成器所需要的更多依赖可以在
 [Installing dependencies](integrate/deps.md) 查看
@@ -47,8 +47,8 @@ git clone https://github.com/fzyzcjy/flutter_rust_bridge && cd flutter_rust_brid
 `flutter_ios_test`, `flutter_windows_test`, `flutter_macos_test` 和
 `flutter_linux_test` 演示了从一台新机器上运行该项目所需要的所有命令
 
-> 译者注：如果您的遇到运行失败，缺少环境等问题，请参考上述 CI 工作流。下面的 cargo ndk 等部分工具，和对应的交叉编译环境需要单独安装，具体请参考
-> CI 工作流。
+> 译者注：如果您的遇到运行失败，缺少环境等问题，请参考上述 CI 工作流。下面的 cargo ndk 等部分工具，和对应的交叉编译环境需要单独安装，也可以参照
+> PART II 的项目设置部分。
 
 ### Android app
 

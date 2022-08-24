@@ -1,6 +1,6 @@
-# Using `build_runner`
+# 使用 `build_runner`
 
-Inspect your `lib/bridge_generated.dart` and you will see that the definition of `Platform` has changed:
+检查一下你的 `lib/bridge_generated.dart`，你会发现 `Platform` 的定义变为了：
 
 ```dart
 @freezed
@@ -17,13 +17,13 @@ class Platform with _$Platform {
 }
 ```
 
-It is no longer a plain enum, but a full-blown enum class with variants! As it is right now, this code
-cannot compile yet since it is missing some components, namely the [`freezed`] library. [`freezed`] is a
-codegen library similar to those we've encountered thus far, but generates more Dart code instead.
-All such libraries perform their code generation upon invoking `build_runner`, i.e. when `flutter pub run build_runner build` is executed.
+它不再是一个普通的枚举，而是带着一个带着变体的枚举类！但是代码现在不能通过编译，因为我们还缺少 [`freezed`] 库。[`freezed`]
+库也是一个代码生成库，和我们目前为止遇到的有些相似，但是它生成的更多是 Dart 代码。所有的这些库都是在调用 `build_runner`
+时进行代码生成的，即执行 `flutter pub run build_runner build` 时。
 
-Regardless, to make this code compile again, we need to make a few changes:
-- Run the following commands to add the latest version of [`freezed`]:
+不管怎么说，为了使这段代码通过编译，我们需要做一些修改：
+
+- 执行下面的代码，添加最新的 [`freezed`] 依赖：
 
 ```shell
 flutter pub add -d build_runner
@@ -31,7 +31,7 @@ flutter pub add -d freezed
 flutter pub add freezed_annotation
 ```
 
-- Update `justfile` to run `build_runner` after Rust codegen:
+- 更新 `justfile` 文件，在 Rust 代码生成后运行 `build_runner`:
 
 ```diff
  gen:
@@ -41,6 +41,6 @@ flutter pub add freezed_annotation
 +    flutter pub run build_runner build
 ```
 
-Now calling `just` will generate both the Rust bindings *and* the Dart library code.
+现在调用 `just` 会同时生成 Rust 绑定和 Dart 代码。
 
 [`freezed`]: https://pub.dev/packages/freezed
