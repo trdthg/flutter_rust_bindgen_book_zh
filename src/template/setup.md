@@ -1,7 +1,6 @@
-# Creating a new project
+# 创建一个新项目
 
-Start by creating a repository using the template from [flutter_rust_bridge_template]
-and cloning it. This template is set up to be able to `flutter run` for most platforms
-that Flutter supports.
+首先使用 [flutter_rust_bridge_template] 的模板创建一个仓库。这个模板在大多数 Flutter 支持的平台应该可以通过
+`flutter run` 直接运行。
 
 [flutter_rust_bridge_template]: https://github.com/Desdaemon/flutter_rust_bridge_template

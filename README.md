@@ -32,13 +32,13 @@
 
 # Part II: 用户指南
 
-- [ ] [从模板创建](./src/template.md)
-  - [ ] [创建一个新项目](./src/template/setup.md)
-    - [ ] [安卓设置](./src/template/setup_android.md)
-    - [ ] [IOS 设置](./src/template/setup_ios.md)
-    - [ ] [Web 设置](./src/template/setup_web.md)
-    - [ ] [Windows 和 Linux](./src/template/setup_desktop.md)
-    - [ ] [其他平台](./src/template/setup_others.md)
+- [x] [从模板创建](./src/template.md)
+  - [x] [创建一个新项目](./src/template/setup.md)
+    - [x] [安卓设置](./src/template/setup_android.md)
+    - [x] [IOS 设置](./src/template/setup_ios.md)
+    - [x] [Web 设置](./src/template/setup_web.md)
+    - [x] [Windows 和 Linux](./src/template/setup_desktop.md)
+    - [x] [其他平台](./src/template/setup_others.md)
   - [ ] [模板之旅](./src/template/tour.md)
     - [ ] [native/src/api.rs](./src/template/tour_api.md)
     - [ ] [`android/app/build.gradle`](./src/template/tour_gradle.md)

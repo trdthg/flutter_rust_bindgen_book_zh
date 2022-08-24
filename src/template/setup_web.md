@@ -1,5 +1,6 @@
-# Web setup
+# Web 设置
 
-As of writing, Web support is underway and tracked by [fzyzcjy/flutter_rust_bridge#315](https://github.com/fzyzcjy/flutter_rust_bridge/issues/315).
-Consider leaving comments and reactions to let us know of the demand for this feature!
+目前为止，Web 支持尚未完成
+[fzyzcjy/flutter_rust_bridge#315](https://github.com/fzyzcjy/flutter_rust_bridge/issues/315)。
 
+考虑一下评论或者建议让我们了解您对该功能的需求！

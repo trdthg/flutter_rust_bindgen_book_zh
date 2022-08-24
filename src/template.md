@@ -1,6 +1,6 @@
-# Create new projects from a template
+# 从模板创建新项目
 
-In this chapter, we are going to use create your own project from a code template. It seems a bit long, but it is just because we have tried to describe *every detail* that you may encounter.
+在这一章里，我们将从模板创建你自己的项目。看起来有点长，但是这只是因为我们想讲清楚你可能遇到的每个细节。
 
-**Remark:** Most complexity does *not* come from this library, `flutter_rust_bridge` - it is as same complex as using raw Dart/Flutter FFI with Rust. In other words, it is the Dart/Flutter + Rust toolchain that takes time to set up.
-
+**注意:** 虽然过程很复杂，但是绝大多数原因都不是来源于该库本身，因为它和使用原始的 Rust/Flutter FFI 一样复杂。换句话说，是建立
+Dart/Flutter + Rust 工具链需要费些时间。
