@@ -134,12 +134,10 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="adding-new-code"><a class="header" href="#adding-new-code">Adding new code</a></h1>
-<p>Let's say we need to change <code>Platform</code> such that we don't really care about whether it
-is running on Intel or Apple Silicon, but we would like to keep this information so
-downlevel code can act on it. We would like to merge <code>MacApple</code> and <code>MacIntel</code> into a
-single <code>MacOs(String)</code> that contains the current CPU architecture. Go ahead and update
-<code>native/src/api.rs</code>:</p>
+                        <h1 id="添加新代码"><a class="header" href="#添加新代码">添加新代码</a></h1>
+<p>我们想要跨平台，因此我们并不关心代码到底是在 Inter 还是 Apple Silicon
+上运行。但是我们需要保留平台信息，以便底层代码能够作出对应的响应。我们可以把 <code>MacApple</code> 和 <code>MacIntel</code> 归为一个
+<code>MacOs(String)</code>，里面包含了当前 CPU 架构。现在更新 <code>native/src/api.rs</code>:</p>
 <pre><code class="language-diff"> pub enum Platform {
      ..
 -    MacIntel,
@@ -148,11 +146,10 @@ single <code>MacOs(String)</code> that contains the current CPU architecture. Go
      ..
  }
 </code></pre>
-<p>Now run <code>just</code> and see that your binding code now has changed.</p>
+<p>现在运行 <code>just</code>，看看生成的绑定代码会如何变化。</p>
 <h2 id="troubleshooting-please-supply-one-or-more-pathtollvm"><a class="header" href="#troubleshooting-please-supply-one-or-more-pathtollvm">Troubleshooting: &quot;Please supply one or more path/to/llvm...&quot;</a></h2>
-<p>A common issue with <code>ffigen</code> is that its detection of the LLVM installation is not reliable
-across platforms. Especially for MacOS and the split between x86-64 and arm64 binaries,
-you might have to modify <code>justfile</code> to explicitly point to its location:</p>
+<p>对 LLVM 安装的检测在不同平台上并不可靠。特别是对于 MacOS 和 x86-64 和 arm64 的二进制文件，你可能需要修改 <code>justfile</code>
+以明确指向它的位置：</p>
 <pre><code>llvm_path := if os() == &quot;macos&quot; {
     &quot;--llvm-path /opt/homebrew/opt/llvm&quot;
 } else {

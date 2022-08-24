@@ -134,8 +134,8 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="using-build_runner"><a class="header" href="#using-build_runner">Using <code>build_runner</code></a></h1>
-<p>Inspect your <code>lib/bridge_generated.dart</code> and you will see that the definition of <code>Platform</code> has changed:</p>
+                        <h1 id="使用-build_runner"><a class="header" href="#使用-build_runner">使用 <code>build_runner</code></a></h1>
+<p>检查一下你的 <code>lib/bridge_generated.dart</code>，你会发现 <code>Platform</code> 的定义变为了：</p>
 <pre><code class="language-dart">@freezed
 class Platform with _$Platform {
     const factory Platform.unknown() = Unknown;
@@ -149,20 +149,19 @@ class Platform with _$Platform {
     const factory Platform.wasm() = Wasm;
 }
 </code></pre>
-<p>It is no longer a plain enum, but a full-blown enum class with variants! As it is right now, this code
-cannot compile yet since it is missing some components, namely the <a href="https://pub.dev/packages/freezed"><code>freezed</code></a> library. <a href="https://pub.dev/packages/freezed"><code>freezed</code></a> is a
-codegen library similar to those we've encountered thus far, but generates more Dart code instead.
-All such libraries perform their code generation upon invoking <code>build_runner</code>, i.e. when <code>flutter pub run build_runner build</code> is executed.</p>
-<p>Regardless, to make this code compile again, we need to make a few changes:</p>
+<p>它不再是一个普通的枚举，而是带着一个带着变体的枚举类！但是代码现在不能通过编译，因为我们还缺少 <a href="https://pub.dev/packages/freezed"><code>freezed</code></a> 库。<a href="https://pub.dev/packages/freezed"><code>freezed</code></a>
+库也是一个代码生成库，和我们目前为止遇到的有些相似，但是它生成的更多是 Dart 代码。所有的这些库都是在调用 <code>build_runner</code>
+时进行代码生成的，即执行 <code>flutter pub run build_runner build</code> 时。</p>
+<p>不管怎么说，为了使这段代码通过编译，我们需要做一些修改：</p>
 <ul>
-<li>Run the following commands to add the latest version of <a href="https://pub.dev/packages/freezed"><code>freezed</code></a>:</li>
+<li>执行下面的代码，添加最新的 <a href="https://pub.dev/packages/freezed"><code>freezed</code></a> 依赖：</li>
 </ul>
 <pre><code class="language-shell">flutter pub add -d build_runner
 flutter pub add -d freezed
 flutter pub add freezed_annotation
 </code></pre>
 <ul>
-<li>Update <code>justfile</code> to run <code>build_runner</code> after Rust codegen:</li>
+<li>更新 <code>justfile</code> 文件，在 Rust 代码生成后运行 <code>build_runner</code>:</li>
 </ul>
 <pre><code class="language-diff"> gen:
      ..
@@ -170,7 +169,7 @@ flutter pub add freezed_annotation
 -    # flutter pub run build_runner build
 +    flutter pub run build_runner build
 </code></pre>
-<p>Now calling <code>just</code> will generate both the Rust bindings <em>and</em> the Dart library code.</p>
+<p>现在调用 <code>just</code> 会同时生成 Rust 绑定和 Dart 代码。</p>
 
                     </main>
 

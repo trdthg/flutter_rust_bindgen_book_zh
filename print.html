@@ -303,7 +303,7 @@ scoop install flutter_rust_bridge_codegen
 brew install desdaemon/repo/flutter_rust_bridge_codegen
 </code></pre>
 <p><small>(注释：感谢 @Desdaemon 将脚本发布到 brew/scoop)</small></p>
-<p>接着运行代码生成器。</p>
+<p>接着运行代码生成。</p>
 <p><small>注释：需要一些安装步骤。你可以查看 <a href="tutorial_with_flutter.html">教程</a>, <a href="template.html">从模板创建项目</a>
 or <a href="integrate.html">与现有项目集成</a> 获取更多详细信息.</small></p>
 <pre><code class="language-bash">flutter_rust_bridge_codegen --rust-input path/to/api.rs \
@@ -312,6 +312,10 @@ or <a href="integrate.html">与现有项目集成</a> 获取更多详细信息.<
 <p>绑定代码生成之后，你可以在 Flutter/Dart 中无缝使用：</p>
 <pre><code class="language-dart">api.drawTree(TreeNode(value: &quot;root&quot;, ...), Colorful(palette: &quot;viridis&quot;));
 </code></pre>
+<blockquote>
+<p>译者注：如果你在代码生成时遇到了这个错误 <code>fatal error: 'stdbool.h' file not found</code>
+可以尝试参照：<a href="https://github.com/dart-lang/ffigen/issues/257#issuecomment-1061788936">dart-lang/ffigen/issues/257</a></p>
+</blockquote>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="教程一个-flutter-和-rust-构建的-app"><a class="header" href="#教程一个-flutter-和-rust-构建的-app">教程：一个 Flutter 和 Rust 构建的 app</a></h1>
 <p>在这个教程中，我们将绘制一个
 <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">曼德博集合（英语：Mandelbrot set，或译为曼德布洛特复数集合）</a>（一个著名的分形）。这个图片会由
@@ -328,14 +332,14 @@ Rust 算法生成，并在 Flutter 中绘制，通过这个库通信。</p>
 </p>
 <p>图片来源：维基百科</p>
 </details>
-<h2 id="获取代码"><a class="header" href="#获取代码">获取代码</a></h2>
-<p>请<a href="https://flutter.dev/docs/get-started/install">安装 Flutter</a> (可以选择
-<a href="https://flutter.dev/desktop">桌面支持</a>，如果你想把程序运行在桌面上而不是手机),
-<a href="https://www.rust-lang.org/learn/get-started">安装 Rust</a>, 熟悉一下之后，接着克隆样例代码：</p>
+<h2 id="获取源代码"><a class="header" href="#获取源代码">获取源代码</a></h2>
+<p>请 <a href="https://flutter.dev/docs/get-started/install">安装 Flutter</a>
+(如果你想把程序运行在桌面上，可以选择添加 <a href="https://flutter.dev/desktop">桌面支持</a>),
+<a href="https://www.rust-lang.org/learn/get-started">安装 Rust</a>, 接着克隆样例代码：</p>
 <pre><code class="language-shell">git clone https://github.com/fzyzcjy/flutter_rust_bridge &amp;&amp; cd flutter_rust_bridge/frb_example/with_flutter
 </code></pre>
 <h2 id="可选运行代码生成器"><a class="header" href="#可选运行代码生成器">可选：运行代码生成器</a></h2>
-<p>这一步是可选的，因为我已经在 <a href="./quickstart.html">快速入门</a> 时生成了源代码，你是你再次运行也不会看到任何改变。</p>
+<p>这一步是可选的，因为我已经在 <a href="./quickstart.html">快速入门</a> 时生成了源代码，再次运行也不会产生任何改变。</p>
 <p>一旦你修改了 <code>api.rs</code>，就需要再次运行代码生成。代码生成器所需要的更多依赖可以在
 <a href="integrate/deps.html">Installing dependencies</a> 查看</p>
 <h2 id="运行-app"><a class="header" href="#运行-app">运行 app</a></h2>
@@ -345,8 +349,8 @@ Rust 算法生成，并在 Flutter 中绘制，通过这个库通信。</p>
 <code>flutter_ios_test</code>, <code>flutter_windows_test</code>, <code>flutter_macos_test</code> 和
 <code>flutter_linux_test</code> 演示了从一台新机器上运行该项目所需要的所有命令</p>
 <blockquote>
-<p>译者注：如果您的遇到运行失败，缺少环境等问题，请参考上述 CI 工作流。下面的 cargo ndk 等部分工具，和对应的交叉编译环境需要单独安装，具体请参考
-CI 工作流。</p>
+<p>译者注：如果您的遇到运行失败，缺少环境等问题，请参考上述 CI 工作流。下面的 cargo ndk 等部分工具，和对应的交叉编译环境需要单独安装，也可以参照
+PART II 的项目设置部分。</p>
 </blockquote>
 <h3 id="android-app"><a class="header" href="#android-app">Android app</a></h3>
 <ul>
@@ -1009,7 +1013,7 @@ NDK (version 22)</p>
 <p>译者注：用户也可以不下载 Android Studio，直接通过 sdkmanager 在命令行安装。</p>
 </blockquote>
 <p><a href="https://developer.android.com/ndk">Android NDK</a>, 或者说 Native Development Kit, 确保了使用其他语言编写的代码可以通过 JNI 或者说
-<a href="https://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/jniTOC.html">Java Native Interface</a> 运行在 JVM 上。我们会将 Cargo 创建的动态连接库和项目的打包结果打包在一起。</p>
+<a href="https://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/jniTOC.html">Java Native Interface</a> 运行在 JVM 上。我们会把 Cargo 创建的动态连接库和项目的打包结果打包在一起。</p>
 <p>跟着上面的步骤，你应该会把 NDK 安装到了 <code>$ANDROID_SDK_HOME/ndk</code> 文件夹，ANDROID_SDK_HOME 通常是：</p>
 <ul>
 <li>Windows: <code>%APPDATA%\Local\Android\sdk</code></li>
@@ -1028,8 +1032,10 @@ NDK (version 22)</p>
 <h2 id="cargo-ndk"><a class="header" href="#cargo-ndk"><a href="https://github.com/bbqsrc/cargo-ndk">cargo-ndk</a></a></h2>
 <pre><code class="language-shell">cargo install cargo-ndk --version 2.6.0
 </code></pre>
-<p><a href="https://github.com/bbqsrc/cargo-ndk">cargo-ndk</a> 是一个 cargo 插件，它能够将代码编译到适合的 JNI 而不需要额外的配置。运行上述命令进行安装。cargo-ndk 2.7.0
-版本引入了一些变化，破坏了对 NDK 22 版本的支持，所以 目前必须使用 2.6.0。</p>
+<p><a href="https://github.com/bbqsrc/cargo-ndk">cargo-ndk</a> 是一个 cargo 插件，它能够将代码编译到适合的 JNI 而 typedef DartPostCObjectFnType =
+ffi.Pointer&lt; ffi.NativeFunction&lt;ffi.Bool Function(DartPort,
+ffi.Pointer&lt;ffi.Void&gt;)&gt;&gt;; typedef DartPort = ffi.Int64;c
+不需要额外的配置。运行上述命令进行安装。cargo-ndk 2.7.0 版本引入了一些变化，破坏了对 NDK 22 版本的支持，所以 目前必须使用 2.6.0。</p>
 <h2 id="可选的-ndk-设置"><a class="header" href="#可选的-ndk-设置">可选的 NDK 设置</a></h2>
 <p>你也可以选择最新版本的 NDK，它比 22 版本要好。但是你需要 Hack
 部分代码去解决一个报错：<a href="https://github.com/bbqsrc/cargo-ndk/issues/22">unable to find library -lgcc error</a>.</p>
@@ -1116,11 +1122,11 @@ Flutter。<a href="https://github.com/canonical/flutter-snap/pull/61">canonical/
 <div style="break-before: page; page-break-before: always;"></div><h1 id="其他平台"><a class="header" href="#其他平台">其他平台</a></h1>
 <p>对于所有剩下的平台，基本没有需要设置的步骤。除了在下面列表中标注的。<a href="https://docs.flutter.dev/desktop">Desktop support for Flutter</a>。如果你要查看当前进展，运行
 <code>flutter -v</code> 它会显示你的工具链的状态和任何可操作的步骤。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="template-tour"><a class="header" href="#template-tour">Template tour</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="模板之旅"><a class="header" href="#模板之旅">模板之旅</a></h1>
 <p><img src="template/success.png" alt="success-screen" /></p>
-<p>Congratulations! 🎉 You should have a working Flutter app equipped with
-a Rust runtime component. This section is meant to be a gentle introduction to the details of Rust integration with the existing Flutter toolchain. Feel free to skip forward to <a href="template/generate.html">Generating code</a> to learn how to write new code, or visit
-<a href="template/../integrate.html">Integrating with existing projects</a> to add Rust to your preexisting Flutter project.</p>
+<p>祝贺！🎉 现在你应该有一个可以正常运行的 Flutter 应用了，并且配备了 一个 Rust 运行时组件。本节旨在温和地介绍 Rust 与现有 Flutter
+工具链集成的细节。不用担心，你可以直接跳到<a href="template/generate.html">生成代码</a>一节来学习如何编写新的代码。或者直接查看
+<a href="template/../integrate.html">集成到现有项目</a> 一节，将 Rust 添加到现有的 Flutter 项目</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="nativesrcapirs"><a class="header" href="#nativesrcapirs"><code>native/src/api.rs</code></a></h1>
 <p>This is the default entry point for your library. Only functions defined here will be eligible for codegen.
 Functions may use types not defined in this file as parameter or return types, but those types must have
@@ -1167,17 +1173,16 @@ Useful when you want to debug build-related issues.</p>
 <p>In <code>windows</code> and <code>linux</code> are two identical files named <code>rust.cmake</code>.
 These files are included in the existing <code>CMakeLists.txt</code> that Flutter uses
 to compile its applications.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="generating-code"><a class="header" href="#generating-code">Generating code</a></h1>
-<p>This section assumes you followed the instructions in <a href="template/template.html">Creating a new project</a>, and has successfully <code>flutter run</code> on your target device.</p>
-<p>Up until now, all the code necessary for executing the program has been supplied for you, so there was no need to install anything. We will now look at how to create new Rust code, generate the necessary glue code and use them in Dart.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="installing-codegen"><a class="header" href="#installing-codegen">Installing codegen</a></h1>
-<p>More informations in the <a href="template/../integrate/deps.html">Installing dependencies</a> section.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="adding-new-code"><a class="header" href="#adding-new-code">Adding new code</a></h1>
-<p>Let's say we need to change <code>Platform</code> such that we don't really care about whether it
-is running on Intel or Apple Silicon, but we would like to keep this information so
-downlevel code can act on it. We would like to merge <code>MacApple</code> and <code>MacIntel</code> into a
-single <code>MacOs(String)</code> that contains the current CPU architecture. Go ahead and update
-<code>native/src/api.rs</code>:</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="代码生成"><a class="header" href="#代码生成">代码生成</a></h1>
+<p>这一部分假设您已经跟随 <a href="template/template.html">创建一个新项目</a> 成功运行了 <code>flutter run</code> 到您的设备上。</p>
+<p>到目前为止，程序运行的所有必要代码都提供给你了，没有额外的东西需要安装。现在我们将注意力集中在如何编写 Rust 代码，生成必要的胶水代码并在 Dart
+中使用。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="安装代码生成器"><a class="header" href="#安装代码生成器">安装代码生成器</a></h1>
+<p>更多信息在 <a href="template/../integrate/deps.html">安装依赖</a> 部分。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="添加新代码"><a class="header" href="#添加新代码">添加新代码</a></h1>
+<p>我们想要跨平台，因此我们并不关心代码到底是在 Inter 还是 Apple Silicon
+上运行。但是我们需要保留平台信息，以便底层代码能够作出对应的响应。我们可以把 <code>MacApple</code> 和 <code>MacIntel</code> 归为一个
+<code>MacOs(String)</code>，里面包含了当前 CPU 架构。现在更新 <code>native/src/api.rs</code>:</p>
 <pre><code class="language-diff"> pub enum Platform {
      ..
 -    MacIntel,
@@ -1186,19 +1191,18 @@ single <code>MacOs(String)</code> that contains the current CPU architecture. Go
      ..
  }
 </code></pre>
-<p>Now run <code>just</code> and see that your binding code now has changed.</p>
+<p>现在运行 <code>just</code>，看看生成的绑定代码会如何变化。</p>
 <h2 id="troubleshooting-please-supply-one-or-more-pathtollvm"><a class="header" href="#troubleshooting-please-supply-one-or-more-pathtollvm">Troubleshooting: &quot;Please supply one or more path/to/llvm...&quot;</a></h2>
-<p>A common issue with <code>ffigen</code> is that its detection of the LLVM installation is not reliable
-across platforms. Especially for MacOS and the split between x86-64 and arm64 binaries,
-you might have to modify <code>justfile</code> to explicitly point to its location:</p>
+<p>对 LLVM 安装的检测在不同平台上并不可靠。特别是对于 MacOS 和 x86-64 和 arm64 的二进制文件，你可能需要修改 <code>justfile</code>
+以明确指向它的位置：</p>
 <pre><code>llvm_path := if os() == &quot;macos&quot; {
     &quot;--llvm-path /opt/homebrew/opt/llvm&quot;
 } else {
     &quot;&quot;
 }
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="using-build_runner"><a class="header" href="#using-build_runner">Using <code>build_runner</code></a></h1>
-<p>Inspect your <code>lib/bridge_generated.dart</code> and you will see that the definition of <code>Platform</code> has changed:</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="使用-build_runner"><a class="header" href="#使用-build_runner">使用 <code>build_runner</code></a></h1>
+<p>检查一下你的 <code>lib/bridge_generated.dart</code>，你会发现 <code>Platform</code> 的定义变为了：</p>
 <pre><code class="language-dart">@freezed
 class Platform with _$Platform {
     const factory Platform.unknown() = Unknown;
@@ -1212,20 +1216,19 @@ class Platform with _$Platform {
     const factory Platform.wasm() = Wasm;
 }
 </code></pre>
-<p>It is no longer a plain enum, but a full-blown enum class with variants! As it is right now, this code
-cannot compile yet since it is missing some components, namely the <a href="https://pub.dev/packages/freezed"><code>freezed</code></a> library. <a href="https://pub.dev/packages/freezed"><code>freezed</code></a> is a
-codegen library similar to those we've encountered thus far, but generates more Dart code instead.
-All such libraries perform their code generation upon invoking <code>build_runner</code>, i.e. when <code>flutter pub run build_runner build</code> is executed.</p>
-<p>Regardless, to make this code compile again, we need to make a few changes:</p>
+<p>它不再是一个普通的枚举，而是带着一个带着变体的枚举类！但是代码现在不能通过编译，因为我们还缺少 <a href="https://pub.dev/packages/freezed"><code>freezed</code></a> 库。<a href="https://pub.dev/packages/freezed"><code>freezed</code></a>
+库也是一个代码生成库，和我们目前为止遇到的有些相似，但是它生成的更多是 Dart 代码。所有的这些库都是在调用 <code>build_runner</code>
+时进行代码生成的，即执行 <code>flutter pub run build_runner build</code> 时。</p>
+<p>不管怎么说，为了使这段代码通过编译，我们需要做一些修改：</p>
 <ul>
-<li>Run the following commands to add the latest version of <a href="https://pub.dev/packages/freezed"><code>freezed</code></a>:</li>
+<li>执行下面的代码，添加最新的 <a href="https://pub.dev/packages/freezed"><code>freezed</code></a> 依赖：</li>
 </ul>
 <pre><code class="language-shell">flutter pub add -d build_runner
 flutter pub add -d freezed
 flutter pub add freezed_annotation
 </code></pre>
 <ul>
-<li>Update <code>justfile</code> to run <code>build_runner</code> after Rust codegen:</li>
+<li>更新 <code>justfile</code> 文件，在 Rust 代码生成后运行 <code>build_runner</code>:</li>
 </ul>
 <pre><code class="language-diff"> gen:
      ..
@@ -1233,11 +1236,10 @@ flutter pub add freezed_annotation
 -    # flutter pub run build_runner build
 +    flutter pub run build_runner build
 </code></pre>
-<p>Now calling <code>just</code> will generate both the Rust bindings <em>and</em> the Dart library code.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="wrapping-up"><a class="header" href="#wrapping-up">Wrapping up</a></h1>
-<p>With our new definition of <code>Platform</code> in place, we can rewrite the previous code to make use
-of it! Here is an example of what you can do with freezed enums.</p>
-<p>In <code>lib/main.dart</code>:</p>
+<p>现在调用 <code>just</code> 会同时生成 Rust 绑定和 Dart 代码。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="收尾"><a class="header" href="#收尾">收尾</a></h1>
+<p>有了对 &quot;平台&quot; 的新定义，我们可以重写以前的代码去使用它！下面是一个例子，展示了 freezed 枚举的使用技巧。</p>
+<p>在 <code>lib/main.dart</code> 里：</p>
 <pre><code class="language-diff">- final text = const {
 -   Platform.Android: 'Android',
 -   Platform.Ios: 'iOS',
@@ -1257,7 +1259,7 @@ of it! Here is an example of what you can do with freezed enums.</p>
 +   wasm: () =&gt; 'the Web',
 + );
 </code></pre>
-<p>In <code>native/src/api.rs</code>:</p>
+<p>在 <code>native/src/api.rs</code> 里：</p>
 <pre><code class="language-diff">     } else if cfg!(target_os = &quot;ios&quot;) {
          Platform::Ios
      } else if cfg!(all(target_os = &quot;macos&quot;, target_arch = &quot;aarch64&quot;)) {
@@ -1270,8 +1272,7 @@ of it! Here is an example of what you can do with freezed enums.</p>
          Platform::Wasm
      } else if cfg!(unix) {
 </code></pre>
-<p>When you <code>flutter run</code>, you should get something like this:
-<img src="template/macos_intel.png" alt="macos-intel" /></p>
+<p>当你运行 <code>flutter run</code> 后，你应该能看到： <img src="template/macos_intel.png" alt="macos-intel" /></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="integrating-with-existing-projects"><a class="header" href="#integrating-with-existing-projects">Integrating with existing projects</a></h1>
 <p>This guide is an intermediate-level introduction to integrating Rust with
 an existing Flutter project. If you are new to Rust or configuring
@@ -1563,7 +1564,7 @@ to <code>lib/ffi.dart</code>, then modify its contents:</p>
  // but rather directly **linked** against the binary.
  final _dylib = io.Platform.isWindows ? '$_base.dll' : 'lib$_base.so';
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="wrapping-up-1"><a class="header" href="#wrapping-up-1">Wrapping up</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="wrapping-up"><a class="header" href="#wrapping-up">Wrapping up</a></h1>
 <p>Congratulations! You have successfully added a Rust component to your Flutter app
 using <code>flutter_rust_bridge</code> and configured <code>flutter run</code> to build your Rust library
 and link it to the app.</p>

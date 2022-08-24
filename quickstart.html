@@ -154,7 +154,7 @@ scoop install flutter_rust_bridge_codegen
 brew install desdaemon/repo/flutter_rust_bridge_codegen
 </code></pre>
 <p><small>(注释：感谢 @Desdaemon 将脚本发布到 brew/scoop)</small></p>
-<p>接着运行代码生成器。</p>
+<p>接着运行代码生成。</p>
 <p><small>注释：需要一些安装步骤。你可以查看 <a href="tutorial_with_flutter.html">教程</a>, <a href="template.html">从模板创建项目</a>
 or <a href="integrate.html">与现有项目集成</a> 获取更多详细信息.</small></p>
 <pre><code class="language-bash">flutter_rust_bridge_codegen --rust-input path/to/api.rs \
@@ -163,6 +163,10 @@ or <a href="integrate.html">与现有项目集成</a> 获取更多详细信息.<
 <p>绑定代码生成之后，你可以在 Flutter/Dart 中无缝使用：</p>
 <pre><code class="language-dart">api.drawTree(TreeNode(value: &quot;root&quot;, ...), Colorful(palette: &quot;viridis&quot;));
 </code></pre>
+<blockquote>
+<p>译者注：如果你在代码生成时遇到了这个错误 <code>fatal error: 'stdbool.h' file not found</code>
+可以尝试参照：<a href="https://github.com/dart-lang/ffigen/issues/257#issuecomment-1061788936">dart-lang/ffigen/issues/257</a></p>
+</blockquote>
 
                     </main>
 
