@@ -1,25 +1,24 @@
 # Using dummy headers
 
-`flutter_rust_bridge_codegen` created a C header which lists all the
-exported symbols from our library, then uses it so that Xcode won't strip
-the symbols.
+`flutter_rust_bridge_codegen` 会创建一个 C 头文件，里面列出了 Rust 库导出的所有符号，我们需要使用它确保 Xcode
+不会将符号去除。
 
-Add `ios/Runner/bridge_generated.h` (or `macos/Runner/bridge_generated.h`)
-to the project, either by dragging it onto the project tree or
-via the **Add Files to "Runner"...** menu option.
+在项目中添加 `ios/Runner/bridge_generated.h` (或者
+`macos/Runner/bridge_generated.h`)，你可以把文件直接拖到项目文件夹中或者点击菜单上的 **Add Files to
+"Runner"...** .
 
-Switch to the **Build Phases** tab and drag the **bridge_generated.h** file over
-to the **Copy Bundle Resources** phase, if it isn't already present.
+如果它还没有出现，请切换到 **Build Phases** 标签页，把 **bridge_generated.h** 文件拖到 **Copy Bundle
+Resources**。
 
 ## iOS
 
-Next, add this line to `ios/Runner/Runner-Bridging-Header.h`:
+接下来，在 `ios/Runner/Runner-Bridging-Header.h` 中添加：
 
 ```diff
 +#import "bridge_generated.h"
 ```
 
-and in `ios/Runner/AppDelegate.swift`:
+在 `ios/Runner/AppDelegate.swift` 中添加：
 
 ```diff
  override func application(
@@ -32,14 +31,13 @@ and in `ios/Runner/AppDelegate.swift`:
  }
 ```
 
-It is important that you use the result of `dummy_method_to_enforce_bundling()` (like in the example above), otherwise the symbols might still get stripped.
-
+这里调用 `dummy_method_to_enforce_bundling()`
+并打印返回值的步骤非常重要（类似于上面的例子），否则最终的符号还是可能被去除。
 
 ## MacOS
 
-Flutter on MacOS does not use headers by default, so let's go ahead
-and add one ourselves. In the **Build Settings** tab, set the
-**Objective-C Bridging Header** to be **Runner/bridge_generated.h**.
+Flutter 在 MacOS 上默认不使用符号，我们需要添加我们自己的。在 **Build Settings** 标签页中，把 **Objective-C
+Bridging Header** 设置为 **Runner/bridge_generated.h**
 
-Finally, use `dummy_method_to_enforce_bundling` somewhere within
-`macos/Runner/AppDelegate.swift`, as long as Xcode does not consider it dead code.
+最后，在 `macos/Runner/AppDelegate.swift` 文件的某个地方使用一下
+`dummy_method_to_enforce_bundling` , 只要 Xcode 不把它当作 dead code 就行。

@@ -1,11 +1,9 @@
-# Wrapping up
+# 收尾工作
 
-Congratulations! You have successfully added a Rust component to your Flutter app
-using `flutter_rust_bridge` and configured `flutter run` to build your Rust library
-and link it to the app.
+恭喜！您已经成功地将 Rust 组件通过 `flutter_rust_bridge` 添加到您的 Flutter 程序中。 ，并配置了
+`flutter run` 来构建您的 Rust 库 并将其链接到程序中。
 
-As a reminder, you need to run these commands every time your Rust code changes *and*
-before you run `flutter run`:
+作为提醒，每次 Rust 代码改变时，以及 **在你运行`flutter run`之前，你都需要运行这些命令。
 
 ```bash
 {{#include command.sh.txt}}
@@ -13,11 +11,10 @@ before you run `flutter run`:
 flutter pub run build_runner build
 ```
 
-## Renaming the Rust bridge module
+## 重命名 Rust bridge 模块
 
-If you would like to use the `--rust-output` flag of `flutter_rust_bridge_codegen`,
-keep in mind that you will have to update `$crate/src/lib.rs` to point to the correct
-file, for example if you use this command instead:
+如果你想用 `flutter_rust_bridge_codegen` 的 `--rust-output` 参数，不要忘记更新
+`$crate/src/lib.rs` 里引用的模块名
 
 ```bash
 flutter_rust_bridge_codegen \

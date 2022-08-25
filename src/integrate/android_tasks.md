@@ -1,13 +1,12 @@
 # Hooking onto tasks
 
-This is the same method used by the app template and also the easier one.
-Go ahead and install `cargo-ndk` if you have not already done so:
+这与模板使用的方法相同，也是比较简单的方法。如果你还没有安装 `cargo-ndk`，请继续安装。
 
 ```
 cargo install cargo-ndk
 ```
 
-Next, add these lines near the bottom of `android/app/build.gradle`:
+接着，在 `android/app/build.gradle` 的最后添加下面几行：
 
 ```gradle
 [
@@ -25,7 +24,7 @@ Next, add these lines near the bottom of `android/app/build.gradle`:
     tasks.register("cargoBuild$taskPostfix", Exec) {
         // Until https://github.com/bbqsrc/cargo-ndk/pull/13 is merged,
         // this workaround is necessary.
-        
+
         def ndk_command = """cargo ndk \
             -t armeabi-v7a -t arm64-v8a -t x86_64 -t x86 \
             -o ../android/app/src/main/jniLibs build $profileMode"""
@@ -41,12 +40,8 @@ Next, add these lines near the bottom of `android/app/build.gradle`:
 }
 ```
 
-Note the ANDROID\_NDK variable, this is a Gradle property that points to
-your installation of the Android NDK. If you don't rely on portability,
-you can hardcode this value, but note that it can be supplied by one
-of the many `gradle.properties` scattered throughout your filesystem.
-The most reliable way is to create a file at `~/.gradle/gradle.properties`
-and fill it with this:
+注意 ANDROID\_NDK 变量，这是一个 Gradle 属性，它指向你安装的 Android NDK 目录。你可以硬编码这个值，但最可靠的方法是写入到
+`~/.gradle/gradle.properties`：
 
 ```
 ANDROID_NDK=(path to NDK)

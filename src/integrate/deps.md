@@ -1,20 +1,24 @@
-# Installing dependencies
+# 安装依赖
 
-Next, we need to install a few build-time and runtime dependencies.
+下一步，我们需要安装一些构建时和运行时依赖。
 
-## Build-time dependencies
+## 构建依赖
 
-These depdencies are required only in build-time:
+这些依赖只在 build 时需要：
 
-- [`flutter_rust_bridge_codegen`](https://lib.rs/crates/flutter_rust_bridge_codegen), the core codegen for Rust-Dart glue code
-- [`ffigen`](https://pub.dev/packages/ffigen), to generate Dart code from C headers
-- A working installation of LLVM, see [Installing LLVM](https://pub.dev/packages/ffigen#installing-llvm), used by `ffigen`
-- (Optional) [`cargo-xcode`](https://lib.rs/crates/cargo-xcode), if you want to generate Xcode projects for iOS and MacOS
+- [`flutter_rust_bridge_codegen`](https://lib.rs/crates/flutter_rust_bridge_codegen),
+  生成 Rust-Dart 胶水代码的核心
+- [`ffigen`](https://pub.dev/packages/ffigen), 从 C 头文件中生成 Dart 代码
+- 安装 LLVM, 请看
+  [Installing LLVM](https://pub.dev/packages/ffigen#installing-llvm), `ffigen`
+  会使用到
+- (可选) [`cargo-xcode`](https://lib.rs/crates/cargo-xcode),如果你想生成为 IOS 和 MacOS 的
+  Xcode 项目
 
-An easy way to install most of these dependencies is to run:
+安装这些依赖的简单方法：
 
-- dart project
-  
+- dart 项目
+
   ```bash
   cargo install flutter_rust_bridge_codegen
   dart pub add --dev ffigen && dart pub add ffi
@@ -22,7 +26,7 @@ An easy way to install most of these dependencies is to run:
   cargo install cargo-xcode
   ```
 
-- flutter project
+- flutter 项目
 
   ```bash
   cargo install flutter_rust_bridge_codegen
@@ -31,20 +35,18 @@ An easy way to install most of these dependencies is to run:
   cargo install cargo-xcode
   ```
 
-Alternatively, each of these dependencies may provide prebuilt binaries. Check with
-your package manager and review them individually.
+另外，这些依赖也可能已经提供了预构建的二进制版本。请自行到包管理器中查找。
 
-## Dart dependencies
+## Dart 依赖
 
-On the Dart side, `flutter_rust_bridge` is the required runtime component of
-`flutter_rust_bridge_codegen`. If you plan to use enum structs in Rust, the
-following dependencies are also needed:
+在 Dart 这里，`flutter_rust_bridge` 是 `flutter_rust_bridge_codegen` 必需的运行时组件。如果你打算在
+Dart 中使用 Rust 的 enum struct，你需要这些依赖：
 
 - `build_runner` (dev)
 - `freezed` (dev)
 - `freezed_annotation`
 
-Their usage is explained in [Using `build_runner`](../generate/build_runner.md).
+它们的是使用方法在 [Using `build_runner`](../generate/build_runner.md)。
 
 ```bash
 flutter pub add flutter_rust_bridge
@@ -54,14 +56,13 @@ flutter pub add -d freezed
 flutter pub add freezed_annotation
 ```
 
-## Rust dependencies
+## Rust 依赖
 
-Similar to Dart, Rust requires the `flutter_rust_bridge` runtime component for support.
+和 Dart 类似，Rust 需要 `flutter_rust_bridge` 最为运行时依赖。
 
-Add these lines to `Cargo.toml`:
+在 `Cargo.toml` 里添加：
 
 ```diff
 +[dependencies]
 +flutter_rust_bridge = "1"
 ```
-

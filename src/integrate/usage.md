@@ -1,11 +1,10 @@
-# Using the dynamic library
+# 使用动态连接库
 
-If everything went well, running `flutter run` will now build your Rust library,
-the Flutter binary and link the two together. Now the only thing left to do is
-to actually use it!
+如果一切顺利，运行 `flutter run` 就会自动构建你的 Rust 库，Flutter 二进制文件，并将二者连接起来。现在唯一要做的事情就是使用它！
 
-Download [this file](https://raw.githubusercontent.com/Desdaemon/flutter_rust_bridge_template/main/lib/ffi.dart)
-to `lib/ffi.dart`, then modify its contents:
+把
+[这个文件](https://raw.githubusercontent.com/Desdaemon/flutter_rust_bridge_template/main/lib/ffi.dart)
+下载到 `lib/ffi.dart`,接着修改下面几行：
 
 ```diff
  // Re-export the bridge so it is only necessary to import this file.

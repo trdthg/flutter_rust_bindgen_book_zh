@@ -1,9 +1,7 @@
-# Generating bindings
+# 生成绑定
 
-Now that we've got most of the plumbing out of the way, let's compile our Rust
-application. If you just created your crate a few moments ago, go ahead and
-add a new file at `$crate/src/api.rs` and replace its contents with this snippet or
-whatever suits your fancy:
+现在我们已经完成了大部分的工作，让我们来编译我们的 Rust 程序。如果你刚才创建了你的 crate，请继续 在 _$crate/src/api.rs_
+处添加一个新文件，并将其内容替换为下面的代码片段或其他内容。
 
 ```rust,ignore
 pub fn greet() -> String {
@@ -11,22 +9,20 @@ pub fn greet() -> String {
 }
 ```
 
-then in `$crate/src/lib.rs`:
+接着在 `$crate/src/lib.rs` 添加：
 
 ```diff
 +mod api;
 ```
 
-## Running the codegen
+## 运行代码生成
 
-Before we can compile the library, we need to generate the bindings first.
-From the root of the app, run these commands:
+在我们编译之前，我们需要先生成绑定。从项目根目录运行这些命令：
 
 ```bash
 {{#include command.sh.txt}}
 ```
 
-> **Note:** These will be the same commands to use whenever you modify your Rust library code.
+> **注意：** 每次修改 Rust 的时候都会使用到这些命令。
 
-Running this command yields the C header of the functions and types exported
-by the Rust library, which we will need to keep the symbols from being stripped.
+运行这个命令可以得到由 Rust 库导出的函数和类型的 C 头文件。我们需要确保它来保持符号不被剥离。

@@ -1,16 +1,13 @@
-# Integrating with Windows and Linux
+# 与 Windows 和 Linux 集成
 
-This guide groups together instructions for Windows and Linux desktop apps,
-as they use the same build system.
+本指南将 Windows 和 Linux 桌面应用程序的说明放在一起，因为它们使用相同的构建系统。
 
-The idea is the same as other platforms: we hook onto the existing projects
-using scripts, and we will also be borrowing from the template. Go ahead
-and download [rust.cmake](https://raw.githubusercontent.com/Desdaemon/flutter_rust_bridge_template/main/windows/rust.cmake)
-into your `windows` and `linux` folders. Keep in mind that CMake will refuse
-to use files that lie outside of its working directory, so there will be duplications
-between the two build folders.
+和其他平台一样：我们将使用脚本整合到现有的项目。现在我们将借用下模板，把
+[rust.cmake](https://raw.githubusercontent.com/Desdaemon/flutter_rust_bridge_template/main/windows/rust.cmake)
+下载到你的 "windows" 和 "linux" 文件夹里。请注意，CMake
+会拒绝使用位于其工作目录之外的文件，所以在这两个构建文件夹之间会有一些重复的文件。
 
-Next, add this line to your `CMakeLists.txt` files:
+接下来，在你的`CMakeLists.txt`文件中添加这一行：
 
 ```diff
  # Generated plugin build rules, which manage building the plugins and adding
@@ -25,13 +22,14 @@ Next, add this line to your `CMakeLists.txt` files:
 
 ## Linux
 
-On Linux, you will need to bump the minimum CMake version to 3.12 to make use
-of [Corrosion](https://github.com/corrosion-rs/corrosion), which is used by `rust.cmake`. Change this line in `linux/CMakeLists.txt`:
+在 Linux 上，你需要将 CMake 的最低版本提高到 3.12，这是
+[Corrosion](https://github.com/corrosion-rs/corrosion) 的要求，`rust.cmake` 依赖
+Corrosion。请修改 `linux/CMakeLists.txt` 的这一行：
 
 ```diff
 -cmake_minimum_required(VERSION 3.10)
 +cmake_minimum_required(VERSION 3.12)
 ```
 
-Alternatively, you can install Corrosion permanently on your system.
-Refer to the [Linux troubleshooting notes](../template/setup_desktop.md) here.
+可选：你可以将 Corrosion 安装到系统上。请查看
+[Linux troubleshooting notes](../template/setup_desktop.md).
