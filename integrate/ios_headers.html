@@ -135,19 +135,18 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="using-dummy-headers"><a class="header" href="#using-dummy-headers">Using dummy headers</a></h1>
-<p><code>flutter_rust_bridge_codegen</code> created a C header which lists all the
-exported symbols from our library, then uses it so that Xcode won't strip
-the symbols.</p>
-<p>Add <code>ios/Runner/bridge_generated.h</code> (or <code>macos/Runner/bridge_generated.h</code>)
-to the project, either by dragging it onto the project tree or
-via the <strong>Add Files to &quot;Runner&quot;...</strong> menu option.</p>
-<p>Switch to the <strong>Build Phases</strong> tab and drag the <strong>bridge_generated.h</strong> file over
-to the <strong>Copy Bundle Resources</strong> phase, if it isn't already present.</p>
+<p><code>flutter_rust_bridge_codegen</code> 会创建一个 C 头文件，里面列出了 Rust 库导出的所有符号，我们需要使用它确保 Xcode
+不会将符号去除。</p>
+<p>在项目中添加 <code>ios/Runner/bridge_generated.h</code> (或者
+<code>macos/Runner/bridge_generated.h</code>)，你可以把文件直接拖到项目文件夹中或者点击菜单上的 <strong>Add Files to
+&quot;Runner&quot;...</strong> .</p>
+<p>如果它还没有出现，请切换到 <strong>Build Phases</strong> 标签页，把 <strong>bridge_generated.h</strong> 文件拖到 <strong>Copy Bundle
+Resources</strong>。</p>
 <h2 id="ios"><a class="header" href="#ios">iOS</a></h2>
-<p>Next, add this line to <code>ios/Runner/Runner-Bridging-Header.h</code>:</p>
+<p>接下来，在 <code>ios/Runner/Runner-Bridging-Header.h</code> 中添加：</p>
 <pre><code class="language-diff">+#import &quot;bridge_generated.h&quot;
 </code></pre>
-<p>and in <code>ios/Runner/AppDelegate.swift</code>:</p>
+<p>在 <code>ios/Runner/AppDelegate.swift</code> 中添加：</p>
 <pre><code class="language-diff"> override func application(
      _ application: UIApplication,
      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -157,13 +156,13 @@ to the <strong>Copy Bundle Resources</strong> phase, if it isn't already present
      ..
  }
 </code></pre>
-<p>It is important that you use the result of <code>dummy_method_to_enforce_bundling()</code> (like in the example above), otherwise the symbols might still get stripped.</p>
+<p>这里调用 <code>dummy_method_to_enforce_bundling()</code>
+并打印返回值的步骤非常重要（类似于上面的例子），否则最终的符号还是可能被去除。</p>
 <h2 id="macos"><a class="header" href="#macos">MacOS</a></h2>
-<p>Flutter on MacOS does not use headers by default, so let's go ahead
-and add one ourselves. In the <strong>Build Settings</strong> tab, set the
-<strong>Objective-C Bridging Header</strong> to be <strong>Runner/bridge_generated.h</strong>.</p>
-<p>Finally, use <code>dummy_method_to_enforce_bundling</code> somewhere within
-<code>macos/Runner/AppDelegate.swift</code>, as long as Xcode does not consider it dead code.</p>
+<p>Flutter 在 MacOS 上默认不使用符号，我们需要添加我们自己的。在 <strong>Build Settings</strong> 标签页中，把 <strong>Objective-C
+Bridging Header</strong> 设置为 <strong>Runner/bridge_generated.h</strong></p>
+<p>最后，在 <code>macos/Runner/AppDelegate.swift</code> 文件的某个地方使用一下
+<code>dummy_method_to_enforce_bundling</code> , 只要 Xcode 不把它当作 dead code 就行。</p>
 
                     </main>
 

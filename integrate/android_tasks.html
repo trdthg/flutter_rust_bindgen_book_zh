@@ -135,11 +135,10 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="hooking-onto-tasks"><a class="header" href="#hooking-onto-tasks">Hooking onto tasks</a></h1>
-<p>This is the same method used by the app template and also the easier one.
-Go ahead and install <code>cargo-ndk</code> if you have not already done so:</p>
+<p>这与模板使用的方法相同，也是比较简单的方法。如果你还没有安装 <code>cargo-ndk</code>，请继续安装。</p>
 <pre><code>cargo install cargo-ndk
 </code></pre>
-<p>Next, add these lines near the bottom of <code>android/app/build.gradle</code>:</p>
+<p>接着，在 <code>android/app/build.gradle</code> 的最后添加下面几行：</p>
 <pre><code class="language-gradle">[
     new Tuple2('Debug', ''),
     new Tuple2('Profile', '--release'),
@@ -155,7 +154,7 @@ Go ahead and install <code>cargo-ndk</code> if you have not already done so:</p>
     tasks.register(&quot;cargoBuild$taskPostfix&quot;, Exec) {
         // Until https://github.com/bbqsrc/cargo-ndk/pull/13 is merged,
         // this workaround is necessary.
-        
+
         def ndk_command = &quot;&quot;&quot;cargo ndk \
             -t armeabi-v7a -t arm64-v8a -t x86_64 -t x86 \
             -o ../android/app/src/main/jniLibs build $profileMode&quot;&quot;&quot;
@@ -170,12 +169,8 @@ Go ahead and install <code>cargo-ndk</code> if you have not already done so:</p>
     }
 }
 </code></pre>
-<p>Note the ANDROID_NDK variable, this is a Gradle property that points to
-your installation of the Android NDK. If you don't rely on portability,
-you can hardcode this value, but note that it can be supplied by one
-of the many <code>gradle.properties</code> scattered throughout your filesystem.
-The most reliable way is to create a file at <code>~/.gradle/gradle.properties</code>
-and fill it with this:</p>
+<p>注意 ANDROID_NDK 变量，这是一个 Gradle 属性，它指向你安装的 Android NDK 目录。你可以硬编码这个值，但最可靠的方法是写入到
+<code>~/.gradle/gradle.properties</code>：</p>
 <pre><code>ANDROID_NDK=(path to NDK)
 </code></pre>
 

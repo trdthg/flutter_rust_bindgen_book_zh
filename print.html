@@ -981,8 +981,8 @@ issue）。</p>
 <p>更多信息：<a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/298">#298</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="从模板创建新项目"><a class="header" href="#从模板创建新项目">从模板创建新项目</a></h1>
 <p>在这一章里，我们将从模板创建你自己的项目。看起来有点长，但是这只是因为我们想讲清楚你可能遇到的每个细节。</p>
-<p><strong>注意:</strong> 虽然过程很复杂，但是绝大多数原因都不是来源于该库本身，因为它和使用原始的 Rust/Flutter FFI 一样复杂。换句话说，是建立
-Dart/Flutter + Rust 工具链需要费些时间。</p>
+<p><strong>注意:</strong> 虽然过程很复杂，但是绝大多数原因都不是来源于该库本身，使用原始的 Rust/Flutter FFI 和它一样复杂。换句话说，真正耗时的是搭建
+Dart/Flutter + Rust 工具链。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="创建一个新项目"><a class="header" href="#创建一个新项目">创建一个新项目</a></h1>
 <p>首先使用 <a href="https://github.com/Desdaemon/flutter_rust_bridge_template">flutter_rust_bridge_template</a> 的模板创建一个仓库。这个模板在大多数 Flutter 支持的平台应该可以通过
 <code>flutter run</code> 直接运行。</p>
@@ -1273,19 +1273,16 @@ flutter pub add freezed_annotation
      } else if cfg!(unix) {
 </code></pre>
 <p>当你运行 <code>flutter run</code> 后，你应该能看到： <img src="template/macos_intel.png" alt="macos-intel" /></p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="integrating-with-existing-projects"><a class="header" href="#integrating-with-existing-projects">Integrating with existing projects</a></h1>
-<p>This guide is an intermediate-level introduction to integrating Rust with
-an existing Flutter project. If you are new to Rust or configuring
-build processes in general, we suggest looking at <a href="template/tour.html">the template tour</a>
-to learn about the moving parts behind a <code>flutter run</code>.</p>
-<p>Before following this guide, upgrade your Flutter SDK, and if possible
-refresh your native build folders (<code>android</code>, <code>ios</code>, etc.) to make the process
-as straightforward as possible.</p>
-<p><strong>Remark:</strong> Most complexity does <em>not</em> come from this library, <code>flutter_rust_bridge</code> - it is as same complex as using raw Dart/Flutter FFI with Rust. In other words, it is the Dart/Flutter + Rust toolchain that takes time to set up.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="creating-a-new-crate"><a class="header" href="#creating-a-new-crate">Creating a new crate</a></h1>
-<p>First, if you haven't done so already, create a new crate within your project directory
-using <code>cargo new --lib</code>. It is recommended that the crate root is a sibling of the other native build
-folders for ease of config, e.g.:</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="集成到现有项目"><a class="header" href="#集成到现有项目">集成到现有项目</a></h1>
+<p>这一部分是中级教程，介绍了如何将 Rust 与现有的 Flutter 项目集成。如果您是 Rust
+初学者，或者只是在配置开发环境，我建议你先去看<a href="template/tour.html">the template tour</a> 学习 <code>flutter run</code>
+背后的部分。</p>
+<p>在进入教程之前，为了使集成更简单，请更新你的 Flutter SDK，如果可以的话，也请您重新构建项目。</p>
+<p><strong>注意:</strong> 虽然过程很复杂，但是绝大多数原因都不是来源于该库本身，使用原始的 Rust/Flutter FFI 和它一样复杂。换句话说，真正耗时的是搭建
+Dart/Flutter + Rust 工具链。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="创建一个新的-crate"><a class="header" href="#创建一个新的-crate">创建一个新的 crate</a></h1>
+<p>首先，你需要在项目文件夹里创建一个新的 Rust crate，运行 <code>cargo new --lib</code>。建议将 crate
+的根目录设为和其他项目同等级别，这样有助于配置文件。</p>
 <pre><code>├── android
 ├── ios
 ├── lib
@@ -1298,30 +1295,31 @@ folders for ease of config, e.g.:</p>
 ├── web
 └── windows
 </code></pre>
-<p>Throughout this section we will refer to your crate name as $crate. Unless otherwise noted, the crate folder
-and the crate name will be used interchangeably.</p>
-<p>Next, add these two lines to your <code>Cargo.toml</code>:</p>
+<p>这部分中我们会把你的 crate 称为 $crate。除非有其他说明，crate 文件夹和 crate 名称意义相同。</p>
+<p>接着，在你的 <code>Cargo.toml</code> 加上这两行：</p>
 <pre><code class="language-diff">+[lib]
 +crate-type = [&quot;staticlib&quot;, &quot;cdylib&quot;]
 </code></pre>
-<p>This configures your crate to be output as a static library for MacOS and iOS,
-and a dynamic library on other platforms. Configure this to your needs.
-If you would like to write tests or benchmarks, append <code>&quot;rlib&quot;</code> to the list
-as well.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="installing-dependencies"><a class="header" href="#installing-dependencies">Installing dependencies</a></h1>
-<p>Next, we need to install a few build-time and runtime dependencies.</p>
-<h2 id="build-time-dependencies"><a class="header" href="#build-time-dependencies">Build-time dependencies</a></h2>
-<p>These depdencies are required only in build-time:</p>
+<p>这两个行配置会让你的 crate 在 MacOS 和 iOS 上构建为一个静态库。在其他平台上则是动态库。根据你的需要进行配置。如果你
+想写单元测试或基准测试，也可以把<code>&quot;rlib&quot;</code> 加进去。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="安装依赖"><a class="header" href="#安装依赖">安装依赖</a></h1>
+<p>下一步，我们需要安装一些构建时和运行时依赖。</p>
+<h2 id="构建依赖"><a class="header" href="#构建依赖">构建依赖</a></h2>
+<p>这些依赖只在 build 时需要：</p>
 <ul>
-<li><a href="https://lib.rs/crates/flutter_rust_bridge_codegen"><code>flutter_rust_bridge_codegen</code></a>, the core codegen for Rust-Dart glue code</li>
-<li><a href="https://pub.dev/packages/ffigen"><code>ffigen</code></a>, to generate Dart code from C headers</li>
-<li>A working installation of LLVM, see <a href="https://pub.dev/packages/ffigen#installing-llvm">Installing LLVM</a>, used by <code>ffigen</code></li>
-<li>(Optional) <a href="https://lib.rs/crates/cargo-xcode"><code>cargo-xcode</code></a>, if you want to generate Xcode projects for iOS and MacOS</li>
+<li><a href="https://lib.rs/crates/flutter_rust_bridge_codegen"><code>flutter_rust_bridge_codegen</code></a>,
+生成 Rust-Dart 胶水代码的核心</li>
+<li><a href="https://pub.dev/packages/ffigen"><code>ffigen</code></a>, 从 C 头文件中生成 Dart 代码</li>
+<li>安装 LLVM, 请看
+<a href="https://pub.dev/packages/ffigen#installing-llvm">Installing LLVM</a>, <code>ffigen</code>
+会使用到</li>
+<li>(可选) <a href="https://lib.rs/crates/cargo-xcode"><code>cargo-xcode</code></a>,如果你想生成为 IOS 和 MacOS 的
+Xcode 项目</li>
 </ul>
-<p>An easy way to install most of these dependencies is to run:</p>
+<p>安装这些依赖的简单方法：</p>
 <ul>
 <li>
-<p>dart project</p>
+<p>dart 项目</p>
 <pre><code class="language-bash">cargo install flutter_rust_bridge_codegen
 dart pub add --dev ffigen &amp;&amp; dart pub add ffi
 # if building for iOS or MacOS
@@ -1329,7 +1327,7 @@ cargo install cargo-xcode
 </code></pre>
 </li>
 <li>
-<p>flutter project</p>
+<p>flutter 项目</p>
 <pre><code class="language-bash">cargo install flutter_rust_bridge_codegen
 flutter pub add --dev ffigen &amp;&amp; flutter pub add ffi
 # if building for iOS or MacOS
@@ -1337,42 +1335,37 @@ cargo install cargo-xcode
 </code></pre>
 </li>
 </ul>
-<p>Alternatively, each of these dependencies may provide prebuilt binaries. Check with
-your package manager and review them individually.</p>
-<h2 id="dart-dependencies"><a class="header" href="#dart-dependencies">Dart dependencies</a></h2>
-<p>On the Dart side, <code>flutter_rust_bridge</code> is the required runtime component of
-<code>flutter_rust_bridge_codegen</code>. If you plan to use enum structs in Rust, the
-following dependencies are also needed:</p>
+<p>另外，这些依赖也可能已经提供了预构建的二进制版本。请自行到包管理器中查找。</p>
+<h2 id="dart-依赖"><a class="header" href="#dart-依赖">Dart 依赖</a></h2>
+<p>在 Dart 这里，<code>flutter_rust_bridge</code> 是 <code>flutter_rust_bridge_codegen</code> 必需的运行时组件。如果你打算在
+Dart 中使用 Rust 的 enum struct，你需要这些依赖：</p>
 <ul>
 <li><code>build_runner</code> (dev)</li>
 <li><code>freezed</code> (dev)</li>
 <li><code>freezed_annotation</code></li>
 </ul>
-<p>Their usage is explained in <a href="integrate/../generate/build_runner.html">Using <code>build_runner</code></a>.</p>
+<p>它们的是使用方法在 <a href="integrate/../generate/build_runner.html">Using <code>build_runner</code></a>。</p>
 <pre><code class="language-bash">flutter pub add flutter_rust_bridge
 # if using Dart codegen
 flutter pub add -d build_runner
 flutter pub add -d freezed
 flutter pub add freezed_annotation
 </code></pre>
-<h2 id="rust-dependencies"><a class="header" href="#rust-dependencies">Rust dependencies</a></h2>
-<p>Similar to Dart, Rust requires the <code>flutter_rust_bridge</code> runtime component for support.</p>
-<p>Add these lines to <code>Cargo.toml</code>:</p>
+<h2 id="rust-依赖"><a class="header" href="#rust-依赖">Rust 依赖</a></h2>
+<p>和 Dart 类似，Rust 需要 <code>flutter_rust_bridge</code> 最为运行时依赖。</p>
+<p>在 <code>Cargo.toml</code> 里添加：</p>
 <pre><code class="language-diff">+[dependencies]
 +flutter_rust_bridge = &quot;1&quot;
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="integrating-with-android"><a class="header" href="#integrating-with-android">Integrating with Android</a></h1>
-<p>The setup process is identical to <a href="integrate/../template/setup_android.html">Android setup</a>,
-so go ahead and follow the steps described there. Once you're done, we will discuss
-how to modify the existing toolchain to accommodate Rust.</p>
-<p>There is more than one way to set up Cargo to run alongside Gradle, so this guide
-will cover the two main ones: hooking onto tasks, and integrating with CMake.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="集成到安卓"><a class="header" href="#集成到安卓">集成到安卓</a></h1>
+<p>设置过程与 <a href="integrate/../template/setup_android.html">Android setup</a> 相同。
+所以请继续按照那里的步骤进行。当你完成后，我们将继续修改现有的工具链以适应 Rust。</p>
+<p>设置 Cargo 与 Gradle 一起运行的方法有很多，本指南将介绍两种主要方式：任务钩子（hooking onto tasks），以及与 CMake 集成。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hooking-onto-tasks"><a class="header" href="#hooking-onto-tasks">Hooking onto tasks</a></h1>
-<p>This is the same method used by the app template and also the easier one.
-Go ahead and install <code>cargo-ndk</code> if you have not already done so:</p>
+<p>这与模板使用的方法相同，也是比较简单的方法。如果你还没有安装 <code>cargo-ndk</code>，请继续安装。</p>
 <pre><code>cargo install cargo-ndk
 </code></pre>
-<p>Next, add these lines near the bottom of <code>android/app/build.gradle</code>:</p>
+<p>接着，在 <code>android/app/build.gradle</code> 的最后添加下面几行：</p>
 <pre><code class="language-gradle">[
     new Tuple2('Debug', ''),
     new Tuple2('Profile', '--release'),
@@ -1388,7 +1381,7 @@ Go ahead and install <code>cargo-ndk</code> if you have not already done so:</p>
     tasks.register(&quot;cargoBuild$taskPostfix&quot;, Exec) {
         // Until https://github.com/bbqsrc/cargo-ndk/pull/13 is merged,
         // this workaround is necessary.
-        
+
         def ndk_command = &quot;&quot;&quot;cargo ndk \
             -t armeabi-v7a -t arm64-v8a -t x86_64 -t x86 \
             -o ../android/app/src/main/jniLibs build $profileMode&quot;&quot;&quot;
@@ -1403,79 +1396,72 @@ Go ahead and install <code>cargo-ndk</code> if you have not already done so:</p>
     }
 }
 </code></pre>
-<p>Note the ANDROID_NDK variable, this is a Gradle property that points to
-your installation of the Android NDK. If you don't rely on portability,
-you can hardcode this value, but note that it can be supplied by one
-of the many <code>gradle.properties</code> scattered throughout your filesystem.
-The most reliable way is to create a file at <code>~/.gradle/gradle.properties</code>
-and fill it with this:</p>
+<p>注意 ANDROID_NDK 变量，这是一个 Gradle 属性，它指向你安装的 Android NDK 目录。你可以硬编码这个值，但最可靠的方法是写入到
+<code>~/.gradle/gradle.properties</code>：</p>
 <pre><code>ANDROID_NDK=(path to NDK)
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="cmake-with-gradle"><a class="header" href="#cmake-with-gradle">CMake with Gradle</a></h1>
-<p>If you have taken a look at either the <code>windows</code> or <code>linux</code> folder,
-you will see a file named <code>CMakeLists.txt</code>. This is the definition file
-for the CMake toolchain that Flutter uses to build Windows and Linux apps.
-You can also use this strategy on Gradle, but this setup is beyond the scope
-of this guide and reserved for advanced tinkers.</p>
-<p>Refer to the <a href="https://developer.android.com/studio/projects/add-native-code">Add C and C++ code to your project</a>
-page on the official Android docs, modify around C-specific parts and use a
-tool like <a href="https://github.com/corrosion-rs/corrosion"><code>Corrosion</code></a> to integrate
-with Cargo. The advantage of this setup is that you can reuse your C tools
-<em>and</em> benefit from various techniques such as caching builds.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="integrating-with-iosmacos"><a class="header" href="#integrating-with-iosmacos">Integrating with iOS/MacOS</a></h1>
-<p><em>Credit to <a href="https://github.com/brotskydotcom/rust-on-ios">brotskydotcom/rust-on-ios</a>
-for the inspiration of this method.</em></p>
-<p>Setting up <code>flutter run</code> for iOS and MacOS is slightly more complicated than other platforms,
-due to its reliance on the Xcode user interface. This guide assumes you are running
-a relatively recent version of Xcode, which at the time of writing is Xcode 13.
-Other versions might have minor variances but the overall process should be the same.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="creating-the-rust-project"><a class="header" href="#creating-the-rust-project">Creating the Rust project</a></h1>
-<p>First, follow the instructions on the <a href="https://gitlab.com/kornelski/cargo-xcode#usage">Usage</a>
-section of <code>cargo-xcode</code>. The instructions that follow are quoted from there, but keep in mind
-that it might have become outdated.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cmake-和-gradle"><a class="header" href="#cmake-和-gradle">CMake 和 Gradle</a></h1>
+<p>如果你之前看过 <em>windows</em> 或 <em>linux</em> 文件夹，你会看到 一个名为 <em>CMakeLists.txt</em> 的文件。这个文件是 CMake
+工具链的定义文件，Flutter 使用它来构建 Windows 和 Linux 应用程序。你也可以在 Gradle 上使用
+这个策略，但这种设置超出了本指南的范围，是留给高级人员的。</p>
+<p>请参考官方 Android 文档中的
+<a href="https://developer.android.com/studio/projects/add-native-code">Add C and C++ code to your project</a>，围绕
+C 语言的特定部分进行修改，并使用 <a href="https://github.com/corrosion-rs/corrosion"><code>Corrosion</code></a>
+这样的工具来集成到 Cargo。这种设置的好处是，你可以重复使用 C 语言工具，并且受益于各种现有成熟技术，如构建缓存。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="与-iosmacos-集成"><a class="header" href="#与-iosmacos-集成">与 iOS/MacOS 集成</a></h1>
+<p><em>Credit to
+<a href="https://github.com/brotskydotcom/rust-on-ios">brotskydotcom/rust-on-ios</a> for
+the inspiration of this method.</em></p>
+<p>为 iOS 和 MacOS 设置 <code>flutter run</code> 比其他平台稍微复杂一些。由于其对 Xcode 用户界面的依赖。本指南假设您正在运行
+一个相对较新的 Xcode 版本，在写这篇文章的时候是 Xcode 13。其他版本可能会有一些小的差异，但整体过程应该是相同的。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="创建-rust-项目"><a class="header" href="#创建-rust-项目">创建 Rust 项目</a></h1>
+<p>首先，按照 <a href="https://gitlab.com/kornelski/cargo-xcode#usage">Usage</a>
+部分的说明。下面的说明是从那里引用的，但请记住 但请记住，它可能已经过时了。</p>
+<p>First, follow the instructions on the
+<a href="https://gitlab.com/kornelski/cargo-xcode#usage">Usage</a> section of
+<code>cargo-xcode</code>. The instructions that follow are quoted from there,
+但是记住，它可能已经过时了。</p>
 <hr />
-<p>Ensure that these lines are present in your <code>$crate/Cargo.toml</code>:</p>
+<p>确保你的 <code>$crate/Cargo.toml</code> 里有下面几行代码：</p>
 <pre><code class="language-toml">[lib]
 crate-type = [&quot;lib&quot;, &quot;staticlib&quot;, &quot;cdylib&quot;]
 </code></pre>
-<p>where</p>
+<p>一些说明</p>
 <ul>
-<li><code>lib</code> is required for non-library targets, such as tests and benchmarks</li>
-<li><code>staticlib</code> is required for iOS</li>
-<li><code>cdylib</code> for all other platforms</li>
+<li><code>lib</code> 对于非库项目时必须的，例如 tests 和 benchmarks</li>
+<li><code>staticlib</code> 对 iOS 是必须的</li>
+<li><code>cdylib</code> 是用于其他平台</li>
 </ul>
-<p>Configure this to suit your needs. Then run this command in <code>$crate</code>:</p>
+<p>请按照您的需求进行配置。接着在 <code>$crate</code> 下运行：</p>
 <pre><code class="language-bash">cargo xcode
 </code></pre>
-<p>This will generate a <code>$crate/$crate.xcodeproj</code> that can be imported into other Xcode projects.
-You only have to do this once per crate.
-Don't open the project yet; we need to configure it through the parent projects first.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="linking-the-project"><a class="header" href="#linking-the-project">Linking the project</a></h1>
-<p>Open <code>ios/Runner.xcodeproj</code> in Xcode, then add <code>$crate/$crate.xcodeproj</code> as a <em>subproject</em>
-of the Runner project. It should look like this:</p>
+<p>这行命令会生成一个 <code>$crate/$crate.xcodeproj</code>，可以导入到其他 Xcode 项目。你只需要为每个 crate
+做一次这样的工作。先不要打开这个项目 我们需要先通过父项目对其进行配置。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="链接该项目"><a class="header" href="#链接该项目">链接该项目</a></h1>
+<p>在 Xcode 中打开 <code>ios/Runner.xcodeproj</code>, 接着把 <code>$crate/$crate.xcodeproj</code> 作为一个
+<em>subproject</em> 添加。结果大致是这样：</p>
+<p>Open <code>ios/Runner.xcodeproj</code> in Xcode, then add <code>$crate/$crate.xcodeproj</code> as a
+<em>subproject</em> of the Runner project. It should look like this:</p>
 <p><img src="integrate/ios_proj_tree.png" alt="proj-tree" /></p>
-<p>Click on the <code>Runner</code> root project, then go to the <strong>Build Phases</strong> tab.
-First, expand the <strong>Dependencies</strong> phase, and add <strong>$crate-staticlib</strong>
-for iOS, or <strong>$crate-cdylib</strong> for MacOS.</p>
+<p>Click on the <code>Runner</code> root project, then go to the <strong>Build Phases</strong> tab. First,
+expand the <strong>Dependencies</strong> phase, and add <strong>$crate-staticlib</strong> for iOS, or
+<strong>$crate-cdylib</strong> for MacOS.</p>
 <p><img src="integrate/ios_dep_phase.png" alt="dep-phase" /></p>
-<p>Then, expand the <strong>Link Binary With Libraries</strong> phase, and add <strong>lib$crate_static.a</strong>
-for iOS, or <strong>$crate.dylib</strong> for MacOS.</p>
+<p>Then, expand the <strong>Link Binary With Libraries</strong> phase, and add
+<strong>lib$crate_static.a</strong> for iOS, or <strong>$crate.dylib</strong> for MacOS.</p>
 <p><img src="integrate/ios_link_phase.png" alt="link-phase" /></p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="generating-bindings"><a class="header" href="#generating-bindings">Generating bindings</a></h1>
-<p>Now that we've got most of the plumbing out of the way, let's compile our Rust
-application. If you just created your crate a few moments ago, go ahead and
-add a new file at <code>$crate/src/api.rs</code> and replace its contents with this snippet or
-whatever suits your fancy:</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="生成绑定"><a class="header" href="#生成绑定">生成绑定</a></h1>
+<p>现在我们已经完成了大部分的工作，让我们来编译我们的 Rust 程序。如果你刚才创建了你的 crate，请继续 在 <em>$crate/src/api.rs</em>
+处添加一个新文件，并将其内容替换为下面的代码片段或其他内容。</p>
 <pre><code class="language-rust ignore">pub fn greet() -&gt; String {
     &quot;Hello from Rust! 🦀&quot;.into()
 }
 </code></pre>
-<p>then in <code>$crate/src/lib.rs</code>:</p>
+<p>接着在 <code>$crate/src/lib.rs</code> 添加：</p>
 <pre><code class="language-diff">+mod api;
 </code></pre>
-<h2 id="running-the-codegen"><a class="header" href="#running-the-codegen">Running the codegen</a></h2>
-<p>Before we can compile the library, we need to generate the bindings first.
-From the root of the app, run these commands:</p>
+<h2 id="运行代码生成"><a class="header" href="#运行代码生成">运行代码生成</a></h2>
+<p>在我们编译之前，我们需要先生成绑定。从项目根目录运行这些命令：</p>
 <pre><code class="language-bash">flutter_rust_bridge_codegen \
     -r $crate/src/api.rs \
     -d lib/bridge_generated.dart \
@@ -1483,24 +1469,22 @@ From the root of the app, run these commands:</p>
     -c macos/Runner/bridge_generated.h   # if building for MacOS
 </code></pre>
 <blockquote>
-<p><strong>Note:</strong> These will be the same commands to use whenever you modify your Rust library code.</p>
+<p><strong>注意：</strong> 每次修改 Rust 的时候都会使用到这些命令。</p>
 </blockquote>
-<p>Running this command yields the C header of the functions and types exported
-by the Rust library, which we will need to keep the symbols from being stripped.</p>
+<p>运行这个命令可以得到由 Rust 库导出的函数和类型的 C 头文件。我们需要确保它来保持符号不被剥离。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="using-dummy-headers"><a class="header" href="#using-dummy-headers">Using dummy headers</a></h1>
-<p><code>flutter_rust_bridge_codegen</code> created a C header which lists all the
-exported symbols from our library, then uses it so that Xcode won't strip
-the symbols.</p>
-<p>Add <code>ios/Runner/bridge_generated.h</code> (or <code>macos/Runner/bridge_generated.h</code>)
-to the project, either by dragging it onto the project tree or
-via the <strong>Add Files to &quot;Runner&quot;...</strong> menu option.</p>
-<p>Switch to the <strong>Build Phases</strong> tab and drag the <strong>bridge_generated.h</strong> file over
-to the <strong>Copy Bundle Resources</strong> phase, if it isn't already present.</p>
+<p><code>flutter_rust_bridge_codegen</code> 会创建一个 C 头文件，里面列出了 Rust 库导出的所有符号，我们需要使用它确保 Xcode
+不会将符号去除。</p>
+<p>在项目中添加 <code>ios/Runner/bridge_generated.h</code> (或者
+<code>macos/Runner/bridge_generated.h</code>)，你可以把文件直接拖到项目文件夹中或者点击菜单上的 <strong>Add Files to
+&quot;Runner&quot;...</strong> .</p>
+<p>如果它还没有出现，请切换到 <strong>Build Phases</strong> 标签页，把 <strong>bridge_generated.h</strong> 文件拖到 <strong>Copy Bundle
+Resources</strong>。</p>
 <h2 id="ios"><a class="header" href="#ios">iOS</a></h2>
-<p>Next, add this line to <code>ios/Runner/Runner-Bridging-Header.h</code>:</p>
+<p>接下来，在 <code>ios/Runner/Runner-Bridging-Header.h</code> 中添加：</p>
 <pre><code class="language-diff">+#import &quot;bridge_generated.h&quot;
 </code></pre>
-<p>and in <code>ios/Runner/AppDelegate.swift</code>:</p>
+<p>在 <code>ios/Runner/AppDelegate.swift</code> 中添加：</p>
 <pre><code class="language-diff"> override func application(
      _ application: UIApplication,
      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -1510,23 +1494,20 @@ to the <strong>Copy Bundle Resources</strong> phase, if it isn't already present
      ..
  }
 </code></pre>
-<p>It is important that you use the result of <code>dummy_method_to_enforce_bundling()</code> (like in the example above), otherwise the symbols might still get stripped.</p>
+<p>这里调用 <code>dummy_method_to_enforce_bundling()</code>
+并打印返回值的步骤非常重要（类似于上面的例子），否则最终的符号还是可能被去除。</p>
 <h2 id="macos"><a class="header" href="#macos">MacOS</a></h2>
-<p>Flutter on MacOS does not use headers by default, so let's go ahead
-and add one ourselves. In the <strong>Build Settings</strong> tab, set the
-<strong>Objective-C Bridging Header</strong> to be <strong>Runner/bridge_generated.h</strong>.</p>
-<p>Finally, use <code>dummy_method_to_enforce_bundling</code> somewhere within
-<code>macos/Runner/AppDelegate.swift</code>, as long as Xcode does not consider it dead code.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="integrating-with-windows-and-linux"><a class="header" href="#integrating-with-windows-and-linux">Integrating with Windows and Linux</a></h1>
-<p>This guide groups together instructions for Windows and Linux desktop apps,
-as they use the same build system.</p>
-<p>The idea is the same as other platforms: we hook onto the existing projects
-using scripts, and we will also be borrowing from the template. Go ahead
-and download <a href="https://raw.githubusercontent.com/Desdaemon/flutter_rust_bridge_template/main/windows/rust.cmake">rust.cmake</a>
-into your <code>windows</code> and <code>linux</code> folders. Keep in mind that CMake will refuse
-to use files that lie outside of its working directory, so there will be duplications
-between the two build folders.</p>
-<p>Next, add this line to your <code>CMakeLists.txt</code> files:</p>
+<p>Flutter 在 MacOS 上默认不使用符号，我们需要添加我们自己的。在 <strong>Build Settings</strong> 标签页中，把 <strong>Objective-C
+Bridging Header</strong> 设置为 <strong>Runner/bridge_generated.h</strong></p>
+<p>最后，在 <code>macos/Runner/AppDelegate.swift</code> 文件的某个地方使用一下
+<code>dummy_method_to_enforce_bundling</code> , 只要 Xcode 不把它当作 dead code 就行。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="与-windows-和-linux-集成"><a class="header" href="#与-windows-和-linux-集成">与 Windows 和 Linux 集成</a></h1>
+<p>本指南将 Windows 和 Linux 桌面应用程序的说明放在一起，因为它们使用相同的构建系统。</p>
+<p>和其他平台一样：我们将使用脚本整合到现有的项目。现在我们将借用下模板，把
+<a href="https://raw.githubusercontent.com/Desdaemon/flutter_rust_bridge_template/main/windows/rust.cmake">rust.cmake</a>
+下载到你的 &quot;windows&quot; 和 &quot;linux&quot; 文件夹里。请注意，CMake
+会拒绝使用位于其工作目录之外的文件，所以在这两个构建文件夹之间会有一些重复的文件。</p>
+<p>接下来，在你的<code>CMakeLists.txt</code>文件中添加这一行：</p>
 <pre><code class="language-diff"> # Generated plugin build rules, which manage building the plugins and adding
  # them to the application.
  include(flutter/generated_plugins.cmake)
@@ -1537,22 +1518,23 @@ between the two build folders.</p>
  # Support files are copied into place next to the executable, so that it can
 </code></pre>
 <h2 id="linux"><a class="header" href="#linux">Linux</a></h2>
-<p>On Linux, you will need to bump the minimum CMake version to 3.12 to make use
-of <a href="https://github.com/corrosion-rs/corrosion">Corrosion</a>, which is used by <code>rust.cmake</code>. Change this line in <code>linux/CMakeLists.txt</code>:</p>
+<p>在 Linux 上，你需要将 CMake 的最低版本提高到 3.12，这是
+<a href="https://github.com/corrosion-rs/corrosion">Corrosion</a> 的要求，<code>rust.cmake</code> 依赖
+Corrosion。请修改 <code>linux/CMakeLists.txt</code> 的这一行：</p>
 <pre><code class="language-diff">-cmake_minimum_required(VERSION 3.10)
 +cmake_minimum_required(VERSION 3.12)
 </code></pre>
-<p>Alternatively, you can install Corrosion permanently on your system.
-Refer to the <a href="integrate/../template/setup_desktop.html">Linux troubleshooting notes</a> here.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="integrating-with-web"><a class="header" href="#integrating-with-web">Integrating with Web</a></h1>
-<p>As of writing, Web support is underway and tracked by <a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/315">fzyzcjy/flutter_rust_bridge#315</a>.
-Consider leaving comments and reactions to let us know of the demand for this feature!</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="using-the-dynamic-library"><a class="header" href="#using-the-dynamic-library">Using the dynamic library</a></h1>
-<p>If everything went well, running <code>flutter run</code> will now build your Rust library,
-the Flutter binary and link the two together. Now the only thing left to do is
-to actually use it!</p>
-<p>Download <a href="https://raw.githubusercontent.com/Desdaemon/flutter_rust_bridge_template/main/lib/ffi.dart">this file</a>
-to <code>lib/ffi.dart</code>, then modify its contents:</p>
+<p>可选：你可以将 Corrosion 安装到系统上。请查看
+<a href="integrate/../template/setup_desktop.html">Linux troubleshooting notes</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="与-web-集成"><a class="header" href="#与-web-集成">与 Web 集成</a></h1>
+<p>截至发稿时，Web
+支持正在进行中，并在<a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/315">fzyzcjy/flutter_rust_bridge#315</a>持续跟踪。
+请留下评论和建议，让我们了解您对这一功能的需求！</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="使用动态连接库"><a class="header" href="#使用动态连接库">使用动态连接库</a></h1>
+<p>如果一切顺利，运行 <code>flutter run</code> 就会自动构建你的 Rust 库，Flutter 二进制文件，并将二者连接起来。现在唯一要做的事情就是使用它！</p>
+<p>把
+<a href="https://raw.githubusercontent.com/Desdaemon/flutter_rust_bridge_template/main/lib/ffi.dart">这个文件</a>
+下载到 <code>lib/ffi.dart</code>,接着修改下面几行：</p>
 <pre><code class="language-diff"> // Re-export the bridge so it is only necessary to import this file.
  export 'bridge_generated.dart';
  import 'dart:io' as io;
@@ -1564,12 +1546,10 @@ to <code>lib/ffi.dart</code>, then modify its contents:</p>
  // but rather directly **linked** against the binary.
  final _dylib = io.Platform.isWindows ? '$_base.dll' : 'lib$_base.so';
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="wrapping-up"><a class="header" href="#wrapping-up">Wrapping up</a></h1>
-<p>Congratulations! You have successfully added a Rust component to your Flutter app
-using <code>flutter_rust_bridge</code> and configured <code>flutter run</code> to build your Rust library
-and link it to the app.</p>
-<p>As a reminder, you need to run these commands every time your Rust code changes <em>and</em>
-before you run <code>flutter run</code>:</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="收尾工作"><a class="header" href="#收尾工作">收尾工作</a></h1>
+<p>恭喜！您已经成功地将 Rust 组件通过 <code>flutter_rust_bridge</code> 添加到您的 Flutter 程序中。 ，并配置了
+<code>flutter run</code> 来构建您的 Rust 库 并将其链接到程序中。</p>
+<p>作为提醒，每次 Rust 代码改变时，以及 **在你运行<code>flutter run</code>之前，你都需要运行这些命令。</p>
 <pre><code class="language-bash">flutter_rust_bridge_codegen \
     -r $crate/src/api.rs \
     -d lib/bridge_generated.dart \
@@ -1578,10 +1558,9 @@ before you run <code>flutter run</code>:</p>
 # if using Dart codegen
 flutter pub run build_runner build
 </code></pre>
-<h2 id="renaming-the-rust-bridge-module"><a class="header" href="#renaming-the-rust-bridge-module">Renaming the Rust bridge module</a></h2>
-<p>If you would like to use the <code>--rust-output</code> flag of <code>flutter_rust_bridge_codegen</code>,
-keep in mind that you will have to update <code>$crate/src/lib.rs</code> to point to the correct
-file, for example if you use this command instead:</p>
+<h2 id="重命名-rust-bridge-模块"><a class="header" href="#重命名-rust-bridge-模块">重命名 Rust bridge 模块</a></h2>
+<p>如果你想用 <code>flutter_rust_bridge_codegen</code> 的 <code>--rust-output</code> 参数，不要忘记更新
+<code>$crate/src/lib.rs</code> 里引用的模块名</p>
 <pre><code class="language-bash">flutter_rust_bridge_codegen \
     ..
     --rust-output $crate/src/my_bridge.rs

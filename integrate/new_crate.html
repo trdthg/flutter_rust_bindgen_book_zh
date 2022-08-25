@@ -134,10 +134,9 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="creating-a-new-crate"><a class="header" href="#creating-a-new-crate">Creating a new crate</a></h1>
-<p>First, if you haven't done so already, create a new crate within your project directory
-using <code>cargo new --lib</code>. It is recommended that the crate root is a sibling of the other native build
-folders for ease of config, e.g.:</p>
+                        <h1 id="创建一个新的-crate"><a class="header" href="#创建一个新的-crate">创建一个新的 crate</a></h1>
+<p>首先，你需要在项目文件夹里创建一个新的 Rust crate，运行 <code>cargo new --lib</code>。建议将 crate
+的根目录设为和其他项目同等级别，这样有助于配置文件。</p>
 <pre><code>├── android
 ├── ios
 ├── lib
@@ -150,16 +149,13 @@ folders for ease of config, e.g.:</p>
 ├── web
 └── windows
 </code></pre>
-<p>Throughout this section we will refer to your crate name as $crate. Unless otherwise noted, the crate folder
-and the crate name will be used interchangeably.</p>
-<p>Next, add these two lines to your <code>Cargo.toml</code>:</p>
+<p>这部分中我们会把你的 crate 称为 $crate。除非有其他说明，crate 文件夹和 crate 名称意义相同。</p>
+<p>接着，在你的 <code>Cargo.toml</code> 加上这两行：</p>
 <pre><code class="language-diff">+[lib]
 +crate-type = [&quot;staticlib&quot;, &quot;cdylib&quot;]
 </code></pre>
-<p>This configures your crate to be output as a static library for MacOS and iOS,
-and a dynamic library on other platforms. Configure this to your needs.
-If you would like to write tests or benchmarks, append <code>&quot;rlib&quot;</code> to the list
-as well.</p>
+<p>这两个行配置会让你的 crate 在 MacOS 和 iOS 上构建为一个静态库。在其他平台上则是动态库。根据你的需要进行配置。如果你
+想写单元测试或基准测试，也可以把<code>&quot;rlib&quot;</code> 加进去。</p>
 
                     </main>
 

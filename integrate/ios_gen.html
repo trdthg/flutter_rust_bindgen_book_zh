@@ -134,21 +134,18 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="generating-bindings"><a class="header" href="#generating-bindings">Generating bindings</a></h1>
-<p>Now that we've got most of the plumbing out of the way, let's compile our Rust
-application. If you just created your crate a few moments ago, go ahead and
-add a new file at <code>$crate/src/api.rs</code> and replace its contents with this snippet or
-whatever suits your fancy:</p>
+                        <h1 id="生成绑定"><a class="header" href="#生成绑定">生成绑定</a></h1>
+<p>现在我们已经完成了大部分的工作，让我们来编译我们的 Rust 程序。如果你刚才创建了你的 crate，请继续 在 <em>$crate/src/api.rs</em>
+处添加一个新文件，并将其内容替换为下面的代码片段或其他内容。</p>
 <pre><code class="language-rust ignore">pub fn greet() -&gt; String {
     &quot;Hello from Rust! 🦀&quot;.into()
 }
 </code></pre>
-<p>then in <code>$crate/src/lib.rs</code>:</p>
+<p>接着在 <code>$crate/src/lib.rs</code> 添加：</p>
 <pre><code class="language-diff">+mod api;
 </code></pre>
-<h2 id="running-the-codegen"><a class="header" href="#running-the-codegen">Running the codegen</a></h2>
-<p>Before we can compile the library, we need to generate the bindings first.
-From the root of the app, run these commands:</p>
+<h2 id="运行代码生成"><a class="header" href="#运行代码生成">运行代码生成</a></h2>
+<p>在我们编译之前，我们需要先生成绑定。从项目根目录运行这些命令：</p>
 <pre><code class="language-bash">flutter_rust_bridge_codegen \
     -r $crate/src/api.rs \
     -d lib/bridge_generated.dart \
@@ -156,10 +153,9 @@ From the root of the app, run these commands:</p>
     -c macos/Runner/bridge_generated.h   # if building for MacOS
 </code></pre>
 <blockquote>
-<p><strong>Note:</strong> These will be the same commands to use whenever you modify your Rust library code.</p>
+<p><strong>注意：</strong> 每次修改 Rust 的时候都会使用到这些命令。</p>
 </blockquote>
-<p>Running this command yields the C header of the functions and types exported
-by the Rust library, which we will need to keep the symbols from being stripped.</p>
+<p>运行这个命令可以得到由 Rust 库导出的函数和类型的 C 头文件。我们需要确保它来保持符号不被剥离。</p>
 
                     </main>
 

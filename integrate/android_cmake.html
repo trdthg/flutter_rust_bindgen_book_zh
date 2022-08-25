@@ -134,17 +134,14 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="cmake-with-gradle"><a class="header" href="#cmake-with-gradle">CMake with Gradle</a></h1>
-<p>If you have taken a look at either the <code>windows</code> or <code>linux</code> folder,
-you will see a file named <code>CMakeLists.txt</code>. This is the definition file
-for the CMake toolchain that Flutter uses to build Windows and Linux apps.
-You can also use this strategy on Gradle, but this setup is beyond the scope
-of this guide and reserved for advanced tinkers.</p>
-<p>Refer to the <a href="https://developer.android.com/studio/projects/add-native-code">Add C and C++ code to your project</a>
-page on the official Android docs, modify around C-specific parts and use a
-tool like <a href="https://github.com/corrosion-rs/corrosion"><code>Corrosion</code></a> to integrate
-with Cargo. The advantage of this setup is that you can reuse your C tools
-<em>and</em> benefit from various techniques such as caching builds.</p>
+                        <h1 id="cmake-和-gradle"><a class="header" href="#cmake-和-gradle">CMake 和 Gradle</a></h1>
+<p>如果你之前看过 <em>windows</em> 或 <em>linux</em> 文件夹，你会看到 一个名为 <em>CMakeLists.txt</em> 的文件。这个文件是 CMake
+工具链的定义文件，Flutter 使用它来构建 Windows 和 Linux 应用程序。你也可以在 Gradle 上使用
+这个策略，但这种设置超出了本指南的范围，是留给高级人员的。</p>
+<p>请参考官方 Android 文档中的
+<a href="https://developer.android.com/studio/projects/add-native-code">Add C and C++ code to your project</a>，围绕
+C 语言的特定部分进行修改，并使用 <a href="https://github.com/corrosion-rs/corrosion"><code>Corrosion</code></a>
+这样的工具来集成到 Cargo。这种设置的好处是，你可以重复使用 C 语言工具，并且受益于各种现有成熟技术，如构建缓存。</p>
 
                     </main>
 

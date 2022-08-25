@@ -134,16 +134,13 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="integrating-with-windows-and-linux"><a class="header" href="#integrating-with-windows-and-linux">Integrating with Windows and Linux</a></h1>
-<p>This guide groups together instructions for Windows and Linux desktop apps,
-as they use the same build system.</p>
-<p>The idea is the same as other platforms: we hook onto the existing projects
-using scripts, and we will also be borrowing from the template. Go ahead
-and download <a href="https://raw.githubusercontent.com/Desdaemon/flutter_rust_bridge_template/main/windows/rust.cmake">rust.cmake</a>
-into your <code>windows</code> and <code>linux</code> folders. Keep in mind that CMake will refuse
-to use files that lie outside of its working directory, so there will be duplications
-between the two build folders.</p>
-<p>Next, add this line to your <code>CMakeLists.txt</code> files:</p>
+                        <h1 id="与-windows-和-linux-集成"><a class="header" href="#与-windows-和-linux-集成">与 Windows 和 Linux 集成</a></h1>
+<p>本指南将 Windows 和 Linux 桌面应用程序的说明放在一起，因为它们使用相同的构建系统。</p>
+<p>和其他平台一样：我们将使用脚本整合到现有的项目。现在我们将借用下模板，把
+<a href="https://raw.githubusercontent.com/Desdaemon/flutter_rust_bridge_template/main/windows/rust.cmake">rust.cmake</a>
+下载到你的 &quot;windows&quot; 和 &quot;linux&quot; 文件夹里。请注意，CMake
+会拒绝使用位于其工作目录之外的文件，所以在这两个构建文件夹之间会有一些重复的文件。</p>
+<p>接下来，在你的<code>CMakeLists.txt</code>文件中添加这一行：</p>
 <pre><code class="language-diff"> # Generated plugin build rules, which manage building the plugins and adding
  # them to the application.
  include(flutter/generated_plugins.cmake)
@@ -154,13 +151,14 @@ between the two build folders.</p>
  # Support files are copied into place next to the executable, so that it can
 </code></pre>
 <h2 id="linux"><a class="header" href="#linux">Linux</a></h2>
-<p>On Linux, you will need to bump the minimum CMake version to 3.12 to make use
-of <a href="https://github.com/corrosion-rs/corrosion">Corrosion</a>, which is used by <code>rust.cmake</code>. Change this line in <code>linux/CMakeLists.txt</code>:</p>
+<p>在 Linux 上，你需要将 CMake 的最低版本提高到 3.12，这是
+<a href="https://github.com/corrosion-rs/corrosion">Corrosion</a> 的要求，<code>rust.cmake</code> 依赖
+Corrosion。请修改 <code>linux/CMakeLists.txt</code> 的这一行：</p>
 <pre><code class="language-diff">-cmake_minimum_required(VERSION 3.10)
 +cmake_minimum_required(VERSION 3.12)
 </code></pre>
-<p>Alternatively, you can install Corrosion permanently on your system.
-Refer to the <a href="../template/setup_desktop.html">Linux troubleshooting notes</a> here.</p>
+<p>可选：你可以将 Corrosion 安装到系统上。请查看
+<a href="../template/setup_desktop.html">Linux troubleshooting notes</a>.</p>
 
                     </main>
 

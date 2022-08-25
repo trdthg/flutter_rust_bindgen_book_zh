@@ -134,12 +134,10 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="wrapping-up"><a class="header" href="#wrapping-up">Wrapping up</a></h1>
-<p>Congratulations! You have successfully added a Rust component to your Flutter app
-using <code>flutter_rust_bridge</code> and configured <code>flutter run</code> to build your Rust library
-and link it to the app.</p>
-<p>As a reminder, you need to run these commands every time your Rust code changes <em>and</em>
-before you run <code>flutter run</code>:</p>
+                        <h1 id="收尾工作"><a class="header" href="#收尾工作">收尾工作</a></h1>
+<p>恭喜！您已经成功地将 Rust 组件通过 <code>flutter_rust_bridge</code> 添加到您的 Flutter 程序中。 ，并配置了
+<code>flutter run</code> 来构建您的 Rust 库 并将其链接到程序中。</p>
+<p>作为提醒，每次 Rust 代码改变时，以及 **在你运行<code>flutter run</code>之前，你都需要运行这些命令。</p>
 <pre><code class="language-bash">flutter_rust_bridge_codegen \
     -r $crate/src/api.rs \
     -d lib/bridge_generated.dart \
@@ -148,10 +146,9 @@ before you run <code>flutter run</code>:</p>
 # if using Dart codegen
 flutter pub run build_runner build
 </code></pre>
-<h2 id="renaming-the-rust-bridge-module"><a class="header" href="#renaming-the-rust-bridge-module">Renaming the Rust bridge module</a></h2>
-<p>If you would like to use the <code>--rust-output</code> flag of <code>flutter_rust_bridge_codegen</code>,
-keep in mind that you will have to update <code>$crate/src/lib.rs</code> to point to the correct
-file, for example if you use this command instead:</p>
+<h2 id="重命名-rust-bridge-模块"><a class="header" href="#重命名-rust-bridge-模块">重命名 Rust bridge 模块</a></h2>
+<p>如果你想用 <code>flutter_rust_bridge_codegen</code> 的 <code>--rust-output</code> 参数，不要忘记更新
+<code>$crate/src/lib.rs</code> 里引用的模块名</p>
 <pre><code class="language-bash">flutter_rust_bridge_codegen \
     ..
     --rust-output $crate/src/my_bridge.rs

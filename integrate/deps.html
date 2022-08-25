@@ -134,20 +134,24 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="installing-dependencies"><a class="header" href="#installing-dependencies">Installing dependencies</a></h1>
-<p>Next, we need to install a few build-time and runtime dependencies.</p>
-<h2 id="build-time-dependencies"><a class="header" href="#build-time-dependencies">Build-time dependencies</a></h2>
-<p>These depdencies are required only in build-time:</p>
+                        <h1 id="安装依赖"><a class="header" href="#安装依赖">安装依赖</a></h1>
+<p>下一步，我们需要安装一些构建时和运行时依赖。</p>
+<h2 id="构建依赖"><a class="header" href="#构建依赖">构建依赖</a></h2>
+<p>这些依赖只在 build 时需要：</p>
 <ul>
-<li><a href="https://lib.rs/crates/flutter_rust_bridge_codegen"><code>flutter_rust_bridge_codegen</code></a>, the core codegen for Rust-Dart glue code</li>
-<li><a href="https://pub.dev/packages/ffigen"><code>ffigen</code></a>, to generate Dart code from C headers</li>
-<li>A working installation of LLVM, see <a href="https://pub.dev/packages/ffigen#installing-llvm">Installing LLVM</a>, used by <code>ffigen</code></li>
-<li>(Optional) <a href="https://lib.rs/crates/cargo-xcode"><code>cargo-xcode</code></a>, if you want to generate Xcode projects for iOS and MacOS</li>
+<li><a href="https://lib.rs/crates/flutter_rust_bridge_codegen"><code>flutter_rust_bridge_codegen</code></a>,
+生成 Rust-Dart 胶水代码的核心</li>
+<li><a href="https://pub.dev/packages/ffigen"><code>ffigen</code></a>, 从 C 头文件中生成 Dart 代码</li>
+<li>安装 LLVM, 请看
+<a href="https://pub.dev/packages/ffigen#installing-llvm">Installing LLVM</a>, <code>ffigen</code>
+会使用到</li>
+<li>(可选) <a href="https://lib.rs/crates/cargo-xcode"><code>cargo-xcode</code></a>,如果你想生成为 IOS 和 MacOS 的
+Xcode 项目</li>
 </ul>
-<p>An easy way to install most of these dependencies is to run:</p>
+<p>安装这些依赖的简单方法：</p>
 <ul>
 <li>
-<p>dart project</p>
+<p>dart 项目</p>
 <pre><code class="language-bash">cargo install flutter_rust_bridge_codegen
 dart pub add --dev ffigen &amp;&amp; dart pub add ffi
 # if building for iOS or MacOS
@@ -155,7 +159,7 @@ cargo install cargo-xcode
 </code></pre>
 </li>
 <li>
-<p>flutter project</p>
+<p>flutter 项目</p>
 <pre><code class="language-bash">cargo install flutter_rust_bridge_codegen
 flutter pub add --dev ffigen &amp;&amp; flutter pub add ffi
 # if building for iOS or MacOS
@@ -163,27 +167,25 @@ cargo install cargo-xcode
 </code></pre>
 </li>
 </ul>
-<p>Alternatively, each of these dependencies may provide prebuilt binaries. Check with
-your package manager and review them individually.</p>
-<h2 id="dart-dependencies"><a class="header" href="#dart-dependencies">Dart dependencies</a></h2>
-<p>On the Dart side, <code>flutter_rust_bridge</code> is the required runtime component of
-<code>flutter_rust_bridge_codegen</code>. If you plan to use enum structs in Rust, the
-following dependencies are also needed:</p>
+<p>另外，这些依赖也可能已经提供了预构建的二进制版本。请自行到包管理器中查找。</p>
+<h2 id="dart-依赖"><a class="header" href="#dart-依赖">Dart 依赖</a></h2>
+<p>在 Dart 这里，<code>flutter_rust_bridge</code> 是 <code>flutter_rust_bridge_codegen</code> 必需的运行时组件。如果你打算在
+Dart 中使用 Rust 的 enum struct，你需要这些依赖：</p>
 <ul>
 <li><code>build_runner</code> (dev)</li>
 <li><code>freezed</code> (dev)</li>
 <li><code>freezed_annotation</code></li>
 </ul>
-<p>Their usage is explained in <a href="../generate/build_runner.html">Using <code>build_runner</code></a>.</p>
+<p>它们的是使用方法在 <a href="../generate/build_runner.html">Using <code>build_runner</code></a>。</p>
 <pre><code class="language-bash">flutter pub add flutter_rust_bridge
 # if using Dart codegen
 flutter pub add -d build_runner
 flutter pub add -d freezed
 flutter pub add freezed_annotation
 </code></pre>
-<h2 id="rust-dependencies"><a class="header" href="#rust-dependencies">Rust dependencies</a></h2>
-<p>Similar to Dart, Rust requires the <code>flutter_rust_bridge</code> runtime component for support.</p>
-<p>Add these lines to <code>Cargo.toml</code>:</p>
+<h2 id="rust-依赖"><a class="header" href="#rust-依赖">Rust 依赖</a></h2>
+<p>和 Dart 类似，Rust 需要 <code>flutter_rust_bridge</code> 最为运行时依赖。</p>
+<p>在 <code>Cargo.toml</code> 里添加：</p>
 <pre><code class="language-diff">+[dependencies]
 +flutter_rust_bridge = &quot;1&quot;
 </code></pre>

@@ -134,12 +134,11 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="using-the-dynamic-library"><a class="header" href="#using-the-dynamic-library">Using the dynamic library</a></h1>
-<p>If everything went well, running <code>flutter run</code> will now build your Rust library,
-the Flutter binary and link the two together. Now the only thing left to do is
-to actually use it!</p>
-<p>Download <a href="https://raw.githubusercontent.com/Desdaemon/flutter_rust_bridge_template/main/lib/ffi.dart">this file</a>
-to <code>lib/ffi.dart</code>, then modify its contents:</p>
+                        <h1 id="使用动态连接库"><a class="header" href="#使用动态连接库">使用动态连接库</a></h1>
+<p>如果一切顺利，运行 <code>flutter run</code> 就会自动构建你的 Rust 库，Flutter 二进制文件，并将二者连接起来。现在唯一要做的事情就是使用它！</p>
+<p>把
+<a href="https://raw.githubusercontent.com/Desdaemon/flutter_rust_bridge_template/main/lib/ffi.dart">这个文件</a>
+下载到 <code>lib/ffi.dart</code>,接着修改下面几行：</p>
 <pre><code class="language-diff"> // Re-export the bridge so it is only necessary to import this file.
  export 'bridge_generated.dart';
  import 'dart:io' as io;
