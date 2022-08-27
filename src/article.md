@@ -1,4 +1,3 @@
-# Articles
+# 文章
 
-This chapter contains some articles related to `flutter_rust_bridge`.
-
+这一章包含了一些和 `flutter_rust_bridge` 相关的文章。

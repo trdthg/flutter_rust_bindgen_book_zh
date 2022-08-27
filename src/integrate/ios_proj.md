@@ -1,12 +1,7 @@
 # 创建 Rust 项目
 
-首先，按照 [Usage](https://gitlab.com/kornelski/cargo-xcode#usage)
-部分的说明。下面的说明是从那里引用的，但请记住 但请记住，它可能已经过时了。
-
-First, follow the instructions on the
-[Usage](https://gitlab.com/kornelski/cargo-xcode#usage) section of
-`cargo-xcode`. The instructions that follow are quoted from there,
-但是记住，它可能已经过时了。
+首先，请按照 [Usage](https://gitlab.com/kornelski/cargo-xcode#usage) 中 `cargo-xcode`
+部分的说明进行操作。下面的内容就是从那里引用的，但请注意，它可能已经过时了。
 
 ---
 
