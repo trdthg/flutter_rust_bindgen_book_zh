@@ -135,17 +135,14 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="链接该项目"><a class="header" href="#链接该项目">链接该项目</a></h1>
-<p>在 Xcode 中打开 <code>ios/Runner.xcodeproj</code>, 接着把 <code>$crate/$crate.xcodeproj</code> 作为一个
-<em>subproject</em> 添加。结果大致是这样：</p>
-<p>Open <code>ios/Runner.xcodeproj</code> in Xcode, then add <code>$crate/$crate.xcodeproj</code> as a
-<em>subproject</em> of the Runner project. It should look like this:</p>
+<p>在 Xcode 中打开 <code>ios/Runner.xcodeproj</code>, 接着把 <code>$crate/$crate.xcodeproj</code>
+添加为子项目。结果大致是这样：</p>
 <p><img src="ios_proj_tree.png" alt="proj-tree" /></p>
-<p>Click on the <code>Runner</code> root project, then go to the <strong>Build Phases</strong> tab. First,
-expand the <strong>Dependencies</strong> phase, and add <strong>$crate-staticlib</strong> for iOS, or
-<strong>$crate-cdylib</strong> for MacOS.</p>
+<p>点击 <code>Runner</code> 根项目，接着找到 <strong>Build Phases</strong>. 首先，展开 <strong>Dependencies</strong> , 接着对于 IOS 请添加
+<strong>$crate-staticlib</strong> ，对于 MacOS 请添加 <strong>$crate-cdylib</strong> 。</p>
 <p><img src="ios_dep_phase.png" alt="dep-phase" /></p>
-<p>Then, expand the <strong>Link Binary With Libraries</strong> phase, and add
-<strong>lib$crate_static.a</strong> for iOS, or <strong>$crate.dylib</strong> for MacOS.</p>
+<p>接着，展开 <strong>Link Binary With Libraries</strong>, 为 IOS 添加 <strong>lib$crate_static.a</strong>，或者对于 MacOS
+添加 <strong>$crate.dylib</strong>.</p>
 <p><img src="ios_link_phase.png" alt="link-phase" /></p>
 
                     </main>

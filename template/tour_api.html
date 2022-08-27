@@ -135,12 +135,12 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="nativesrcapirs"><a class="header" href="#nativesrcapirs"><code>native/src/api.rs</code></a></h1>
-<p>This is the default entry point for your library. Only functions defined here will be eligible for codegen.
-Functions may use types not defined in this file as parameter or return types, but those types must have
-been imported through <code>pub use</code> so that they are visible from <code>native/src/bridge_generated.rs</code>.</p>
-<p>Only types defined within the current crate are eligible for codegen.
-Furthermore, structs and enums may only comprise of types that are themselves eligible.</p>
-<p>To review the subset of currently eligible functions and types, see <a href="https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/frb_example/pure_dart/rust/src/api.rs">the example file here</a>.</p>
+<p>这是库默认入口文件，只有定义在这里的函数才能进行代码生成。函数可以引用定义在其他文件中的类型，作为参数或者返回值类型。但是这些类型必须通过 <code>pub use</code>
+导入，以便它们在 <code>native/src/bridge_generated.rs</code> 中可见。</p>
+<p>只有定义在当前 crate 的类型有资格进行代码生成。</p>
+<p>除此之外，结构和枚举的字段也需要符合上述条件。</p>
+<p>要查看目前符合条件的函数和类型，请看
+<a href="https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/frb_example/pure_dart/rust/src/api.rs">示例文件</a>.</p>
 
                     </main>
 
