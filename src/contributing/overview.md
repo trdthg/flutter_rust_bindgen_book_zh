@@ -1,13 +1,16 @@
-# Overview
+# 总览
 
 ## Prelude
 
-Firstly, welcome, and thanks for your contributions!
+首先，欢迎并感谢您做出的贡献！
 
-If you want to contribute, feel free to create a [Pull Request](https://github.com/fzyzcjy/flutter_rust_bridge/pulls). If you need some ideas of what to contribute, have a look at the [Issues section](https://github.com/fzyzcjy/flutter_rust_bridge/issues) of this repository.
+如果你想成为一个贡献者，请提交一个
+[Pull Request](https://github.com/fzyzcjy/flutter_rust_bridge/pulls)。如果你需要一些改进的点子，去看一下仓库的
+[Issues section](https://github.com/fzyzcjy/flutter_rust_bridge/issues)
 
-For a checklist, have a look at the [PR template](https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/.github/PULL_REQUEST_TEMPLATE.md).
+需要一个 PR 模板？请看一下
+[PR template](https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/.github/PULL_REQUEST_TEMPLATE.md).
 
-## Overall design
+## 总体设计
 
-To get a high-level idea how this library is implemented, here is the overall design: [link](design.md).
+如果你想从高层了解这个库的实现原理，这里是整体设计：[link](design.md)。

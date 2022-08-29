@@ -68,9 +68,9 @@
 
 # Part III: 贡献指南
 
-- [ ] [总览](./src/contributing/overview.md)
-- [ ] [整体设计](./src/contributing/design.md)
-- [ ] [附录](./src/contributing/appendix.md)
+- [x] [总览](./src/contributing/overview.md)
+- [x] [整体设计](./src/contributing/design.md)
+- [x] [附录](./src/contributing/appendix.md)
 
 # Part IV: 更多文档
 

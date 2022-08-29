@@ -1,24 +1,26 @@
-# Overall design
+# 设计总览
 
-> This doc is still WIP. Tracking issue: https://github.com/fzyzcjy/flutter_rust_bridge/issues/593
+> 这篇文档正在编写中。Tracking issue:
+> https://github.com/fzyzcjy/flutter_rust_bridge/issues/593
 
-## Folder structure
+## 文件结构
 
-* `frb_codegen`: Code generator. It inputs `api.rs` and outputs Rust and Dart code files.
-* `frb_example`: Examples.
-  * `pure_dart`: Not only an example, but, more importantly, serves as end-to-end tests.
-  * `with_flutter`: Example with integration into Flutter.
-  * `pure_dart_multi`: Demonstrate multi-file usage.
-* `frb_dart`: Support library for Dart - to be imported by users.
-* `frb_rust`: Support library for Rust - to be imported by users.
-* `frb_macros`: Indeed part of `frb_rust`. <small>It is a separate package simply because limitation of proc macros.</small>
-* `book`: The documentation.
-* `.github`: GitHub-related.
-  * `workflows/ci.yaml`: Definition of CI workflows.
+- `frb_codegen`: 代码生成器。它接收 `api.rs` 作为输入，并输出 Rust and Dart 代码文件。
+- `frb_example`: 例子。
+  - `pure_dart`: 不只是一个例子，更重要的是作为端到端的测试。
+  - `with_flutter`: 集成到 Flutter 的例子。
+  - `pure_dart_multi`: 展示多文件的使用。
+- `frb_dart`: 对 Dart 库的支持 - 需要由用户引入。
+- `frb_rust`: 对 Rust 库的支持 - 需要由用户引入。
+- `frb_macros`: `frb_rust` 独立的一部分。<small> 因为 proc macro 的限制，所以它是一个独立的
+  crate。</small>
+- `book`: 文档。
+- `.github`: GitHub 相关。
+  - `workflows/ci.yaml`: CI 工作流的定义。
 
-## Code-generator structure
+## 代码生成结构
 
-The pipeline is as follows:
+流程如下：
 
 ```
 ----------    src/parser    ----------    src/generator     ---------------
@@ -26,32 +28,54 @@ The pipeline is as follows:
 ----------                  ----------                      ---------------
 ```
 
-* The input, `api.rs` in the figure, is the user-provided handwritten Rust code.
-* The parser (`src/parser`) converts the input code (indeed [syn](https://crates.io/crates/syn) tree) into IR.
-* IR (`src/ir`), or internal representation, is a data structure that represents the information of the code that we are interested in.
-* The generator (`src/generator`) converts the IR into final outputs. More specifcially, as you can probably guess, `src/generator/dart` generates Dart code, `src/generator/rust` is for Rust code, and `src/generator/c` is for (a bit of) C code.
-* The outputs (`Rust & Dart` in the figure) are written to corresponding files.
+- 输入，图中的 `api.rs`, 是由用户提供的手工编写的 Rust 代码。
+- 解析器 (`src/parser`) 将输入的代码 (其实是 [syn](https://crates.io/crates/syn) 树) 转换为 IR.
+- IR (`src/ir`), 或者说 internal representation, 是一种结构，用来表示我们感兴趣的代码的信息。
+- 生成器 (`src/generator`) 将 IR 转换为最终的输出。更具体一点就是 `src/generator/dart` 生成 Dart 代码，
+  `src/generator/rust` 生成 Rust 代码，`src/generator/c` 生成 (部分) C 代码。
+- 最终的输出 (图中的 `Rust & Dart`) 被写入到对应的文件。
 
-## Data flow
+## 数据流
 
-Let us see what happens when a function is called.
+> 建议读者配合着 IDE 的代码跳转功能一同查看
 
-Suppose a user calls a (generated) Dart function `func({required String str})`. Then, the following happens:
+让我们看一下当调用一个函数时发生了什么。
 
-1. The generated Dart function, `func({required String str})`, convert "*Dart api data*" (i.e. the data that user really provides) into "*Dart wire data*" (i.e. the data that will really pass between Dart and Rust). More specifically, it calls `_api2wire_String(str)` and get a `ffi.Pointer<wire_uint_8_list>` (because `String`s use `pub struct wire_uint_8_list { ptr: *mut u8, len: i32 }` under the hood).
-2. Now we call the Dart version of `wire_func`, with low-level data like `wire_uint_8_list`. We have used our codegen to create a Rust `wire_func` function, and use `cbindgen` to generate the corresponding C function, and use `ffigen` to get the cooresponding Dart function. Here, we call the Dart version of `wire_func`. Since Dart FFI and Rust FFI is C-compatible, it seamlessly calls the Rust version of `wire_func`. Notice that, since we are utilizing C-compatible functions (and it is the only feasible way), we can only pass around low-level things like pointers, instead of high-level and safe things.
-2. Surely, the Rust `wire_func` is called. The function uses `.wire2api()` to convert "*Rust wire data*" (`wire_uint_8_list` here) into "*Rust api data*" (`String` here, i.e. data that users really use). 
-2. The `FLUTTER_RUST_BRIDGE_HANDLER` is called with "*Rust api data*". That handler is user-customizable, so users may provide their own implementation other than the default thread-pool, etc. By default, we use a thread pool, and we call the user-written `func` Rust function in `api.rs`.
-2. The user-written `fn func(str: String) -> String { ... }` is called, and we get a return value.
-2. The return value, a `String`, is posted to the Dart side. It is done by the Dart-provided API, [`Dart_PostCObject`](https://github.com/dart-lang/sdk/blob/fd0d3b254690007d0ebc84175f30fa7d7491ec3e/runtime/include/dart_native_api.h#L124), which let us provide C structs and it will automatically become Dart data on the other side. We use the Rust-safe wrapper `allo-isolate` for it. We deliberately choose this, because this enables Dart code to be *async* instead of sync.
-2. On the Dart side, we now see some Dart objects (indeed "*Dart wire data*"). We use functions like `_wire2api_SomeType` to convert it to the final "*Dart api data*". Notice this "wire2api" is on *Dart* side, so it means "*Dart* wire data to *Dart* api data", and is different from the one above which is for Rust. For example, since `Dart_PostCObject` does not provide a way to construct arbitrary structs(classes), we have to pass Rust structs as lists, and use the `wire2api` to convert them to corresponding Dart classes.
-2. The final result value is provided as return value of the Dart function, `func`, that the user called just now. A function call finishes!
+假设用户调用了一个（生成的）Dart 函数 `func({required String str})`。下面是详细过程：
 
-## Memory safety
+1. 生成的 Dart 函数，`func({required String str})`, 首先会将参数类型进行转换 "_Dart api data_"
+   (即用户提供的数据) 转换为 "_Dart wire data_" (即真正在 Dart 和 Rust 间传递的数据). 更具体一点，它会调用
+   `_api2wire_String(str)` 并得到一个指针 `ffi.Pointer<wire_uint_8_list>` (因为 `String`
+   类型在底层使用 `pub struct wire_uint_8_list { ptr: *mut u8, len: i32 }`).
+2. 可以用拿到的底层数据结构 `wire_uint_8_list` 调用 Dart 版本的 `wire_func`。调用 我们必须使用代码生成器生成一个
+   Rust 的 `wire_func` 函数，并使用 `cbindgen` 生成一个对应的 C 函数，接着使用 `ffigen` 得到对应的 Dart
+   函数。在这里，我们调用 Dart 版本的 `wire_func`。注意，因为我们利用的是和 C
+   语言兼容的函数，所以我们只能传递类似于指针的低级数据类型，而不是高级的安全的数据类型。
+3. 当 Rust 版的 `wire_func` 被调用时，也会对参数类型进行转换。即使用 `.wire2api()` 将 "_Rust wire data_"
+   (`wire_uint_8_list`，在 Dart 和 Rust 间传递的数据) 转换为 "_Rust api data_" (在这里就是
+   `String`, 用户真正使用的数据).
+4. 携带者转换后 "_Rust api data_" 调用 `FLUTTER_RUST_BRIDGE_HANDLER`。handler
+   是用户自定义的，所以用户可以提供他们自己的实现，而不是使用默认的线程池等。默认情况下，我们的 Handler 使用一个线程池，并在里面调用
+   `api.rs` 中定义的由用户编写的 Rust 函数
+5. 调用用户编写的 `fn func(str: String) -> String { ... }`，并得到返回值。
+6. 返回值类型是一个 `String`，它会被传递到 Dart 侧。这是通过 Dart 提供的 API
+   实现的。[`Dart_PostCObject`](https://github.com/dart-lang/sdk/blob/fd0d3b254690007d0ebc84175f30fa7d7491ec3e/runtime/include/dart_native_api.h#L124)，这个项目允许我们提供
+   C 的结构体，并自动转换到 Dart 的数据。我们使用了一个 Rust 安全的 wrapper `allo-isolate` 去通信，因为它允许 Dart
+   代码可以是异步的而不是同步。
+7. 现在让我们回到 Dart 一侧，你应该会接收到一些 Dart 对象（其实就是 "_Dart wire data_"）。接着我们会使用一些类似于
+   `_wire2api_SomeType` 的函数将它们转换为最终的 "_Dart api data_"。注意，这里提到的 "wire2api" 只定义在
+   Dart 一侧，它的作用就是将 "_Dart_ wire data" 转换为 "_Dart_ api data"，和之前定义在 Rust
+   中的不一样。举个例子，由于 `Dart_PostCObject` 并没有提供方法构建任意的结构体（类），我们必须将 Rust
+   结构体作为一个列表传递，并使用 `wire2api` 转换为对应的 Dart 类。
+8. 最终的结果会以 Dart 函数的返回值出现，即用户刚开始调用的 `func` 函数。到此为止，函数调用的整个过程就结束了！
 
-How is memory safety implemented? This is a case-by-case problem. For example, suppose we want to see how a `String` is safely passed from Dart to Rust. Then, we need to examine the Dart `_api2wire_String` and the Rust `.wire2api()` for it.
+## 内存安全
 
-Indeed `String` is implemented by delegating to `Vec<u8>`, so we need to see code related to String as well as `Vec<u8>`. By simply clicking a few times and jump around code, we will see that:
+如何保障内存安全？这个具体需要具体问题具体分析。例如，假设我们想看一个 `String` 是如何从 Dart 传递给 Rust 的。那么我们需要关注的是
+Dart 的 `_api2wire_String` 和 Rust 的 `.wire2api()`。
+
+实际上 `String` 是通过委派给 `Vec<u8>` 生成的，所以我们需要检查和 String 和 `Vec<u8>` 相关
+的代码。经过一系列跳转，你会看到下面的代码：
 
 ```dart
 ffi.Pointer<wire_uint_8_list> _api2wire_String(String raw) {
@@ -65,7 +89,7 @@ ffi.Pointer<wire_uint_8_list> _api2wire_uint_8_list(Uint8List raw) {
 }
 ```
 
-and
+以及
 
 ```rust,noplayground
 impl Wire2Api<Vec<u8>> for *mut wire_uint_8_list {
@@ -90,10 +114,10 @@ pub struct wire_uint_8_list {
 }
 ```
 
-In other words, String (or `Vec<u8>`) is converted to a raw struct with pointer and length field. The memory is manipulated carefully so there is no leak or double free.
+换句话说，String（或者 `Vec<u8>`）被转换为了一个原始结构体，它带有指针和长度字段。对内存的操作非常小心，因此不会造成泄漏或 重复释放。
 
-We use Valgrind to check as well, and I use it in production environment without problems, so no worries about memory problems :)
+我们同时还使用了 Valgrind 进行检查，我本人已经在生产环境中使用它，并没有发生问题，所以不用担心内存问题:)
 
-## Want to know more? Tell me
+## 想了解更多？请告诉我
 
-What do you want to know? Feel free to create an issue in GitHub, and I will tell more :)
+你还想了解哪些方面？请在 Github 上创建一个 Issue，我会告诉你更多 :)
