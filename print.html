@@ -1558,66 +1558,94 @@ flutter pub run build_runner build
 <pre><code class="language-diff">-mod bridge_generated;
 +mod my_bridge;
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="overview"><a class="header" href="#overview">Overview</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总览"><a class="header" href="#总览">总览</a></h1>
 <h2 id="prelude"><a class="header" href="#prelude">Prelude</a></h2>
-<p>Firstly, welcome, and thanks for your contributions!</p>
-<p>If you want to contribute, feel free to create a <a href="https://github.com/fzyzcjy/flutter_rust_bridge/pulls">Pull Request</a>. If you need some ideas of what to contribute, have a look at the <a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues">Issues section</a> of this repository.</p>
-<p>For a checklist, have a look at the <a href="https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/.github/PULL_REQUEST_TEMPLATE.md">PR template</a>.</p>
-<h2 id="overall-design"><a class="header" href="#overall-design">Overall design</a></h2>
-<p>To get a high-level idea how this library is implemented, here is the overall design: <a href="contributing/design.html">link</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="overall-design-1"><a class="header" href="#overall-design-1">Overall design</a></h1>
+<p>首先，欢迎并感谢您做出的贡献！</p>
+<p>如果你想成为一个贡献者，请提交一个
+<a href="https://github.com/fzyzcjy/flutter_rust_bridge/pulls">Pull Request</a>。如果你需要一些改进的点子，去看一下仓库的
+<a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues">Issues section</a></p>
+<p>需要一个 PR 模板？请看一下
+<a href="https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/.github/PULL_REQUEST_TEMPLATE.md">PR template</a>.</p>
+<h2 id="总体设计"><a class="header" href="#总体设计">总体设计</a></h2>
+<p>如果你想从高层了解这个库的实现原理，这里是整体设计：<a href="contributing/design.html">link</a>。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="设计总览"><a class="header" href="#设计总览">设计总览</a></h1>
 <blockquote>
-<p>This doc is still WIP. Tracking issue: https://github.com/fzyzcjy/flutter_rust_bridge/issues/593</p>
+<p>这篇文档正在编写中。Tracking issue:
+https://github.com/fzyzcjy/flutter_rust_bridge/issues/593</p>
 </blockquote>
-<h2 id="folder-structure"><a class="header" href="#folder-structure">Folder structure</a></h2>
+<h2 id="文件结构"><a class="header" href="#文件结构">文件结构</a></h2>
 <ul>
-<li><code>frb_codegen</code>: Code generator. It inputs <code>api.rs</code> and outputs Rust and Dart code files.</li>
-<li><code>frb_example</code>: Examples.
+<li><code>frb_codegen</code>: 代码生成器。它接收 <code>api.rs</code> 作为输入，并输出 Rust and Dart 代码文件。</li>
+<li><code>frb_example</code>: 例子。
 <ul>
-<li><code>pure_dart</code>: Not only an example, but, more importantly, serves as end-to-end tests.</li>
-<li><code>with_flutter</code>: Example with integration into Flutter.</li>
-<li><code>pure_dart_multi</code>: Demonstrate multi-file usage.</li>
+<li><code>pure_dart</code>: 不只是一个例子，更重要的是作为端到端的测试。</li>
+<li><code>with_flutter</code>: 集成到 Flutter 的例子。</li>
+<li><code>pure_dart_multi</code>: 展示多文件的使用。</li>
 </ul>
 </li>
-<li><code>frb_dart</code>: Support library for Dart - to be imported by users.</li>
-<li><code>frb_rust</code>: Support library for Rust - to be imported by users.</li>
-<li><code>frb_macros</code>: Indeed part of <code>frb_rust</code>. <small>It is a separate package simply because limitation of proc macros.</small></li>
-<li><code>book</code>: The documentation.</li>
-<li><code>.github</code>: GitHub-related.
+<li><code>frb_dart</code>: 对 Dart 库的支持 - 需要由用户引入。</li>
+<li><code>frb_rust</code>: 对 Rust 库的支持 - 需要由用户引入。</li>
+<li><code>frb_macros</code>: <code>frb_rust</code> 独立的一部分。<small> 因为 proc macro 的限制，所以它是一个独立的
+crate。</small></li>
+<li><code>book</code>: 文档。</li>
+<li><code>.github</code>: GitHub 相关。
 <ul>
-<li><code>workflows/ci.yaml</code>: Definition of CI workflows.</li>
+<li><code>workflows/ci.yaml</code>: CI 工作流的定义。</li>
 </ul>
 </li>
 </ul>
-<h2 id="code-generator-structure"><a class="header" href="#code-generator-structure">Code-generator structure</a></h2>
-<p>The pipeline is as follows:</p>
+<h2 id="代码生成结构"><a class="header" href="#代码生成结构">代码生成结构</a></h2>
+<p>流程如下：</p>
 <pre><code>----------    src/parser    ----------    src/generator     ---------------
 | api.rs | ---------------&gt; | src/ir | -------------------&gt; | Rust &amp; Dart |
 ----------                  ----------                      ---------------
 </code></pre>
 <ul>
-<li>The input, <code>api.rs</code> in the figure, is the user-provided handwritten Rust code.</li>
-<li>The parser (<code>src/parser</code>) converts the input code (indeed <a href="https://crates.io/crates/syn">syn</a> tree) into IR.</li>
-<li>IR (<code>src/ir</code>), or internal representation, is a data structure that represents the information of the code that we are interested in.</li>
-<li>The generator (<code>src/generator</code>) converts the IR into final outputs. More specifcially, as you can probably guess, <code>src/generator/dart</code> generates Dart code, <code>src/generator/rust</code> is for Rust code, and <code>src/generator/c</code> is for (a bit of) C code.</li>
-<li>The outputs (<code>Rust &amp; Dart</code> in the figure) are written to corresponding files.</li>
+<li>输入，图中的 <code>api.rs</code>, 是由用户提供的手工编写的 Rust 代码。</li>
+<li>解析器 (<code>src/parser</code>) 将输入的代码 (其实是 <a href="https://crates.io/crates/syn">syn</a> 树) 转换为 IR.</li>
+<li>IR (<code>src/ir</code>), 或者说 internal representation, 是一种结构，用来表示我们感兴趣的代码的信息。</li>
+<li>生成器 (<code>src/generator</code>) 将 IR 转换为最终的输出。更具体一点就是 <code>src/generator/dart</code> 生成 Dart 代码，
+<code>src/generator/rust</code> 生成 Rust 代码，<code>src/generator/c</code> 生成 (部分) C 代码。</li>
+<li>最终的输出 (图中的 <code>Rust &amp; Dart</code>) 被写入到对应的文件。</li>
 </ul>
-<h2 id="data-flow"><a class="header" href="#data-flow">Data flow</a></h2>
-<p>Let us see what happens when a function is called.</p>
-<p>Suppose a user calls a (generated) Dart function <code>func({required String str})</code>. Then, the following happens:</p>
+<h2 id="数据流"><a class="header" href="#数据流">数据流</a></h2>
+<blockquote>
+<p>建议读者配合着 IDE 的代码跳转功能一同查看</p>
+</blockquote>
+<p>让我们看一下当调用一个函数时发生了什么。</p>
+<p>假设用户调用了一个（生成的）Dart 函数 <code>func({required String str})</code>。下面是详细过程：</p>
 <ol>
-<li>The generated Dart function, <code>func({required String str})</code>, convert &quot;<em>Dart api data</em>&quot; (i.e. the data that user really provides) into &quot;<em>Dart wire data</em>&quot; (i.e. the data that will really pass between Dart and Rust). More specifically, it calls <code>_api2wire_String(str)</code> and get a <code>ffi.Pointer&lt;wire_uint_8_list&gt;</code> (because <code>String</code>s use <code>pub struct wire_uint_8_list { ptr: *mut u8, len: i32 }</code> under the hood).</li>
-<li>Now we call the Dart version of <code>wire_func</code>, with low-level data like <code>wire_uint_8_list</code>. We have used our codegen to create a Rust <code>wire_func</code> function, and use <code>cbindgen</code> to generate the corresponding C function, and use <code>ffigen</code> to get the cooresponding Dart function. Here, we call the Dart version of <code>wire_func</code>. Since Dart FFI and Rust FFI is C-compatible, it seamlessly calls the Rust version of <code>wire_func</code>. Notice that, since we are utilizing C-compatible functions (and it is the only feasible way), we can only pass around low-level things like pointers, instead of high-level and safe things.</li>
-<li>Surely, the Rust <code>wire_func</code> is called. The function uses <code>.wire2api()</code> to convert &quot;<em>Rust wire data</em>&quot; (<code>wire_uint_8_list</code> here) into &quot;<em>Rust api data</em>&quot; (<code>String</code> here, i.e. data that users really use). </li>
-<li>The <code>FLUTTER_RUST_BRIDGE_HANDLER</code> is called with &quot;<em>Rust api data</em>&quot;. That handler is user-customizable, so users may provide their own implementation other than the default thread-pool, etc. By default, we use a thread pool, and we call the user-written <code>func</code> Rust function in <code>api.rs</code>.</li>
-<li>The user-written <code>fn func(str: String) -&gt; String { ... }</code> is called, and we get a return value.</li>
-<li>The return value, a <code>String</code>, is posted to the Dart side. It is done by the Dart-provided API, <a href="https://github.com/dart-lang/sdk/blob/fd0d3b254690007d0ebc84175f30fa7d7491ec3e/runtime/include/dart_native_api.h#L124"><code>Dart_PostCObject</code></a>, which let us provide C structs and it will automatically become Dart data on the other side. We use the Rust-safe wrapper <code>allo-isolate</code> for it. We deliberately choose this, because this enables Dart code to be <em>async</em> instead of sync.</li>
-<li>On the Dart side, we now see some Dart objects (indeed &quot;<em>Dart wire data</em>&quot;). We use functions like <code>_wire2api_SomeType</code> to convert it to the final &quot;<em>Dart api data</em>&quot;. Notice this &quot;wire2api&quot; is on <em>Dart</em> side, so it means &quot;<em>Dart</em> wire data to <em>Dart</em> api data&quot;, and is different from the one above which is for Rust. For example, since <code>Dart_PostCObject</code> does not provide a way to construct arbitrary structs(classes), we have to pass Rust structs as lists, and use the <code>wire2api</code> to convert them to corresponding Dart classes.</li>
-<li>The final result value is provided as return value of the Dart function, <code>func</code>, that the user called just now. A function call finishes!</li>
+<li>生成的 Dart 函数，<code>func({required String str})</code>, 首先会将参数类型进行转换 &quot;<em>Dart api data</em>&quot;
+(即用户提供的数据) 转换为 &quot;<em>Dart wire data</em>&quot; (即真正在 Dart 和 Rust 间传递的数据). 更具体一点，它会调用
+<code>_api2wire_String(str)</code> 并得到一个指针 <code>ffi.Pointer&lt;wire_uint_8_list&gt;</code> (因为 <code>String</code>
+类型在底层使用 <code>pub struct wire_uint_8_list { ptr: *mut u8, len: i32 }</code>).</li>
+<li>可以用拿到的底层数据结构 <code>wire_uint_8_list</code> 调用 Dart 版本的 <code>wire_func</code>。调用 我们必须使用代码生成器生成一个
+Rust 的 <code>wire_func</code> 函数，并使用 <code>cbindgen</code> 生成一个对应的 C 函数，接着使用 <code>ffigen</code> 得到对应的 Dart
+函数。在这里，我们调用 Dart 版本的 <code>wire_func</code>。注意，因为我们利用的是和 C
+语言兼容的函数，所以我们只能传递类似于指针的低级数据类型，而不是高级的安全的数据类型。</li>
+<li>当 Rust 版的 <code>wire_func</code> 被调用时，也会对参数类型进行转换。即使用 <code>.wire2api()</code> 将 &quot;<em>Rust wire data</em>&quot;
+(<code>wire_uint_8_list</code>，在 Dart 和 Rust 间传递的数据) 转换为 &quot;<em>Rust api data</em>&quot; (在这里就是
+<code>String</code>, 用户真正使用的数据).</li>
+<li>携带者转换后 &quot;<em>Rust api data</em>&quot; 调用 <code>FLUTTER_RUST_BRIDGE_HANDLER</code>。handler
+是用户自定义的，所以用户可以提供他们自己的实现，而不是使用默认的线程池等。默认情况下，我们的 Handler 使用一个线程池，并在里面调用
+<code>api.rs</code> 中定义的由用户编写的 Rust 函数</li>
+<li>调用用户编写的 <code>fn func(str: String) -&gt; String { ... }</code>，并得到返回值。</li>
+<li>返回值类型是一个 <code>String</code>，它会被传递到 Dart 侧。这是通过 Dart 提供的 API
+实现的。<a href="https://github.com/dart-lang/sdk/blob/fd0d3b254690007d0ebc84175f30fa7d7491ec3e/runtime/include/dart_native_api.h#L124"><code>Dart_PostCObject</code></a>，这个项目允许我们提供
+C 的结构体，并自动转换到 Dart 的数据。我们使用了一个 Rust 安全的 wrapper <code>allo-isolate</code> 去通信，因为它允许 Dart
+代码可以是异步的而不是同步。</li>
+<li>现在让我们回到 Dart 一侧，你应该会接收到一些 Dart 对象（其实就是 &quot;<em>Dart wire data</em>&quot;）。接着我们会使用一些类似于
+<code>_wire2api_SomeType</code> 的函数将它们转换为最终的 &quot;<em>Dart api data</em>&quot;。注意，这里提到的 &quot;wire2api&quot; 只定义在
+Dart 一侧，它的作用就是将 &quot;<em>Dart</em> wire data&quot; 转换为 &quot;<em>Dart</em> api data&quot;，和之前定义在 Rust
+中的不一样。举个例子，由于 <code>Dart_PostCObject</code> 并没有提供方法构建任意的结构体（类），我们必须将 Rust
+结构体作为一个列表传递，并使用 <code>wire2api</code> 转换为对应的 Dart 类。</li>
+<li>最终的结果会以 Dart 函数的返回值出现，即用户刚开始调用的 <code>func</code> 函数。到此为止，函数调用的整个过程就结束了！</li>
 </ol>
-<h2 id="memory-safety"><a class="header" href="#memory-safety">Memory safety</a></h2>
-<p>How is memory safety implemented? This is a case-by-case problem. For example, suppose we want to see how a <code>String</code> is safely passed from Dart to Rust. Then, we need to examine the Dart <code>_api2wire_String</code> and the Rust <code>.wire2api()</code> for it.</p>
-<p>Indeed <code>String</code> is implemented by delegating to <code>Vec&lt;u8&gt;</code>, so we need to see code related to String as well as <code>Vec&lt;u8&gt;</code>. By simply clicking a few times and jump around code, we will see that:</p>
+<h2 id="内存安全"><a class="header" href="#内存安全">内存安全</a></h2>
+<p>如何保障内存安全？这个具体需要具体问题具体分析。例如，假设我们想看一个 <code>String</code> 是如何从 Dart 传递给 Rust 的。那么我们需要关注的是
+Dart 的 <code>_api2wire_String</code> 和 Rust 的 <code>.wire2api()</code>。</p>
+<p>实际上 <code>String</code> 是通过委派给 <code>Vec&lt;u8&gt;</code> 生成的，所以我们需要检查和 String 和 <code>Vec&lt;u8&gt;</code> 相关
+的代码。经过一系列跳转，你会看到下面的代码：</p>
 <pre><code class="language-dart">ffi.Pointer&lt;wire_uint_8_list&gt; _api2wire_String(String raw) {
   return _api2wire_uint_8_list(utf8.encoder.convert(raw));
 }
@@ -1628,7 +1656,7 @@ ffi.Pointer&lt;wire_uint_8_list&gt; _api2wire_uint_8_list(Uint8List raw) {
   return ans;
 }
 </code></pre>
-<p>and</p>
+<p>以及</p>
 <pre><code class="language-rust noplayground">impl Wire2Api&lt;Vec&lt;u8&gt;&gt; for *mut wire_uint_8_list {
     fn wire2api(self) -&gt; Vec&lt;u8&gt; {
         unsafe {
@@ -1650,29 +1678,33 @@ pub struct wire_uint_8_list {
     len: i32,
 }
 </code></pre>
-<p>In other words, String (or <code>Vec&lt;u8&gt;</code>) is converted to a raw struct with pointer and length field. The memory is manipulated carefully so there is no leak or double free.</p>
-<p>We use Valgrind to check as well, and I use it in production environment without problems, so no worries about memory problems :)</p>
-<h2 id="want-to-know-more-tell-me"><a class="header" href="#want-to-know-more-tell-me">Want to know more? Tell me</a></h2>
-<p>What do you want to know? Feel free to create an issue in GitHub, and I will tell more :)</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="appendix"><a class="header" href="#appendix">Appendix</a></h1>
+<p>换句话说，String（或者 <code>Vec&lt;u8&gt;</code>）被转换为了一个原始结构体，它带有指针和长度字段。对内存的操作非常小心，因此不会造成泄漏或 重复释放。</p>
+<p>我们同时还使用了 Valgrind 进行检查，我本人已经在生产环境中使用它，并没有发生问题，所以不用担心内存问题:)</p>
+<h2 id="想了解更多请告诉我"><a class="header" href="#想了解更多请告诉我">想了解更多？请告诉我</a></h2>
+<p>你还想了解哪些方面？请在 Github 上创建一个 Issue，我会告诉你更多 :)</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="附录"><a class="header" href="#附录">附录</a></h1>
 <blockquote>
-<p>Remark: Some docs here seem to be outdated. Refer to ci.yaml, main doc, justfile, etc to see an up-to-date version. This appendix will be overhauled.</p>
+<p>注意：一些文档可能过时了。请在 ci.yaml, 主文档，justfile 等等查看最新版本，etc to see an up-to-date
+version. 本附录将进行大修。</p>
 </blockquote>
-<h2 id="releasing-a-new-version"><a class="header" href="#releasing-a-new-version">Releasing a new version</a></h2>
-<p>Usually this is done by the owner (@fzyzcjy), so you do not need to do the following. If you need to release a new version, the following steps are needed. Bump several versions, change the version number in changelog, and use <code>cargo check</code> to automatically update the examples' dependency versions:</p>
+<h2 id="发行新版本"><a class="header" href="#发行新版本">发行新版本</a></h2>
+<p>通常是由库的拥有者做的 (@fzyzcjy),所以你基本不需要做这一步。如果你需要发布一个新版本，至少需要进行以下步骤。Bump 一些版本，在
+changelog 中改变版本号，并使用 <code>cargo check</code>来自动更新实例的依赖版本。</p>
 <pre><code>just release
 </code></pre>
-<h2 id="sample-commands-to-run-code-generator"><a class="header" href="#sample-commands-to-run-code-generator">Sample commands to run code generator</a></h2>
-<p>Just copied from <a href="https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/.github/workflows/codegen.yml">CI codegen.yml</a>.</p>
+<h2 id="运行代码生成器的简单代码"><a class="header" href="#运行代码生成器的简单代码">运行代码生成器的简单代码</a></h2>
+<p>只需要从
+<a href="https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/.github/workflows/codegen.yml">CI codegen.yml</a>
+复制即可。</p>
 <pre><code>(cd frb_codegen &amp;&amp; cargo run --package flutter_rust_bridge_codegen --bin flutter_rust_bridge_codegen -- --rust-input ../frb_example/pure_dart/rust/src/api.rs --dart-output ../frb_example/pure_dart/dart/lib/bridge_generated.dart --dart-format-line-length 120 &amp;&amp; cargo run --package flutter_rust_bridge_codegen --bin flutter_rust_bridge_codegen -- --rust-input ../frb_example/with_flutter/rust/src/api.rs --dart-output ../frb_example/with_flutter/lib/bridge_generated.dart --c-output ../frb_example/with_flutter/ios/Runner/bridge_generated.h --dart-format-line-length 120)
 </code></pre>
-<h2 id="format-and-lint-everything"><a class="header" href="#format-and-lint-everything">Format and lint everything</a></h2>
+<h2 id="格式化-和-lint"><a class="header" href="#格式化-和-lint">格式化 和 lint</a></h2>
 <pre><code>(cd frb_codegen &amp;&amp; cargo fmt --all); (cd frb_rust &amp;&amp; cargo fmt --all); (cd frb_macros &amp;&amp; cargo fmt --all); (cd frb_example/pure_dart/rust &amp;&amp; cargo fmt --all); (cd frb_example/with_flutter/rust &amp;&amp; cargo fmt --all);
-(cd frb_codegen &amp;&amp; cargo clippy); (cd frb_rust &amp;&amp; cargo clippy); (cd frb_macros &amp;&amp; cargo clippy); (cd frb_example/pure_dart/rust &amp;&amp; cargo clippy); (cd frb_example/with_flutter/rust &amp;&amp; cargo clippy);                                                                                                                                          
+(cd frb_codegen &amp;&amp; cargo clippy); (cd frb_rust &amp;&amp; cargo clippy); (cd frb_macros &amp;&amp; cargo clippy); (cd frb_example/pure_dart/rust &amp;&amp; cargo clippy); (cd frb_example/with_flutter/rust &amp;&amp; cargo clippy);
 (cd frb_dart &amp;&amp; dart format . --line-length 80); (cd frb_example/pure_dart/dart &amp;&amp; dart format . --line-length 120); (cd frb_example/with_flutter &amp;&amp; dart format . --line-length 120);
 (cd frb_dart &amp;&amp; dart analyze --fatal-infos); (cd frb_example/pure_dart/dart &amp;&amp; dart analyze --fatal-infos); (cd frb_example/with_flutter &amp;&amp; dart analyze --fatal-infos);
 </code></pre>
-<h2 id="upgrade-dependency-in-your-dependent-project"><a class="header" href="#upgrade-dependency-in-your-dependent-project">Upgrade dependency in your dependent project</a></h2>
+<h2 id="升级依赖的版本"><a class="header" href="#升级依赖的版本">升级依赖的版本</a></h2>
 <pre><code>flutter pub upgrade flutter_rust_bridge
 cargo update -p flutter_rust_bridge
 </code></pre>
