@@ -134,12 +134,20 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="safety-concerns"><a class="header" href="#safety-concerns">Safety concerns</a></h1>
-<p>This library has CI that runs <a href="https://www.valgrind.org/">Valgrind</a> automatically on the setup that a Dart program calls a Rust program using this package, so memory problems should be found by Valgrind. <sub>(Notice that, even when running a simple hello-world Dart program, Valgrind will report hundreds of errors. See <a href="https://github.com/dart-lang/sdk/issues/47346">this Dart lang issue</a> for more details. Therefore, I both look at &quot;definitely lost&quot; in Valgrind, and manually search things related to this library - if all reported errors are unrelated to this library then we are safe.)</sub></p>
-<p>In addition, Flutter integration tests are also done in CI. This ensures a real Flutter application using this library does not suffer from problems.</p>
-<p>Most of the code are written in safe Rust. The <code>unsafe</code> code mainly comes from <code>support::box_from_leak_ptr</code> and <code>support::vec_from_leak_ptr</code>. They are used for pointers and arrays, and I follow the high-upvoted answers and official doc when writing down that few lines of code.</p>
-<p>I use this library heavily in my own Flutter project (<code>yplusplus</code>, or <code>why++</code>). That app is in production and it works quite well. If I observe any problems, I will fix it in this library.</p>
-<p>The CI also runs the <code>run_codegen</code> workflow, which ensure that the code generator can compile and generate desired results. Lastly, the CI also runs formatters and linters (<code>fmt</code>, <code>clippy</code>, <code>dart analyze</code>, <code>dart format</code>), and linters can also catch some common problems.</p>
+                        <h1 id="安全顾虑"><a class="header" href="#安全顾虑">安全顾虑</a></h1>
+<p>该库使用 CI 工作流，并会在设置过程中自动运行 <a href="https://www.valgrind.org/">Valgrind</a> ，当 Dart 程序使用该库调用
+Rust 程序时，Valgrind 能及时发现内存安全问题
+<sub>( 注意：即时你只运行一个简单的 hello-world Dart 程序，Valgrind 也会检测到几百个错误。请查看
+<a href="https://github.com/dart-lang/sdk/issues/47346">this Dart lang issue</a>
+了解更多。因此，我检查了 Valgrind 报告的 &quot;definitely lost&quot;, 并且手动在库里搜索 -
+如果报告的所有错误都和该库无关，那么它就是安全的)</sub></p>
+<p>除此之外，与 Flutter 的集成也是通过 CI 完成。确保了使用该库的 Flutter 应用不会产生问题。</p>
+<p>大多数代码都是 safe Rust. <code>unsafe</code> 代码主要来自 <code>support::box_from_leak_ptr</code> 和
+<code>support::vec_from_leak_ptr</code>. 他们被用于处理指针和数组，我会遵循高票数的答案和官方文档编写相关代码。</p>
+<p>我在我的个人 Flutter 项目 (<code>yplusplus</code>, or <code>why++</code>) 里非常频繁的使用到了该库。那些 app
+已经用于生产环境，并且运行非常稳定，如果我自己观察到了任何问题，我会修复相关 bug。</p>
+<p>CI 同时会运行 <code>run_codegen</code> 工作流，确保生成的代码可以通过编译。最后，CI 还会运行代码格式化和 linter(<code>fmt</code>,
+<code>clippy</code>, <code>dart analyze</code>, <code>dart format</code>), linter 也能捕获到一些常见错误。</p>
 
                     </main>
 

@@ -134,15 +134,25 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="set-up-flutterdartrust-support-from-scratch"><a class="header" href="#set-up-flutterdartrust-support-from-scratch">Set up Flutter/Dart+Rust support from scratch</a></h1>
+                        <h1 id="从-0-设置-flutterdartrust-环境"><a class="header" href="#从-0-设置-flutterdartrust-环境">从 0 设置 Flutter/Dart+Rust 环境</a></h1>
 <blockquote>
-<p>This documentation is archived, though technically still correct. Have a look at <a href="integrate.html">integrating with existing projects</a> chapters for a more detailed demonstration.</p>
+<p>This documentation is archived, though technically still correct. Have a look
+at <a href="integrate.html">integrating with existing projects</a> chapters for a more
+detailed demonstration.</p>
 </blockquote>
-<p>I suggest that you can start with the <a href="https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/frb_example/with_flutter">Flutter example</a> first, and modify it to satisfy your needs. It can serve as a template for new projects. It is run against CI so we are sure it works.</p>
-<p>Indeed, this library is nothing but a code generator that helps your Flutter/Dart functions call Rust functions. Therefore, &quot;how to create a Flutter app that can run Rust code&quot; is actually out of the scope of this library, and there are already several tutorials on the Internet.</p>
-<p>However, I can sketch the outline of what to do if you want to set up a new Flutter+Rust project as follows.</p>
+<p>I suggest that you can start with the
+<a href="https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/frb_example/with_flutter">Flutter example</a>
+first, and modify it to satisfy your needs. It can serve as a template for new
+projects. It is run against CI so we are sure it works.</p>
+<p>Indeed, this library is nothing but a code generator that helps your
+Flutter/Dart functions call Rust functions. Therefore, &quot;how to create a Flutter
+app that can run Rust code&quot; is actually out of the scope of this library, and
+there are already several tutorials on the Internet.</p>
+<p>However, I can sketch the outline of what to do if you want to set up a new
+Flutter+Rust project as follows.</p>
 <h2 id="step-1"><a class="header" href="#step-1">Step 1</a></h2>
-<p>Create a new Flutter project (or use an existing one). The Dart SDK should be <code>&gt;=2.14.0</code> if you want to use the latest <code>ffigen</code> tool.</p>
+<p>Create a new Flutter project (or use an existing one). The Dart SDK should be
+<code>&gt;=2.14.0</code> if you want to use the latest <code>ffigen</code> tool.</p>
 <h2 id="step-2"><a class="header" href="#step-2">Step 2</a></h2>
 <p>Create a new Rust project, say, at directory <code>rust</code> under the Flutter project.</p>
 <h2 id="step-3"><a class="header" href="#step-3">Step 3</a></h2>
@@ -159,10 +169,19 @@ name = &quot;flutter_rust_bridge_example&quot; # whatever you like
 <li>Add your <code>lib{crate}.a</code> to <code>Link Binary With Libraries</code> in <code>Build Phases</code>.</li>
 <li>Add <code>binding.h</code> to <code>Copy Bundle Resources</code>.</li>
 <li>Add <code>#import &quot;binding.h&quot;</code> to <code>Runner-Bridging-Header</code>.</li>
-<li>Last but not least, add a never-to-be-executed dummy function in Swift that calls any of the generated C bindings. This lib has already generated a dummy method for you, so you simply need to add <code>print(&quot;dummy_value=\(dummy_method_to_enforce_bundling())&quot;);</code> to swift file's <code>override func application(...) {}</code>, and this will prevent symbol stripping - especially in the release build for iOS (i.e. when building ipa file or releasing to App Store). Notice that, we have to use that <code>dummy_method_to_enforce_bundling()</code>, otherwise the symbols will not maintain in the release build, and Flutter will complain it cannot find the symbols.</li>
+<li>Last but not least, add a never-to-be-executed dummy function in Swift that
+calls any of the generated C bindings. This lib has already generated a dummy
+method for you, so you simply need to add
+<code>print(&quot;dummy_value=\(dummy_method_to_enforce_bundling())&quot;);</code> to swift file's
+<code>override func application(...) {}</code>, and this will prevent symbol stripping -
+especially in the release build for iOS (i.e. when building ipa file or
+releasing to App Store). Notice that, we have to use that
+<code>dummy_method_to_enforce_bundling()</code>, otherwise the symbols will not maintain
+in the release build, and Flutter will complain it cannot find the symbols.</li>
 </ol>
 <h2 id="step-5"><a class="header" href="#step-5">Step 5</a></h2>
-<p>Lastly, in order to build the Rust library automatically when you are building Flutter, follow <a href="https://stackoverflow.com/q/69515032/4619958">this tutorial</a>.</p>
+<p>Lastly, in order to build the Rust library automatically when you are building
+Flutter, follow <a href="https://stackoverflow.com/q/69515032/4619958">this tutorial</a>.</p>
 
                     </main>
 

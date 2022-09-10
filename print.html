@@ -1708,56 +1708,101 @@ changelog 中改变版本号，并使用 <code>cargo check</code>来自动更新
 <pre><code>flutter pub upgrade flutter_rust_bridge
 cargo update -p flutter_rust_bridge
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="tutorial-pure-dart"><a class="header" href="#tutorial-pure-dart">Tutorial: Pure Dart</a></h1>
-<p><strong>Remark</strong>: The <code>valgrind_test</code> section of the <a href="https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/.github/workflows/test.yaml">CI workflow</a> can also be useful, if you want details of each command and want to see Valgrind configuration.</p>
-<p>Unlike the previous tutorial, this one integrates Rust with pure Dart instead of Flutter.</p>
-<h2 id="get-example-code"><a class="header" href="#get-example-code">Get example code</a></h2>
-<p>Please <a href="https://dart.dev/get-dart">install Dart</a>, <a href="https://www.rust-lang.org/learn/get-started">install Rust</a>, and have some familiarity with them. Then run <code>git clone https://github.com/fzyzcjy/flutter_rust_bridge</code>, and my example is in <code>frb_example/pure_dart</code>.</p>
-<h2 id="optional-manually-run-code-generator"><a class="header" href="#optional-manually-run-code-generator">(Optional) Manually run code generator</a></h2>
-<p>Remark: Bridge is automatically generated upon running <code>cargo build</code> using build-script in build.rs file, so this step is optional. Even if you do it, you should not see anything changed.</p>
-<p>Install it: <code>cargo install flutter_rust_bridge_codegen</code>.</p>
-<p>Run it: <code>flutter_rust_bridge_codegen --rust-input frb_example/pure_dart/rust/src/api.rs --dart-output frb_example/pure_dart/dart/lib/bridge_generated.dart</code> (See <a href="https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/.github/workflows/codegen.yml">CI workflow</a> as a reference.) (For Windows, you may need <code>\\</code> instead of <code>/</code> for paths.)</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="教程pure-dart"><a class="header" href="#教程pure-dart">教程：Pure Dart</a></h1>
+<p><strong>注意</strong>: 如果你想了解每一条具体命令，
+<a href="https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/.github/workflows/test.yaml">CI workflow</a>
+中的 <code>valgrind_test</code> 部分也是有用的。</p>
+<p>和之前的教程不一样，这个教程里 Rust 只和 Dart 本身集成，没有 Flutter.</p>
+<h2 id="拿到示例代码"><a class="header" href="#拿到示例代码">拿到示例代码</a></h2>
+<p>请 <a href="https://dart.dev/get-dart">下载 Dart</a>,
+<a href="https://www.rust-lang.org/learn/get-started">下载 Rust</a>,并熟悉一下。接着运行
+<code>git clone https://github.com/fzyzcjy/flutter_rust_bridge</code>, 例子在
+<code>frb_example/pure_dart</code>.</p>
+<h2 id="可选-手动运行代码生成"><a class="header" href="#可选-手动运行代码生成">(可选) 手动运行代码生成</a></h2>
+<p>注意：代码会在运行完 <code>cargo build</code> 后，通过 <em>build.rs</em>
+里的构建脚本自动生成。所以这一步是可选的。即使你再次运行，代码也不会发生什么改变。</p>
+<p>安装代码生成器：<code>cargo install flutter_rust_bridge_codegen</code>.</p>
+<p>运行：
+<code>flutter_rust_bridge_codegen --rust-input frb_example/pure_dart/rust/src/api.rs --dart-output frb_example/pure_dart/dart/lib/bridge_generated.dart</code>
+(你可以将
+<a href="https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/.github/workflows/codegen.yml">CI workflow</a>
+最为查阅手册.) (对 Windows 用户，你可能需要在路径里用 <code>\\</code> 代替 <code>/</code>.)</p>
 <h2 id="run-dartrust-app"><a class="header" href="#run-dartrust-app">Run &quot;Dart+Rust&quot; app</a></h2>
-<p>You may run <code>frb_example/pure_dart/dart/lib/main.dart</code> as a normal Dart program, except that you should provide the dynamic linked library of the Rust code (for simplicity, here I only demonstrate the approach for dynamic linked library, but you can for sure use other methods). The detailed steps are as follows.</p>
-<p>Run <code>cargo build</code> in <code>frb_example/pure_dart/rust</code> to build the Rust code into a <code>.so</code> file. Then run <code>dart frb_example/pure_dart/dart/lib/main.dart frb_example/pure_dart/rust/target/debug/libflutter_rust_bridge_example.so</code> to run the Dart program with Rust <code>.so</code> file. (If you have problems, see &quot;Troubleshooting&quot; section.)  (If on MacOS, Rust may indeed generate <code>.dylib</code>, so change the last command to use <code>...dylib</code> instead of <code>...so</code>,)</p>
-<p>P.S. You will only see some tests passing - no fancy UI or functionality in this example.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="safety-concerns"><a class="header" href="#safety-concerns">Safety concerns</a></h1>
-<p>This library has CI that runs <a href="https://www.valgrind.org/">Valgrind</a> automatically on the setup that a Dart program calls a Rust program using this package, so memory problems should be found by Valgrind. <sub>(Notice that, even when running a simple hello-world Dart program, Valgrind will report hundreds of errors. See <a href="https://github.com/dart-lang/sdk/issues/47346">this Dart lang issue</a> for more details. Therefore, I both look at &quot;definitely lost&quot; in Valgrind, and manually search things related to this library - if all reported errors are unrelated to this library then we are safe.)</sub></p>
-<p>In addition, Flutter integration tests are also done in CI. This ensures a real Flutter application using this library does not suffer from problems.</p>
-<p>Most of the code are written in safe Rust. The <code>unsafe</code> code mainly comes from <code>support::box_from_leak_ptr</code> and <code>support::vec_from_leak_ptr</code>. They are used for pointers and arrays, and I follow the high-upvoted answers and official doc when writing down that few lines of code.</p>
-<p>I use this library heavily in my own Flutter project (<code>yplusplus</code>, or <code>why++</code>). That app is in production and it works quite well. If I observe any problems, I will fix it in this library.</p>
-<p>The CI also runs the <code>run_codegen</code> workflow, which ensure that the code generator can compile and generate desired results. Lastly, the CI also runs formatters and linters (<code>fmt</code>, <code>clippy</code>, <code>dart analyze</code>, <code>dart format</code>), and linters can also catch some common problems.</p>
+<p>你可以将 <code>frb_example/pure_dart/dart/lib/main.dart</code> 作为一个普通的 Dart 程序运行，唯一不同的是，你需要提供
+Rust 的动态连接库 (简单起见，这里我只演示动态链接库的方法，但你当然可以使用其他方法）详细步骤如下。</p>
+<p>在 <code>frb_example/pure_dart/rust</code> 目录下运行 <code>cargo build</code> 将 Rust 代码编译为 <code>.so</code> 文件。接着执行
+<code>dart frb_example/pure_dart/dart/lib/main.dart frb_example/pure_dart/rust/target/debug/libflutter_rust_bridge_example.so</code>
+去运行 Dart 程序。</p>
+<p>(如果你的运行出现问题，请看 &quot;Troubleshooting&quot; 部分) (如果你的平台是 MacOS, Rust 应该会生成<code>.dylib</code>, 请把命令里的
+<code>...dylib</code> 替换为 <code>...so</code>)</p>
+<p>P.S. 这个例子里并没有 UI 或其他功能，你只能看到一些测试通过的信息。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="安全顾虑"><a class="header" href="#安全顾虑">安全顾虑</a></h1>
+<p>该库使用 CI 工作流，并会在设置过程中自动运行 <a href="https://www.valgrind.org/">Valgrind</a> ，当 Dart 程序使用该库调用
+Rust 程序时，Valgrind 能及时发现内存安全问题
+<sub>( 注意：即时你只运行一个简单的 hello-world Dart 程序，Valgrind 也会检测到几百个错误。请查看
+<a href="https://github.com/dart-lang/sdk/issues/47346">this Dart lang issue</a>
+了解更多。因此，我检查了 Valgrind 报告的 &quot;definitely lost&quot;, 并且手动在库里搜索 -
+如果报告的所有错误都和该库无关，那么它就是安全的)</sub></p>
+<p>除此之外，与 Flutter 的集成也是通过 CI 完成。确保了使用该库的 Flutter 应用不会产生问题。</p>
+<p>大多数代码都是 safe Rust. <code>unsafe</code> 代码主要来自 <code>support::box_from_leak_ptr</code> 和
+<code>support::vec_from_leak_ptr</code>. 他们被用于处理指针和数组，我会遵循高票数的答案和官方文档编写相关代码。</p>
+<p>我在我的个人 Flutter 项目 (<code>yplusplus</code>, or <code>why++</code>) 里非常频繁的使用到了该库。那些 app
+已经用于生产环境，并且运行非常稳定，如果我自己观察到了任何问题，我会修复相关 bug。</p>
+<p>CI 同时会运行 <code>run_codegen</code> 工作流，确保生成的代码可以通过编译。最后，CI 还会运行代码格式化和 linter(<code>fmt</code>,
+<code>clippy</code>, <code>dart analyze</code>, <code>dart format</code>), linter 也能捕获到一些常见错误。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h1>
 <h2 id="the-generated-store_dart_post_cobject-has-the-wrong-signature--stdargh-file-not-found-in-linux--stdboolh--"><a class="header" href="#the-generated-store_dart_post_cobject-has-the-wrong-signature--stdargh-file-not-found-in-linux--stdboolh--">The generated store_dart_post_cobject() has the wrong signature / <code>'stdarg.h' file not found</code> in Linux / <code>stdbool.h</code> / ...</a></h2>
-<p>Try to run code generator with working directory at <code>/</code>, or set the environment variable:</p>
+<p>Try to run code generator with working directory at <code>/</code>, or set the environment
+variable:</p>
 <pre><code class="language-bash">export CPATH=&quot;$(clang -v 2&gt;&amp;1 | grep &quot;Selected GCC installation&quot; | rev | cut -d' ' -f1 | rev)/include&quot;
 </code></pre>
-<p>as described in <a href="https://github.com/dart-lang/ffigen/issues/257">ffigen #257</a>, or add include path as is described in <a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/108">#108</a>. This is a problem with Rust's builtin <code>Command</code>. See also: <a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/472">#472</a> &amp; <a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/494">#494</a>.</p>
+<p>as described in <a href="https://github.com/dart-lang/ffigen/issues/257">ffigen #257</a>,
+or add include path as is described in
+<a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/108">#108</a>. This is a
+problem with Rust's builtin <code>Command</code>. See also:
+<a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/472">#472</a> &amp;
+<a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/494">#494</a>.</p>
 <h2 id="issue-with-store_dart_post_cobject"><a class="header" href="#issue-with-store_dart_post_cobject">Issue with <code>store_dart_post_cobject</code></a></h2>
-<p>If calling rust function gives the error below, please consider running <strong>cargo build</strong> again. This can happen when the generated rs file is not included when building is being done.</p>
+<p>If calling rust function gives the error below, please consider running <strong>cargo
+build</strong> again. This can happen when the generated rs file is not included when
+building is being done.</p>
 <pre><code class="language-sh">[ERROR:flutter/lib/ui/ui_dart_state.cc(209)] Unhandled Exception: Invalid argument(s): Failed to lookup symbol 'store_dart_post_cobject': target/debug/libadder.so: undefined symbol: store_dart_post_cobject
 </code></pre>
 <h2 id="error-running-cargo-ndk-ld-error-unable-to-find-library--lgcc"><a class="header" href="#error-running-cargo-ndk-ld-error-unable-to-find-library--lgcc">Error running <code>cargo ndk</code>: <code>ld: error: unable to find library -lgcc</code></a></h2>
-<p>Downgrade Android NDK to version 22. This is an <a href="https://github.com/bbqsrc/cargo-ndk/issues/22">ongoing issue</a> with <code>cargo-ndk</code>, a library unrelated to flutter_rust_bridge but solely used to build the examples, when using Android NDK version 23. (See <a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/149">#149</a>)</p>
+<p>Downgrade Android NDK to version 22. This is an
+<a href="https://github.com/bbqsrc/cargo-ndk/issues/22">ongoing issue</a> with <code>cargo-ndk</code>,
+a library unrelated to flutter_rust_bridge but solely used to build the
+examples, when using Android NDK version 23. (See
+<a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/149">#149</a>)</p>
 <h2 id="fail-to-run-flutter_rust_bridge_codegen-on-macos-please-supply-one-or-more-pathtollvm"><a class="header" href="#fail-to-run-flutter_rust_bridge_codegen-on-macos-please-supply-one-or-more-pathtollvm">Fail to run <code>flutter_rust_bridge_codegen</code> on MacOS, &quot;Please supply one or more path/to/llvm...&quot;</a></h2>
 <p>If you are running macOS, you will need to specify a path to your llvm:</p>
 <pre><code class="language-shell">flutter_rust_bridge_codegen --rust-input path/to/your/api.rs --dart-output path/to/file/being/bridge_generated.dart --llvm-path /usr/local/homebrew/opt/llvm/
 </code></pre>
-<p>You can install llvm using <code>brew install llvm</code> and it will be installed at <code>/usr/local/homebrew/opt/llvm/</code> by default.</p>
+<p>You can install llvm using <code>brew install llvm</code> and it will be installed at
+<code>/usr/local/homebrew/opt/llvm/</code> by default.</p>
 <h2 id="freezed-file-is-sometimes-not-generated-when-it-should-be"><a class="header" href="#freezed-file-is-sometimes-not-generated-when-it-should-be">Freezed file is sometimes not generated when it should be</a></h2>
-<p>If your <code>.freezed.dart</code> or <code>.g.dart</code> seems outdated, ensure you have run the <code>build_runner</code>.</p>
+<p>If your <code>.freezed.dart</code> or <code>.g.dart</code> seems outdated, ensure you have run the
+<code>build_runner</code>.</p>
 <p>Related: https://github.com/fzyzcjy/flutter_rust_bridge/issues/330</p>
 <h2 id="cant-create-typedef-from-non-function-type"><a class="header" href="#cant-create-typedef-from-non-function-type"><code>Can't create typedef from non-function type.</code></a></h2>
-<p>Ensure min sdk version of Flutter <code>pubspec.yaml</code> is at least 2.13.0 to let <code>ffigen</code> happy.</p>
+<p>Ensure min sdk version of Flutter <code>pubspec.yaml</code> is at least 2.13.0 to let
+<code>ffigen</code> happy.</p>
 <p>https://github.com/fzyzcjy/flutter_rust_bridge/issues/334</p>
 <h2 id="generated-code-is-so-long"><a class="header" href="#generated-code-is-so-long">Generated code is so long</a></h2>
-<p>Indeed all generated code are necessary (if you find something that can be simplified, file an issue). Moreover, other code generation tools also generate long code - for example, when using Google protobuf, a very popular serialization library, I see &gt;10k lines of Java code generated for a quite simple source proto file.</p>
-<h2 id="why-need-dart-2140"><a class="header" href="#why-need-dart-2140">Why need Dart <code>2.14.0</code></a></h2>
-<p>Dart SDK <code>&gt;=2.14.0</code> is needed not by this library, but by the latest version of the <code>ffigen</code> tool. Therefore, write <code>sdk: &quot;&gt;=2.14.0 &lt;3.0.0&quot;</code> in the <code>environment</code> section of <code>pubspec.yaml</code>. If you do not want that, consider installing a older version of the <code>ffigen</code> tool.</p>
-<h2 id="other-problems"><a class="header" href="#other-problems">Other problems?</a></h2>
-<p>Don't hesitate to <a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/new/choose">open an issue</a>! I usually reply within minutes or hours (except when sleeping, of course).</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="command-line-arguments"><a class="header" href="#command-line-arguments">Command line arguments</a></h1>
-<p>Simply add <code>--help</code> to see full documentation. The following is a (possibly outdated) snapshot when running the command with <code>--help</code>:</p>
+<p>Indeed all generated code are necessary (if you find something that can be
+simplified, file an issue). Moreover, other code generation tools also generate
+long code - for example, when using Google protobuf, a very popular
+serialization library, I see &gt;10k lines of Java code generated for a quite
+simple source proto file.</p>
+<h2 id="为什么需要-dart-2140"><a class="header" href="#为什么需要-dart-2140">为什么需要 Dart <code>2.14.0</code></a></h2>
+<p>这个库并不需要 Dart SDK <code>&gt;=2.14.0</code>, 但是最新的 <code>ffigen</code> 工具需要。所以才会在 <code>pubspec.yaml</code> 的
+<code>environment</code> 中限制 <code>sdk: &quot;&gt;=2.14.0 &lt;3.0.0&quot;</code>. 如果你需要摆脱这个限制，请考虑使用更老版本的 <code>ffigen</code> 工具。</p>
+<h2 id="其它问题"><a class="header" href="#其它问题">其它问题？</a></h2>
+<p>不要犹豫
+<a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/new/choose">open an issue</a>!
+我通常会在几分钟或者是几小时内回复 (当然除了我睡觉时 :D).</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="命令行参数"><a class="header" href="#命令行参数">命令行参数</a></h1>
+<p>加上 <code>--help</code> 查看完整文档。下面是一个快照 (可能已经过期):</p>
 <pre><code class="language-shell">flutter_rust_bridge_codegen 1.20.1
 
 USAGE:
@@ -1786,15 +1831,25 @@ OPTIONS:
         --dart-root &lt;dart-root&gt;
             Path to root of Dart project, otherwise inferred from --dart-output
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="set-up-flutterdartrust-support-from-scratch"><a class="header" href="#set-up-flutterdartrust-support-from-scratch">Set up Flutter/Dart+Rust support from scratch</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="从-0-设置-flutterdartrust-环境"><a class="header" href="#从-0-设置-flutterdartrust-环境">从 0 设置 Flutter/Dart+Rust 环境</a></h1>
 <blockquote>
-<p>This documentation is archived, though technically still correct. Have a look at <a href="integrate.html">integrating with existing projects</a> chapters for a more detailed demonstration.</p>
+<p>This documentation is archived, though technically still correct. Have a look
+at <a href="integrate.html">integrating with existing projects</a> chapters for a more
+detailed demonstration.</p>
 </blockquote>
-<p>I suggest that you can start with the <a href="https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/frb_example/with_flutter">Flutter example</a> first, and modify it to satisfy your needs. It can serve as a template for new projects. It is run against CI so we are sure it works.</p>
-<p>Indeed, this library is nothing but a code generator that helps your Flutter/Dart functions call Rust functions. Therefore, &quot;how to create a Flutter app that can run Rust code&quot; is actually out of the scope of this library, and there are already several tutorials on the Internet.</p>
-<p>However, I can sketch the outline of what to do if you want to set up a new Flutter+Rust project as follows.</p>
+<p>I suggest that you can start with the
+<a href="https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/frb_example/with_flutter">Flutter example</a>
+first, and modify it to satisfy your needs. It can serve as a template for new
+projects. It is run against CI so we are sure it works.</p>
+<p>Indeed, this library is nothing but a code generator that helps your
+Flutter/Dart functions call Rust functions. Therefore, &quot;how to create a Flutter
+app that can run Rust code&quot; is actually out of the scope of this library, and
+there are already several tutorials on the Internet.</p>
+<p>However, I can sketch the outline of what to do if you want to set up a new
+Flutter+Rust project as follows.</p>
 <h2 id="step-1"><a class="header" href="#step-1">Step 1</a></h2>
-<p>Create a new Flutter project (or use an existing one). The Dart SDK should be <code>&gt;=2.14.0</code> if you want to use the latest <code>ffigen</code> tool.</p>
+<p>Create a new Flutter project (or use an existing one). The Dart SDK should be
+<code>&gt;=2.14.0</code> if you want to use the latest <code>ffigen</code> tool.</p>
 <h2 id="step-2"><a class="header" href="#step-2">Step 2</a></h2>
 <p>Create a new Rust project, say, at directory <code>rust</code> under the Flutter project.</p>
 <h2 id="step-3"><a class="header" href="#step-3">Step 3</a></h2>
@@ -1811,27 +1866,54 @@ name = &quot;flutter_rust_bridge_example&quot; # whatever you like
 <li>Add your <code>lib{crate}.a</code> to <code>Link Binary With Libraries</code> in <code>Build Phases</code>.</li>
 <li>Add <code>binding.h</code> to <code>Copy Bundle Resources</code>.</li>
 <li>Add <code>#import &quot;binding.h&quot;</code> to <code>Runner-Bridging-Header</code>.</li>
-<li>Last but not least, add a never-to-be-executed dummy function in Swift that calls any of the generated C bindings. This lib has already generated a dummy method for you, so you simply need to add <code>print(&quot;dummy_value=\(dummy_method_to_enforce_bundling())&quot;);</code> to swift file's <code>override func application(...) {}</code>, and this will prevent symbol stripping - especially in the release build for iOS (i.e. when building ipa file or releasing to App Store). Notice that, we have to use that <code>dummy_method_to_enforce_bundling()</code>, otherwise the symbols will not maintain in the release build, and Flutter will complain it cannot find the symbols.</li>
+<li>Last but not least, add a never-to-be-executed dummy function in Swift that
+calls any of the generated C bindings. This lib has already generated a dummy
+method for you, so you simply need to add
+<code>print(&quot;dummy_value=\(dummy_method_to_enforce_bundling())&quot;);</code> to swift file's
+<code>override func application(...) {}</code>, and this will prevent symbol stripping -
+especially in the release build for iOS (i.e. when building ipa file or
+releasing to App Store). Notice that, we have to use that
+<code>dummy_method_to_enforce_bundling()</code>, otherwise the symbols will not maintain
+in the release build, and Flutter will complain it cannot find the symbols.</li>
 </ol>
 <h2 id="step-5"><a class="header" href="#step-5">Step 5</a></h2>
-<p>Lastly, in order to build the Rust library automatically when you are building Flutter, follow <a href="https://stackoverflow.com/q/69515032/4619958">this tutorial</a>.</p>
+<p>Lastly, in order to build the Rust library automatically when you are building
+Flutter, follow <a href="https://stackoverflow.com/q/69515032/4619958">this tutorial</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="文章"><a class="header" href="#文章">文章</a></h1>
 <p>这一章包含了一些和 <code>flutter_rust_bridge</code> 相关的文章。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="async-in-rust"><a class="header" href="#async-in-rust">Async in Rust</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rust-异步"><a class="header" href="#rust-异步">Rust 异步</a></h1>
 <blockquote>
-<p>Author: @AlienKevin</p>
+<p>作者：@AlienKevin</p>
 </blockquote>
-<p>This library does not yet support returning a Future type from Rust and this has to do with the difficulty of uniting the various approaches to async in Rust. The <a href="https://rust-lang.github.io/async-book/01_getting_started/03_state_of_async_rust.html#language-and-library-support">Rust Book</a> summarized the current state of async support succinctly:</p>
+<p>This library does not yet support returning a Future type from Rust and this has
+to do with the difficulty of uniting the various approaches to async in Rust.
+The
+<a href="https://rust-lang.github.io/async-book/01_getting_started/03_state_of_async_rust.html#language-and-library-support">Rust Book</a>
+summarized the current state of async support succinctly:</p>
 <blockquote>
-<p>The most fundamental traits, types and functions, such as the Future trait are provided by the standard library. The async/await syntax is supported directly by the Rust compiler.</p>
+<p>The most fundamental traits, types and functions, such as the Future trait are
+provided by the standard library. The async/await syntax is supported directly
+by the Rust compiler.</p>
 </blockquote>
 <blockquote>
-<p>Many utility types, macros and functions are provided by the futures crate. They can be used in any async Rust application.</p>
+<p>Many utility types, macros and functions are provided by the futures crate.
+They can be used in any async Rust application.</p>
 </blockquote>
 <blockquote>
-<p>Execution of async code, IO and task spawning are provided by &quot;async runtimes&quot;, such as Tokio and async-std. Most async applications, and some async crates, depend on a specific runtime.</p>
+<p>Execution of async code, IO and task spawning are provided by &quot;async
+runtimes&quot;, such as Tokio and async-std. Most async applications, and some
+async crates, depend on a specific runtime.</p>
 </blockquote>
-<p>While the futures crate provides an executor called <code>futures::executor::block_on</code>, libraries that use Tokio runtime cannot use this executor. According to <a href="https://runrust.miraheze.org/wiki/Async_crate_comparison">Rust-lang community wiki</a>, crates like Tokio that provide both a runtime and IO abstractions often have their IO depend on the runtime. This can make it difficult to write runtime-agnostic code. First, we demonstrate a common use case of async programming in Rust by attempting to fetch the content of a file from the internet using the popular HTTP Client <a href="https://docs.rs/reqwest/0.11.6/reqwest/">Reqwest</a>:</p>
+<p>While the futures crate provides an executor called
+<code>futures::executor::block_on</code>, libraries that use Tokio runtime cannot use this
+executor. According to
+<a href="https://runrust.miraheze.org/wiki/Async_crate_comparison">Rust-lang community wiki</a>,
+crates like Tokio that provide both a runtime and IO abstractions often have
+their IO depend on the runtime. This can make it difficult to write
+runtime-agnostic code. First, we demonstrate a common use case of async
+programming in Rust by attempting to fetch the content of a file from the
+internet using the popular HTTP Client
+<a href="https://docs.rs/reqwest/0.11.6/reqwest/">Reqwest</a>:</p>
 <pre><code class="language-rust ignore">use anyhow;
 
 async fn get() -&gt; anyhow::Result&lt;String&gt; {
@@ -1840,9 +1922,14 @@ async fn get() -&gt; anyhow::Result&lt;String&gt; {
     Ok(data)
 }
 </code></pre>
-<p>When you try to generate bindings for the <code>get</code> function, the generated code will contain errors because this library does not support returning Future from Rust.</p>
+<p>When you try to generate bindings for the <code>get</code> function, the generated code
+will contain errors because this library does not support returning Future from
+Rust.</p>
 <h2 id="mismatched-runtime"><a class="header" href="#mismatched-runtime">Mismatched runtime</a></h2>
-<p>The next logic thing to try would be to convert the asynchronous code to synchronous by directly blocking the current thread and execute the code. For our first attempt, we wrap <code>futures::executor::block_on</code> around an async block containing reqwest calls.</p>
+<p>The next logic thing to try would be to convert the asynchronous code to
+synchronous by directly blocking the current thread and execute the code. For
+our first attempt, we wrap <code>futures::executor::block_on</code> around an async block
+containing reqwest calls.</p>
 <pre><code class="language-rust ignore">use anyhow;
 use futures::executor::block_on;
 
@@ -1854,7 +1941,14 @@ fn get() -&gt; anyhow::Result&lt;String&gt; {
     })
 }
 </code></pre>
-<p>Since Reqwest uses the Tokio runtime instead of the futures runtime, our code panicked with the error &quot;there is no reactor running, must be called from the context of a Tokio 1.x runtime&quot;. To fix this error, we have two ways to execute async codes using the Tokio runtime. Approach 1 is the simplest and uses the convenient <a href="https://docs.rs/tokio/1.14.0/tokio/attr.main.html"><code>tokio::main</code></a> macro to turn an async function to a synchronous one. Approach 2 requires you to explicitly create a new Tokio runtime and use its block_on function to run the future to completion.</p>
+<p>Since Reqwest uses the Tokio runtime instead of the futures runtime, our code
+panicked with the error &quot;there is no reactor running, must be called from the
+context of a Tokio 1.x runtime&quot;. To fix this error, we have two ways to execute
+async codes using the Tokio runtime. Approach 1 is the simplest and uses the
+convenient <a href="https://docs.rs/tokio/1.14.0/tokio/attr.main.html"><code>tokio::main</code></a>
+macro to turn an async function to a synchronous one. Approach 2 requires you to
+explicitly create a new Tokio runtime and use its block_on function to run the
+future to completion.</p>
 <h2 id="approach-1-macro"><a class="header" href="#approach-1-macro">Approach 1 (macro)</a></h2>
 <pre><code class="language-rust ignore">use anyhow;
 
@@ -1893,7 +1987,10 @@ tokio = { version = &quot;1.14.0&quot;, features = [&quot;rt-multi-thread&quot;]
 anyhow = { version = &quot;1.0.49&quot; }
 </code></pre>
 <h2 id="plain-futures"><a class="header" href="#plain-futures">Plain futures</a></h2>
-<p>If you are using the plain futures crate without runtimes like Tokio, you should be safe to wrap the asynchronous code in an async block and use the <a href="https://docs.rs/futures/0.3.18/futures/executor/fn.block_on.html"><code>futures::executor::block_on</code></a> to run the future to completion:</p>
+<p>If you are using the plain futures crate without runtimes like Tokio, you should
+be safe to wrap the asynchronous code in an async block and use the
+<a href="https://docs.rs/futures/0.3.18/futures/executor/fn.block_on.html"><code>futures::executor::block_on</code></a>
+to run the future to completion:</p>
 <pre><code class="language-rust ignore">use futures::executor::block_on;
 
 async fn hello_world() -&gt; String {
@@ -1911,7 +2008,10 @@ fn main() {
 }
 </code></pre>
 <h2 id="avoid-async"><a class="header" href="#avoid-async">Avoid async</a></h2>
-<p>Lastly, you can avoid async code all together by using synchronously/blocking version of the functions if they are available. In Reqwest, there's a module called <code>reqwest::blocking</code> designed specifically for this purpose. So you can achieve the same thing above without using async.</p>
+<p>Lastly, you can avoid async code all together by using synchronously/blocking
+version of the functions if they are available. In Reqwest, there's a module
+called <code>reqwest::blocking</code> designed specifically for this purpose. So you can
+achieve the same thing above without using async.</p>
 <pre><code class="language-rust ignore">use anyhow;
 use reqwest;
 
