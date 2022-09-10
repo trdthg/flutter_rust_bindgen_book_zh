@@ -1,25 +1,41 @@
-# Tutorial: Pure Dart
+# 教程：Pure Dart
 
-**Remark**: The `valgrind_test` section of the [CI workflow](https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/.github/workflows/test.yaml) can also be useful, if you want details of each command and want to see Valgrind configuration.
+**注意**: 如果你想了解每一条具体命令，
+[CI workflow](https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/.github/workflows/test.yaml)
+中的 `valgrind_test` 部分也是有用的。
 
-Unlike the previous tutorial, this one integrates Rust with pure Dart instead of Flutter.
+和之前的教程不一样，这个教程里 Rust 只和 Dart 本身集成，没有 Flutter.
 
-## Get example code
+## 拿到示例代码
 
-Please [install Dart](https://dart.dev/get-dart), [install Rust](https://www.rust-lang.org/learn/get-started), and have some familiarity with them. Then run `git clone https://github.com/fzyzcjy/flutter_rust_bridge`, and my example is in `frb_example/pure_dart`.
+请 [下载 Dart](https://dart.dev/get-dart),
+[下载 Rust](https://www.rust-lang.org/learn/get-started),并熟悉一下。接着运行
+`git clone https://github.com/fzyzcjy/flutter_rust_bridge`, 例子在
+`frb_example/pure_dart`.
 
-## (Optional) Manually run code generator
+## (可选) 手动运行代码生成
 
-Remark: Bridge is automatically generated upon running `cargo build` using build-script in build.rs file, so this step is optional. Even if you do it, you should not see anything changed.
+注意：代码会在运行完 `cargo build` 后，通过 _build.rs_
+里的构建脚本自动生成。所以这一步是可选的。即使你再次运行，代码也不会发生什么改变。
 
-Install it: `cargo install flutter_rust_bridge_codegen`.
+安装代码生成器：`cargo install flutter_rust_bridge_codegen`.
 
-Run it: `flutter_rust_bridge_codegen --rust-input frb_example/pure_dart/rust/src/api.rs --dart-output frb_example/pure_dart/dart/lib/bridge_generated.dart` (See [CI workflow](https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/.github/workflows/codegen.yml) as a reference.) (For Windows, you may need `\\` instead of `/` for paths.)
+运行：
+`flutter_rust_bridge_codegen --rust-input frb_example/pure_dart/rust/src/api.rs --dart-output frb_example/pure_dart/dart/lib/bridge_generated.dart`
+(你可以将
+[CI workflow](https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/.github/workflows/codegen.yml)
+最为查阅手册.) (对 Windows 用户，你可能需要在路径里用 `\\` 代替 `/`.)
 
 ## Run "Dart+Rust" app
 
-You may run `frb_example/pure_dart/dart/lib/main.dart` as a normal Dart program, except that you should provide the dynamic linked library of the Rust code (for simplicity, here I only demonstrate the approach for dynamic linked library, but you can for sure use other methods). The detailed steps are as follows.
+你可以将 `frb_example/pure_dart/dart/lib/main.dart` 作为一个普通的 Dart 程序运行，唯一不同的是，你需要提供
+Rust 的动态连接库 (简单起见，这里我只演示动态链接库的方法，但你当然可以使用其他方法）详细步骤如下。
 
-Run `cargo build` in `frb_example/pure_dart/rust` to build the Rust code into a `.so` file. Then run `dart frb_example/pure_dart/dart/lib/main.dart frb_example/pure_dart/rust/target/debug/libflutter_rust_bridge_example.so` to run the Dart program with Rust `.so` file. (If you have problems, see "Troubleshooting" section.)  (If on MacOS, Rust may indeed generate `.dylib`, so change the last command to use `...dylib` instead of `...so`,)
+在 `frb_example/pure_dart/rust` 目录下运行 `cargo build` 将 Rust 代码编译为 `.so` 文件。接着执行
+`dart frb_example/pure_dart/dart/lib/main.dart frb_example/pure_dart/rust/target/debug/libflutter_rust_bridge_example.so`
+去运行 Dart 程序。
 
-P.S. You will only see some tests passing - no fancy UI or functionality in this example.
+(如果你的运行出现问题，请看 "Troubleshooting" 部分) (如果你的平台是 MacOS, Rust 应该会生成`.dylib`, 请把命令里的
+`...dylib` 替换为 `...so`)
+
+P.S. 这个例子里并没有 UI 或其他功能，你只能看到一些测试通过的信息。

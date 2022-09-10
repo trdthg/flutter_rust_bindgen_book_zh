@@ -1,6 +1,6 @@
-# Command line arguments
+# 命令行参数
 
-Simply add `--help` to see full documentation. The following is a (possibly outdated) snapshot when running the command with `--help`:
+加上 `--help` 查看完整文档。下面是一个快照 (可能已经过期):
 
 ```shell
 flutter_rust_bridge_codegen 1.20.1
@@ -31,4 +31,3 @@ OPTIONS:
         --dart-root <dart-root>
             Path to root of Dart project, otherwise inferred from --dart-output
 ```
-
