@@ -76,9 +76,9 @@
 
 - [x] [教程：Pure Dart](./src/tutorial_pure_dart.md)
 - [x] [安全顾虑](./src/safety.md)
-- [-] [疑难解答](./src/troubleshooting.md)
+- [ ] [疑难解答](./src/troubleshooting.md)
 - [x] [命令行参数](./src/command_line.md)
-- [-] [从零开始设置 Flutter/Rust 环境](./src/set_up_from_scratch.md)
+- [ ] [从零开始设置 Flutter/Rust 环境](./src/set_up_from_scratch.md)
 - [x] [文章](./src/article.md)
   - [ ] [Rust 异步](./src/article/async_in_rust.md)
   - [ ] [生成多文件](./src/article/generate_multiple_files.md)

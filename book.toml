@@ -1,5 +1,5 @@
 [book]
-authors = ["trdthg <trdthg@outlook.com>", "authors of flutter_rust_bridge, see GitHub README.md for detailed contributions"]
+authors = ["authors of flutter_rust_bridge, see GitHub README.md for detailed contributions", "trdthg <trdthg@outlook.com>"]
 language = "zh"
 multilingual = false
 src = "src"
