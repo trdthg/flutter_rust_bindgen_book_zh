@@ -135,10 +135,10 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="option"><a class="header" href="#option">Option</a></h1>
-<p>Dart 对于可能为空的字段有特殊的语法 - <code>?</code>，我们会自动把 <code>Option</code> 翻译为 <code>?</code>。你可以查看
+<p>Dart 对于可能为空的字段有特殊的语法 <code>?</code>，该库会自动把 <code>Option</code> 翻译为 <code>?</code>。你可以查看
 <a href="https://dart.dev/null-safety">官方文档</a> 了解更多。</p>
 <p>此外，<code>flutter_rust_bridge</code> 也能够处理 Dart 中的 <code>required</code> 关键字：如果一个参数不能为空，它就会被标记为
-<code>required</code>，同时你必须提供一个值。如果它可以为空，那就不需要 <code>required</code>，Dart 的惯例是默认为 null。</p>
+<code>required</code>。如果它可以为空，那就不需要 <code>required</code>，Dart 默认为 null。</p>
 <h2 id="示例"><a class="header" href="#示例">示例</a></h2>
 <pre><code class="language-rust noplayground">pub struct Element {
     pub tag: Option&lt;String&gt;,

@@ -137,7 +137,7 @@
                         <h1 id="教程一个-flutter-和-rust-构建的-app"><a class="header" href="#教程一个-flutter-和-rust-构建的-app">教程：一个 Flutter 和 Rust 构建的 app</a></h1>
 <p>在这个教程中，我们将绘制一个
 <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">曼德博集合（英语：Mandelbrot set，或译为曼德布洛特复数集合）</a>（一个著名的分形）。这个图片会由
-Rust 算法生成，并在 Flutter 中绘制，通过这个库通信。</p>
+Rust 算法生成，并在 Flutter 中绘制，Rust 和 Flutter 会通过这个库通信。</p>
 <!-- markdownlint-disable MD033 -->
 <details>
 <summary>(点击查看：Mandelbrot set 是什么：)</summary>
@@ -151,33 +151,33 @@ Rust 算法生成，并在 Flutter 中绘制，通过这个库通信。</p>
 <p>图片来源：维基百科</p>
 </details>
 <h2 id="获取源代码"><a class="header" href="#获取源代码">获取源代码</a></h2>
-<p>请 <a href="https://flutter.dev/docs/get-started/install">安装 Flutter</a>
-(如果你想把程序运行在桌面上，可以选择添加 <a href="https://flutter.dev/desktop">桌面支持</a>),
+<p><a href="https://flutter.dev/docs/get-started/install">安装 Flutter</a> (如果你想把程序运行在桌面上，可以选择添加
+<a href="https://flutter.dev/desktop">桌面支持</a>),
 <a href="https://www.rust-lang.org/learn/get-started">安装 Rust</a>, 接着克隆样例代码：</p>
 <pre><code class="language-shell">git clone https://github.com/fzyzcjy/flutter_rust_bridge &amp;&amp; cd flutter_rust_bridge/frb_example/with_flutter
 </code></pre>
 <h2 id="可选运行代码生成器"><a class="header" href="#可选运行代码生成器">可选：运行代码生成器</a></h2>
-<p>这一步是可选的，因为我已经在 <a href="./quickstart.html">快速入门</a> 时生成了源代码，再次运行也不会产生任何改变。</p>
-<p>一旦你修改了 <code>api.rs</code>，就需要再次运行代码生成。代码生成器所需要的更多依赖可以在
-<a href="integrate/deps.html">Installing dependencies</a> 查看</p>
+<p>这一步是可选的，因为我已经在 <a href="./quickstart.html">快速入门</a> 时生成了绑定代码，再次运行也不会产生任何改变。</p>
+<p>一旦你修改了 <code>api.rs</code>，就需要再次运行代码生成。代码生成器需要的依赖可以在
+<a href="integrate/deps.html">Installing dependencies</a> 章节查看</p>
 <h2 id="运行-app"><a class="header" href="#运行-app">运行 app</a></h2>
 <h3 id="前言命令细节"><a class="header" href="#前言命令细节">前言：命令细节</a></h3>
-<p>如果你需要了解命令的各个细节，可以查看
+<p>如果你需要了解命令的具体细节，可以查看
 <a href="https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/.github/workflows/ci.yaml">CI 工作流</a>。<code>flutter_android_test</code>,
 <code>flutter_ios_test</code>, <code>flutter_windows_test</code>, <code>flutter_macos_test</code> 和
 <code>flutter_linux_test</code> 演示了从一台新机器上运行该项目所需要的所有命令</p>
 <blockquote>
-<p>译者注：如果您的遇到运行失败，缺少环境等问题，请参考上述 CI 工作流。下面的 cargo ndk 等部分工具，和对应的交叉编译环境需要单独安装，也可以参照
+<p>译者注：如果您遇到运行失败，缺少环境等问题，请参考上述 CI 工作流。下面的 cargo ndk 等部分工具，和对应的交叉编译环境都需要单独安装，也可以参照
 PART II 的项目设置部分。</p>
 </blockquote>
 <h3 id="android-app"><a class="header" href="#android-app">Android app</a></h3>
 <ul>
 <li>把 <code>ANDROID_NDK=(path to NDK)</code> 添加到 <code>android/gradle.properties</code></li>
 <li>接着运行 <code>cargo ndk -o ../android/app/src/main/jniLibs build</code>.</li>
-<li>最后像平时一样运行 <code>flutter run</code>.</li>
+<li>最后运行 <code>flutter run</code>.</li>
 </ul>
 <p><strong>注意</strong>: <a href="https://stackoverflow.com/q/69515032/4619958">这个教程</a> 能够帮你在构建 Flutter
-程序时自动运行 cargo.</p>
+程序时自动运行 cargo build.</p>
 <h3 id="ios-app"><a class="header" href="#ios-app">iOS app</a></h3>
 <ul>
 <li>打开 <code>Cargo.toml</code> 并把 <code>cdylib</code> 修改为 <code>staticlib</code></li>
@@ -187,13 +187,13 @@ PART II 的项目设置部分。</p>
 <li>最后像平时一样运行 <code>flutter run</code>.</li>
 </ul>
 <p><strong>注意</strong>: <a href="https://stackoverflow.com/q/69515032/4619958">这个教程</a> 能够帮你在构建 Flutter
-程序时自动运行 cargo.</p>
+程序时自动运行 cargo build.</p>
 <h3 id="windows-app"><a class="header" href="#windows-app">Windows app</a></h3>
 <p>假设 <a href="https://flutter.dev/desktop#set-up">Flutter 桌面支持</a> 已经配置完成，你可以直接运行
 <code>flutter run</code>。更多细节可以在
 <a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/66">#66</a>.</p>
 <h3 id="linux-app"><a class="header" href="#linux-app">Linux app</a></h3>
-<p>和 Windows 一样。如果你是通过 <code>snap</code> 安装的 Flutter, 请注意一下
+<p>和 Windows 一样。如果你是通过 <code>snap</code> 安装的 Flutter, 请阅读一下
 <a href="https://github.com/canonical/flutter-snap/issues/53">#53</a>.</p>
 <h3 id="macos-app"><a class="header" href="#macos-app">MacOS app</a></h3>
 <p>和 Windows 一样。(P.S. 本质上说，<code>cargo-xcode</code> 被用于自动化)</p>

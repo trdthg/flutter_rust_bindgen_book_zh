@@ -139,7 +139,7 @@
 <p>和其他平台一样：我们将使用脚本整合到现有的项目。现在我们将借用下模板，把
 <a href="https://raw.githubusercontent.com/Desdaemon/flutter_rust_bridge_template/main/windows/rust.cmake">rust.cmake</a>
 下载到你的 &quot;windows&quot; 和 &quot;linux&quot; 文件夹里。请注意，CMake
-会拒绝使用位于其工作目录之外的文件，所以在这两个构建文件夹之间会有一些重复的文件。</p>
+会拒绝使用位于其工作目录之外的文件，所以在这两个文件夹之间会有一些重复的文件。</p>
 <p>接下来，在你的<code>CMakeLists.txt</code>文件中添加这一行：</p>
 <pre><code class="language-diff"> # Generated plugin build rules, which manage building the plugins and adding
  # them to the application.
@@ -151,7 +151,7 @@
  # Support files are copied into place next to the executable, so that it can
 </code></pre>
 <h2 id="linux"><a class="header" href="#linux">Linux</a></h2>
-<p>在 Linux 上，你需要将 CMake 的最低版本提高到 3.12，这是
+<p>在 Linux 上，你需要将 CMake 的最低版本升到 3.12，这是
 <a href="https://github.com/corrosion-rs/corrosion">Corrosion</a> 的要求，<code>rust.cmake</code> 依赖
 Corrosion。请修改 <code>linux/CMakeLists.txt</code> 的这一行：</p>
 <pre><code class="language-diff">-cmake_minimum_required(VERSION 3.10)

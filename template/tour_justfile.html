@@ -135,10 +135,10 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="justfile"><a class="header" href="#justfile"><code>justfile</code></a></h1>
-<p>这个文件定义了 <a href="https://github.com/casey/just">just</a> 命令的 &quot;配方&quot;，它们和 <code>make</code> 与 MakeFile 类似。<a href="https://github.com/casey/just">just</a> 使用 Rust 构建，并在传统的
-Makefile 语法基础上改进，更好地支持条件语句、参数、跨平台兼容性等。</p>
+<p>这个文件定义了 <a href="https://github.com/casey/just">just</a> 命令的 &quot;配方&quot;，它和 <code>make</code> 与 MakeFile 类似。<a href="https://github.com/casey/just">just</a> 使用 Rust 构建，并在传统的
+Makefile 语法基础上做了改进，更好地支持条件语句、参数、跨平台兼容性等。</p>
 <p>在某些设置中，通过 <code>brew install llvm</code> 安装不会使 LLVM 库对其他可执行文件可见，这会给 <code>ffigen</code> 带来了问题。
-<code>flutter_rust_bridge_codegen</code> 使用它作为 C-to-Dart 代码生成器。</p>
+<code>flutter_rust_bridge_codegen</code> 使用它作为 C-to-Dart 的代码生成器。</p>
 <p>运行 <code>just</code> 默认会运行 <code>gen</code> 和 <code>lint</code> 任务。</p>
 <h2 id="just-gen"><a class="header" href="#just-gen"><code>just gen</code></a></h2>
 <p>生成 Rust 绑定并把它们放到正确的文件夹。<a href="generate.html">Generating new code</a>

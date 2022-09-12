@@ -138,25 +138,32 @@
 <p><em><code>Stream</code> / <code>Iterator</code></em></p>
 <p>Stream 是什么？简单来说：调用一次，返回多次，类似于 Iterator。</p>
 <blockquote>
-<p>译者注：实现了 Future 的迭代器</p>
+<p>译者注：异步 Iterator。</p>
 </blockquote>
-<p>Flutter 的 <a href="https://dart.dev/tutorials/language/streams">Stream</a> 是一个功能强大的抽象。</p>
-<p>例如，你的 Rust 代码可能在运行一个十分复杂的算法，并且每隔几百毫秒，就能找到一种新的解决方案。在这个情况下，它可以直接将这部分内容回复给
-Flutter，并立即渲染到 UI。用户无需等到算法完全结束就能看到部分结果。</p>
+<p>Flutter 的 <a href="https://dart.dev/tutorials/language/streams">Stream</a> 是一个强大的抽象。</p>
+<p>假如，你的 Rust 代码在运行一个十分复杂的算法，并且每隔几百毫秒，就能找到一种新的解决方案。每找到一个解，它就可以直接将这部分内容回复给
+Flutter，并立即渲染到 UI。用户无需等到算法完全结束就能看到一部分结果。</p>
 <p>至于细节方面，一个带有下面函数签名的 Rust 函数 <code>fn f(sink: StreamSink&lt;T&gt;, ..) -&gt; Result&lt;()&gt;</code>
 会被翻译为：<code>Stream&lt;T&gt; f(..)</code>。</p>
+<!-- TODO! -->
 <p>注意：你可以永远持有这个 <code>StreamSink</code>，并且自由使用，甚至在 Rust 函数返回后。下面的 logger
 例子证明了这点（<code>create_log_stream</code> 函数几乎是立即返回，但是你可以在一小时之后使用 <code>StreamSink</code>）。</p>
+<blockquote>
+<p>Notice that, you can hold that StreamSink forever, and use it freely even
+after the Rust function itself returns. The logger example below also
+demonstrates this (the create_log_stream returns almost immediately, while you
+can use the StreamSink after, say, an hour).</p>
+</blockquote>
 <p><code>StreamSink</code> 可以被放在函数的任何地方。例如 <code>fn f(a: i32, b: StreamSink&lt;String&gt;)</code> 和
 <code>fn f(a: StreamSink&lt;String&gt;, b: i32)</code> 都是合法的。</p>
 <h2 id="示例"><a class="header" href="#示例">示例</a></h2>
 <p>下面的例子只是为了加深你对 Stream 特性的理解。</p>
-<h3 id="example-适用于生产环境的-logger"><a class="header" href="#example-适用于生产环境的-logger">Example: 适用于生产环境的 Logger</a></h3>
+<h3 id="示例适用于生产环境的-logger"><a class="header" href="#示例适用于生产环境的-logger">示例：适用于生产环境的 Logger</a></h3>
 <p>在我的 app（已经应用在生产环境）里，我使用了下面的策略处理 Rust 日志：使用常规的 Rust 方法记录日志，比如 <code>info!</code> 和 <code>debug!</code>
 宏。接着日志会在两个地方得到处理：一方面是通过不同平台特定的方法打印（就像安卓平台的 Logcat 和 IOS 的 NSLog）另一个是通过 Stream
 发送到 Dart 端并进一步处理 (例如保存到文件，或者是发送给服务端等)。</p>
 <p>完整的代码可以在这里查看<a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/486">#486</a>。</p>
-<h3 id="example-简单的-logger"><a class="header" href="#example-简单的-logger">Example: 简单的 logger</a></h3>
+<h3 id="示例简单的-logger"><a class="header" href="#示例简单的-logger">示例：简单的 logger</a></h3>
 <p>让我们实现了一个简单的日志系统（改编自我在生产环境中使用 <code>flutter_rust_bridge</code> 构建的日志系统），Rust 代码可以向 Dart
 端发送日志。</p>
 <p>Rust 端 <code>api.rs</code>:</p>
@@ -177,7 +184,7 @@ pub fn create_log_stream(s: StreamSink&lt;LogEntry&gt;) {
 }
 </code></pre>
 <p>现在 Rust 编译器应该会向你抱怨 <code>LogEntry</code> 没有实现 <code>IntoDart</code>。这是符合预期的，因为 <code>flutter_rust_bridge</code>
-会为你生成相关实现。修复它也很简单再次运行 <code>flutter_rust_bridge_codegen</code> 即可</p>
+会为你生成相关实现。修复它也很简单，再次运行 <code>flutter_rust_bridge_codegen</code> 即可</p>
 <p>生成的 Dart 代码：</p>
 <pre><code class="language-Dart">Stream&lt;LogEntry&gt; createLogStream();
 </code></pre>
@@ -193,7 +200,7 @@ pub fn create_log_stream(s: StreamSink&lt;LogEntry&gt;) {
 </code></pre>
 <p>当然了，你也可以跟着 Rust 中的 <code>log</code> 库去实现一个自己的 logger，只需要在外面包装一层 stream sink，就可以使用标准的 Rust
 日志机制，例如 <code>info!</code>。我在我在我的项目中就是这么做的。</p>
-<h3 id="example-简单定时器"><a class="header" href="#example-简单定时器">Example: 简单定时器</a></h3>
+<h3 id="示例简单定时器"><a class="header" href="#示例简单定时器">示例：简单定时器</a></h3>
 <p>Credits:
 <a href="https://gist.github.com/Desdaemon/be5da0a1c6b4724f20093ef434959744">this</a> and
 <a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/347">#347</a>.</p>

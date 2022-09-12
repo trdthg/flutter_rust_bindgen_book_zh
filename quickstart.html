@@ -135,7 +135,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="快速开始"><a class="header" href="#快速开始">快速开始</a></h1>
-<p>像平常一样编写你的 Rust 函数和类型代码。</p>
+<p>像平常一样编写你的 Rust 函数和类型定义。</p>
 <pre><code class="language-rust ignore">// 一个普通的 Rust 函数 ...
 pub fn draw_tree(root: TreeNode, mode: DrawMode) -&gt; Result&lt;Vec&lt;u8&gt;&gt; { /* ... */ }
 
@@ -145,18 +145,18 @@ pub enum DrawMode { Colorful {palette: String}, Grayscale }
 </code></pre>
 <p>安装代码生成器 <code>flutter_rust_bridge_codegen</code>:</p>
 <pre><code class="language-bash">cargo install flutter_rust_bridge_codegen
-# or with cargo-binstall
+# 或者使用 cargo-binstall
 cargo binstall flutter_rust_bridge_codegen
-# or with scoop (Windows)
+# 或者使用 scoop (Windows)
 scoop bucket add frb https://github.com/Desdaemon/scoop-repo
 scoop install flutter_rust_bridge_codegen
-# or with Homebrew
+# 或者使用 Homebrew
 brew install desdaemon/repo/flutter_rust_bridge_codegen
 </code></pre>
-<p><small>(注释：感谢 @Desdaemon 将脚本发布到 brew/scoop)</small></p>
+<p><small>(感谢 @Desdaemon 将脚本发布到 brew/scoop)</small></p>
 <p>接着运行代码生成。</p>
-<p><small>注释：需要一些安装步骤。你可以查看 <a href="tutorial_with_flutter.html">教程</a>, <a href="template.html">从模板创建项目</a>
-or <a href="integrate.html">与现有项目集成</a> 获取更多详细信息.</small></p>
+<p><small>注意：安装需要一些步骤。你可以查看 <a href="tutorial_with_flutter.html">教程</a>, <a href="template.html">从模板创建项目</a>
+或者 <a href="integrate.html">与现有项目集成</a> 等章节获取更多信息.</small></p>
 <pre><code class="language-bash">flutter_rust_bridge_codegen --rust-input path/to/api.rs \
                             --dart-output path/to/bridge_generated.dart
 </code></pre>
@@ -165,7 +165,7 @@ or <a href="integrate.html">与现有项目集成</a> 获取更多详细信息.<
 </code></pre>
 <blockquote>
 <p>译者注：如果你在代码生成时遇到了这个错误 <code>fatal error: 'stdbool.h' file not found</code>
-可以尝试参照：<a href="https://github.com/dart-lang/ffigen/issues/257#issuecomment-1061788936">dart-lang/ffigen/issues/257</a></p>
+可以尝试阅读：<a href="https://github.com/dart-lang/ffigen/issues/257#issuecomment-1061788936">dart-lang/ffigen/issues/257</a></p>
 </blockquote>
 
                     </main>

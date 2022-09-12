@@ -149,7 +149,7 @@
 系统上，你可以使用 <a href="https://asdf-vm.com/">asdf</a> 或者类似的工具去管理你的 Java 版本。模板在 <code>.tool-versions</code>
 文件中定义了一个已知的可以正常运行的 Java 版本。</p>
 <blockquote>
-<p>译者注：<code>.tool-versions</code> 是 asdf 的配置文件</p>
+<p>译者注：<code>asdf</code> 是一个版本管理工具，<code>.tool-versions</code> 是 asdf 的配置文件</p>
 </blockquote>
 <h2 id="android-ndk"><a class="header" href="#android-ndk"><a href="https://developer.android.com/ndk">Android NDK</a></a></h2>
 <p>安装：</p>
@@ -158,7 +158,7 @@
 NDK (version 22)</p>
 </blockquote>
 <blockquote>
-<p>译者注：用户也可以不下载 Android Studio，直接通过 sdkmanager 在命令行安装。</p>
+<p>译者注：您也可以不下载 Android Studio，直接通过 sdkmanager 在命令行安装。</p>
 </blockquote>
 <p><a href="https://developer.android.com/ndk">Android NDK</a>, 或者说 Native Development Kit, 确保了使用其他语言编写的代码可以通过 JNI 或者说
 <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/jniTOC.html">Java Native Interface</a> 运行在 JVM 上。我们会把 Cargo 创建的动态连接库和项目的打包结果打包在一起。</p>
@@ -180,10 +180,8 @@ NDK (version 22)</p>
 <h2 id="cargo-ndk"><a class="header" href="#cargo-ndk"><a href="https://github.com/bbqsrc/cargo-ndk">cargo-ndk</a></a></h2>
 <pre><code class="language-shell">cargo install cargo-ndk --version 2.6.0
 </code></pre>
-<p><a href="https://github.com/bbqsrc/cargo-ndk">cargo-ndk</a> 是一个 cargo 插件，它能够将代码编译到适合的 JNI 而 typedef DartPostCObjectFnType =
-ffi.Pointer&lt; ffi.NativeFunction&lt;ffi.Bool Function(DartPort,
-ffi.Pointer&lt;ffi.Void&gt;)&gt;&gt;; typedef DartPort = ffi.Int64;c
-不需要额外的配置。运行上述命令进行安装。cargo-ndk 2.7.0 版本引入了一些变化，破坏了对 NDK 22 版本的支持，所以 目前必须使用 2.6.0。</p>
+<p><a href="https://github.com/bbqsrc/cargo-ndk">cargo-ndk</a> 是一个 cargo 插件，它能够将代码编译到适合的 JNI 而不需要额外的配置。运行上述命令进行安装。cargo-ndk 2.7.0
+版本引入了一些变化，破坏了对 NDK 22 版本的支持，所以 目前必须使用 2.6.0。</p>
 <h2 id="可选的-ndk-设置"><a class="header" href="#可选的-ndk-设置">可选的 NDK 设置</a></h2>
 <p>你也可以选择最新版本的 NDK，它比 22 版本要好。但是你需要 Hack
 部分代码去解决一个报错：<a href="https://github.com/bbqsrc/cargo-ndk/issues/22">unable to find library -lgcc error</a>.</p>

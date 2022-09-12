@@ -139,7 +139,7 @@
 <code>FLUTTER_RUST_BRIDGE_HANDLER</code> 的变量（可能会用到 <code>lazy_static</code>）。接着，你不一定需要创建一个新的实现了
 <code>Handler</code> 的结构体，只需要利用现有的 <code>SimpleHandler</code>，并自定义它的泛型参数，例如<code>Executor</code>。</p>
 <h2 id="示例"><a class="header" href="#示例">示例</a></h2>
-<h3 id="example-除了-dart-之外同时向你的后端报告错误"><a class="header" href="#example-除了-dart-之外同时向你的后端报告错误">Example: 除了 Dart 之外，同时向你的后端报告错误</a></h3>
+<h3 id="例-1-除了-dart-之外同时向你的后端报告错误"><a class="header" href="#例-1-除了-dart-之外同时向你的后端报告错误">例 1: 除了 Dart 之外，同时向你的后端报告错误</a></h3>
 <pre><code class="language-rust noplayground">pub struct MyErrorHandler(ReportDartErrorHandler);
 
 impl ErrorHandler for MyErrorHandler {
@@ -151,7 +151,7 @@ impl ErrorHandler for MyErrorHandler {
     ...
 }
 </code></pre>
-<h3 id="example-记录执行开始和结束的时间"><a class="header" href="#example-记录执行开始和结束的时间">Example: 记录执行开始和结束的时间</a></h3>
+<h3 id="例-2-记录函数执行开始和结束的时间"><a class="header" href="#例-2-记录函数执行开始和结束的时间">例 2: 记录函数执行开始和结束的时间</a></h3>
 <pre><code class="language-rust noplayground">pub struct MyExecutor(ThreadPoolExecutor&lt;MyErrorHandler&gt;);
 
 impl Executor for MyExecutor {

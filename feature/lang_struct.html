@@ -149,23 +149,19 @@
 没有匿名字段。</p>
 <h2 id="non-final-字段"><a class="header" href="#non-final-字段">Non-final 字段</a></h2>
 <p>在结构体字段上添加 <code>#[(non_final)]</code>, Dart 中对应的字段就会是 non-final 的。默认情况下，所有生成的字段都被设为
-final，因为 Rust 默认情况下是不可变的。</p>
+final，因为 Rust 默认是不可变的。</p>
 <h2 id="dart-元数据注释"><a class="header" href="#dart-元数据注释">Dart 元数据注释</a></h2>
-<p>你可以使用 <code>frb</code> 宏中的 <code>dart_metadata</code> 参数添加 dart 元数据注解。</p>
-<blockquote>
-<p>TODO! You can add dart metadata annotations using <code>dart_metadata</code> parameter in
-<code>frb</code> macro.</p>
-</blockquote>
+<p>你可以使用 <code>frb</code> 宏中的 <code>dart_metadata</code> 参数为 dart 添加元数据注解。</p>
 <ul>
 <li>
-<p>对于那些被 dart 提前引入的注解（例如 <code>@deprecated</code>）,只需将注解作为一个 Rust 字面量。</p>
+<p>对于那些由 dart 提前引入的注解（例如 <code>@deprecated</code>）,只需将注解作为一个 Rust 字面量。</p>
 <blockquote>
 <p>TODO! For annotations that are prelude by dart (e.g. <code>@deprecated</code>), just
 put annotation as a Rust literal.</p>
 </blockquote>
 </li>
 <li>
-<p>如果你需要使用到 import, 把 import 部分的代码追加到注解字面量之后。当前支持两种 import 格式：</p>
+<p>如果你需要使用 import, 请把 import 部分的代码追加到注解字面量之后。目前支持两种 import 格式：</p>
 <ul>
 <li><code>import 'somepackage'</code></li>
 <li><code>import 'somepackage' as somename</code>, <code>somename</code> 部分会成为注解的前缀</li>
@@ -180,7 +176,7 @@ put annotation as a Rust literal.</p>
 <p>如果你想让生成的 Dart 类是 <a href="https://pub.dev/packages/freezed"><code>freezed</code></a>的（类似于 Kotlin 中的
 data-classes），只需要在结构体前添加 <code>#[frb(dart_metadata=(&quot;freezed&quot;))]</code>，它会为你生成需要的东西。</p>
 <h2 id="示例"><a class="header" href="#示例">示例</a></h2>
-<h3 id="example-1-递归字段"><a class="header" href="#example-1-递归字段">Example 1: 递归字段</a></h3>
+<h3 id="例-1--递归字段"><a class="header" href="#例-1--递归字段">例 1 : 递归字段</a></h3>
 <pre><code class="language-rust noplayground">pub struct MyTreeNode {
     pub value: Vec&lt;u8&gt;,
     pub children: Vec&lt;MyTreeNode&gt;,
@@ -193,8 +189,8 @@ data-classes），只需要在结构体前添加 <code>#[frb(dart_metadata=(&quo
   MyTreeNode({required this.value, required this.children});
 }
 </code></pre>
-<p>注意：如果你想了解 <code>Future</code> , 看看这里 <a href="async_dart.html">async_dart</a>.</p>
-<h3 id="example-2-metadata"><a class="header" href="#example-2-metadata">Example 2: Metadata</a></h3>
+<p>注意：如果你想了解 <code>Future</code> , 请看这里 <a href="async_dart.html">async_dart</a>.</p>
+<h3 id="例-2--metadata"><a class="header" href="#例-2--metadata">例 2 : Metadata</a></h3>
 <pre><code class="language-rust noplayground">#[frb(dart_metadata=(&quot;freezed&quot;, &quot;immutable&quot; import &quot;package:meta/meta.dart&quot; as meta))]
 pub struct UserId {
     pub value: u32,

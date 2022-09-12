@@ -144,26 +144,26 @@
 <a href="https://app.codacy.com/gh/fzyzcjy/flutter_rust_bridge?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fzyzcjy/flutter_rust_bridge&amp;utm_campaign=Badge_Grade_Settings"><img src="https://api.codacy.com/project/badge/Grade/6afbdad19e7245adbf9e9771777be3d7" alt="Codacy Badge" /></a></p>
 <p><img src="https://github.com/fzyzcjy/flutter_rust_bridge/raw/master/book/logo.png" alt="Logo" /></p>
 <p>想把 <a href="https://flutter.dev/">Flutter</a>（一个跨平台的热重载快速开发 UI 工具包）和
-<a href="https://www.rust-lang.org/">Rust</a>（一种使每个人都能构建可靠和高效软件的语言）之间的优点结合起来？它来了！</p>
-<h2 id="-advantages"><a class="header" href="#-advantages">🚀 Advantages</a></h2>
+<a href="https://www.rust-lang.org/">Rust</a>（一种使每个人都能构建可靠和高效软件的语言）的优点结合起来？它来了！</p>
+<h2 id="-优势"><a class="header" href="#-优势">🚀 优势</a></h2>
 <ul>
-<li><strong>内存安全</strong>: 完全不用考虑 malloc/free.</li>
-<li><strong>特性丰富</strong>: 带有值的 <code>enum</code>, 根据平台优化的 <code>Vec</code>, 可能递归的 <code>struct</code>, 大数组零拷贝，<code>流数据</code> (迭代器)
-抽象，错误处理 (<code>Result</code>), 可取消的任务，并发控制，等。你可以在
+<li><strong>内存安全</strong>: 完全不用考虑 malloc 和 free.</li>
+<li><strong>特性丰富</strong>:支持类似 Rust 的枚举，根据平台自动优化的 <code>Vec</code>, 可以递归的 <code>struct</code>, 大数组零拷贝，<code>流数据</code> (迭代器)
+抽象，错误处理 (<code>Result</code>), 可取消的任务，并发控制，等。在
 <a href="https://fzyzcjy.github.io/flutter_rust_bridge/feature.html">这里</a> 查看所有特性。</li>
-<li><strong>异步支持</strong>: Rust 代码永远不会阻塞 Flutter. 从 Flutter 的主隔离区（线程）<code>main isolate (thread)</code>
+<li><strong>异步支持</strong>: Rust 代码永远不会阻塞 Flutter. 在 Flutter 的主隔离区 <code>main isolate (或者说 thread)</code>
 中自然的调用 Rust 代码。</li>
-<li><strong>轻量级</strong>: 这不是一个巨大的包含所有东西框架，所以你可以自由的使用你喜欢的 Flutter 和 Rust 第三方库。<sub>例如，使用
-Flutter 库（比如 MobX）进行状态管理更加优雅简单（相比于在 Rust 中实现）; 使用 Rust 实现一个照片处理的算法更加快速和安全
-(相比于在 Flutter 中实现).</sub></li>
+<li><strong>轻量级</strong>: 这不是一个全面的框架，你可以自由的使用你喜欢的 Flutter 和 Rust 第三方库。<sub>例如，使用 Flutter 库（比如
+MobX）进行状态管理更加优雅简单（相比于在 Rust 中实现）; 使用 Rust 实现一个照片处理的算法更加快速和安全 (相比于在 Flutter
+中实现).</sub></li>
 <li><strong>跨平台</strong>: 支持 Android, iOS, Windows, Linux, MacOS
 (<a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/315">Web</a> coming soon)</li>
-<li><strong>易于代码审查 &amp; 方便</strong>: 这个库简单地模拟了人类如何编写模板代码，一点也不神奇！如果你想让说服你自己（或你的团队）相信它是安全的，
+<li><strong>方便 &amp; 易于代码审查</strong>: 这个库只是简单地模拟了人类编写的模板代码，一点也不神奇！如果你想让说服你自己（或你的团队）相信它是安全的，
 没有多少代码可看。 (<a href="https://fzyzcjy.github.io/flutter_rust_bridge/safety.html">更多</a>
 safety concerns.)</li>
-<li><strong>快速</strong>: 它只是一层浅层次的包装（尽管功能丰富），没有想 pritobuf 序列化的开销，因此高性能。(更多的
+<li><strong>快速</strong>: 这个库只做了一个浅层次的包装（尽管功能丰富），没有 pritobuf 序列化的开销，因此高性能。(更多的
 <a href="https://github.com/fzyzcjy/flutter_rust_bridge/issues/318#issuecomment-1034536815">benchmarks</a>
-之后带来) <small>(扔掉了像线程池这样的组件，让它更快)</small></li>
+即将到来) <small>(扔掉了像线程池这样的组件，使它更快)</small></li>
 <li><strong>与纯 Dart 兼容:</strong> 尽管名字里包含了 Rust，这个库 100% 兼容
 <a href="https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/frb_example/pure_dart/README.md">Pure Dart</a></li>
 </ul>
