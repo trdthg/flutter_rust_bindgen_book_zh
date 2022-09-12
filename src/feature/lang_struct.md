@@ -21,20 +21,17 @@ pub struct TreeNode {
 ## Non-final 字段
 
 在结构体字段上添加 `#[(non_final)]`, Dart 中对应的字段就会是 non-final 的。默认情况下，所有生成的字段都被设为
-final，因为 Rust 默认情况下是不可变的。
+final，因为 Rust 默认是不可变的。
 
 ## Dart 元数据注释
 
-你可以使用 `frb` 宏中的 `dart_metadata` 参数添加 dart 元数据注解。
+你可以使用 `frb` 宏中的 `dart_metadata` 参数为 dart 添加元数据注解。
 
-> TODO! You can add dart metadata annotations using `dart_metadata` parameter in
-> `frb` macro.
-
-- 对于那些被 dart 提前引入的注解（例如 `@deprecated`）,只需将注解作为一个 Rust 字面量。
+- 对于那些由 dart 提前引入的注解（例如 `@deprecated`）,只需将注解作为一个 Rust 字面量。
   > TODO! For annotations that are prelude by dart (e.g. `@deprecated`), just
   > put annotation as a Rust literal.
 
-- 如果你需要使用到 import, 把 import 部分的代码追加到注解字面量之后。当前支持两种 import 格式：
+- 如果你需要使用 import, 请把 import 部分的代码追加到注解字面量之后。目前支持两种 import 格式：
   - `import 'somepackage'`
   - `import 'somepackage' as somename`, `somename` 部分会成为注解的前缀
 - 多个注解间使用 `,` 分割
@@ -48,7 +45,7 @@ data-classes），只需要在结构体前添加 `#[frb(dart_metadata=("freezed"
 
 ## 示例
 
-### Example 1: 递归字段
+### 例 1 : 递归字段
 
 ```rust,noplayground
 pub struct MyTreeNode {
@@ -67,9 +64,9 @@ class MyTreeNode {
 }
 ```
 
-注意：如果你想了解 `Future` , 看看这里 [async_dart](async_dart.md).
+注意：如果你想了解 `Future` , 请看这里 [async_dart](async_dart.md).
 
-### Example 2: Metadata
+### 例 2 : Metadata
 
 ```rust,noplayground
 #[frb(dart_metadata=("freezed", "immutable" import "package:meta/meta.dart" as meta))]

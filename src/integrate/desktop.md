@@ -5,7 +5,7 @@
 和其他平台一样：我们将使用脚本整合到现有的项目。现在我们将借用下模板，把
 [rust.cmake](https://raw.githubusercontent.com/Desdaemon/flutter_rust_bridge_template/main/windows/rust.cmake)
 下载到你的 "windows" 和 "linux" 文件夹里。请注意，CMake
-会拒绝使用位于其工作目录之外的文件，所以在这两个构建文件夹之间会有一些重复的文件。
+会拒绝使用位于其工作目录之外的文件，所以在这两个文件夹之间会有一些重复的文件。
 
 接下来，在你的`CMakeLists.txt`文件中添加这一行：
 
@@ -22,7 +22,7 @@
 
 ## Linux
 
-在 Linux 上，你需要将 CMake 的最低版本提高到 3.12，这是
+在 Linux 上，你需要将 CMake 的最低版本升到 3.12，这是
 [Corrosion](https://github.com/corrosion-rs/corrosion) 的要求，`rust.cmake` 依赖
 Corrosion。请修改 `linux/CMakeLists.txt` 的这一行：
 

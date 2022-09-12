@@ -1,9 +1,9 @@
 # 收尾工作
 
-恭喜！您已经成功地将 Rust 组件通过 `flutter_rust_bridge` 添加到您的 Flutter 程序中。 ，并配置了
-`flutter run` 来构建您的 Rust 库 并将其链接到程序中。
+恭喜！您已经成功地将 Rust 组件通过 `flutter_rust_bridge` 添加到您的 Flutter 程序中，并配置了
+`flutter run` 来构建您的 Rust 库并将其链接到程序中。
 
-作为提醒，每次 Rust 代码改变时，以及 **在你运行`flutter run`之前，你都需要运行这些命令。
+作为提醒，每次 Rust 代码改变时，以及在你运行`flutter run`之前，你都需要运行这些命令。
 
 ```bash
 {{#include command.sh.txt}}

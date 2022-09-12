@@ -17,7 +17,7 @@ class Platform with _$Platform {
 }
 ```
 
-它不再是一个普通的枚举，而是带着一个带着变体的枚举类！但是代码现在不能通过编译，因为我们还缺少 [`freezed`] 库。[`freezed`]
+它不再是一个普通的枚举，而是带着一个具有变体的枚举类！现在代码不能通过编译，因为我们还缺少 [`freezed`] 库。[`freezed`]
 库也是一个代码生成库，和我们目前为止遇到的有些相似，但是它生成的更多是 Dart 代码。所有的这些库都是在调用 `build_runner`
 时进行代码生成的，即执行 `flutter pub run build_runner build` 时。
 

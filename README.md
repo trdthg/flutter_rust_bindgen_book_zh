@@ -5,9 +5,9 @@
 # Part I: 核心
 
 - [x] [🧭 快速开始](./src/quickstart.md)
-- [x] [📚 教程：一个 Flutter 和 Rust 构建的 app](./src/tutorial_with_flutter.md)
+- [x] [📚 教程：一个由 Flutter 和 Rust 构建的 app](./src/tutorial_with_flutter.md)
 - [x] [🎼 特性](./src/feature.md)
-  - [x] [语言转换](./src/./src/feature/lang.md)
+  - [x] [语言转换](./src/feature/lang.md)
     - [x] [对应关系总览](./src/feature/lang_simple.md)
     - [x] [Vec 和 数组](./src/feature/lang_vec.md)
     - [x] [结构体](./src/feature/lang_struct.md)
@@ -40,7 +40,7 @@
     - [x] [Windows 和 Linux](./src/template/setup_desktop.md)
     - [x] [其他平台](./src/template/setup_others.md)
   - [x] [模板之旅](./src/template/tour.md)
-    - [x] [native/src/api.rs](./src/template/tour_api.md)
+    - [x] [`native/src/api.rs`](./src/template/tour_api.md)
     - [x] [`android/app/build.gradle`](./src/template/tour_gradle.md)
     - [x] [`native/native.xcodeproj`](./src/template/tour_native_proj.md)
     - [x] [`justfile`](./src/template/tour_justfile.md)

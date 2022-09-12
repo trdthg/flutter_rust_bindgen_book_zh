@@ -20,7 +20,7 @@ Android Studio 依赖于 `javax` 库存在于 Java 运行时，验证安装成�
 系统上，你可以使用 [asdf](https://asdf-vm.com/) 或者类似的工具去管理你的 Java 版本。模板在 `.tool-versions`
 文件中定义了一个已知的可以正常运行的 Java 版本。
 
-> 译者注：`.tool-versions` 是 asdf 的配置文件
+> 译者注：`asdf` 是一个版本管理工具，`.tool-versions` 是 asdf 的配置文件
 
 ## [Android NDK]
 
@@ -29,7 +29,7 @@ Android Studio 依赖于 `javax` 库存在于 Java 运行时，验证安装成�
 > Android Studio > SDK Manager > SDK Tools > uncheck Hide Obsolete Packages >
 > NDK (version 22)
 
-> 译者注：用户也可以不下载 Android Studio，直接通过 sdkmanager 在命令行安装。
+> 译者注：您也可以不下载 Android Studio，直接通过 sdkmanager 在命令行安装。
 
 [Android NDK], 或者说 Native Development Kit, 确保了使用其他语言编写的代码可以通过 JNI 或者说
 [Java Native Interface] 运行在 JVM 上。我们会把 Cargo 创建的动态连接库和项目的打包结果打包在一起。
@@ -63,10 +63,8 @@ ANDROID_NDK=(path to NDK)
 cargo install cargo-ndk --version 2.6.0
 ```
 
-[cargo-ndk] 是一个 cargo 插件，它能够将代码编译到适合的 JNI 而 typedef DartPostCObjectFnType =
-ffi.Pointer< ffi.NativeFunction<ffi.Bool Function(DartPort,
-ffi.Pointer<ffi.Void>)>>; typedef DartPort = ffi.Int64;c
-不需要额外的配置。运行上述命令进行安装。cargo-ndk 2.7.0 版本引入了一些变化，破坏了对 NDK 22 版本的支持，所以 目前必须使用 2.6.0。
+[cargo-ndk] 是一个 cargo 插件，它能够将代码编译到适合的 JNI 而不需要额外的配置。运行上述命令进行安装。cargo-ndk 2.7.0
+版本引入了一些变化，破坏了对 NDK 22 版本的支持，所以 目前必须使用 2.6.0。
 
 ## 可选的 NDK 设置
 

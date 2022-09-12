@@ -1,6 +1,6 @@
 # Hooking onto tasks
 
-这与模板使用的方法相同，也是比较简单的方法。如果你还没有安装 `cargo-ndk`，请继续安装。
+这部分与模板的使用方法相同，也是比较简单的方法。如果你还没有安装 `cargo-ndk`，请继续安装。
 
 ```
 cargo install cargo-ndk

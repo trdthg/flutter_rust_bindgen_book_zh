@@ -6,7 +6,7 @@
 
 ## 示例
 
-### Example: 除了 Dart 之外，同时向你的后端报告错误
+### 例 1: 除了 Dart 之外，同时向你的后端报告错误
 
 ```rust,noplayground
 pub struct MyErrorHandler(ReportDartErrorHandler);
@@ -21,7 +21,7 @@ impl ErrorHandler for MyErrorHandler {
 }
 ```
 
-### Example: 记录执行开始和结束的时间
+### 例 2: 记录函数执行开始和结束的时间
 
 ```rust,noplayground
 pub struct MyExecutor(ThreadPoolExecutor<MyErrorHandler>);

@@ -1,6 +1,6 @@
 # 外部类型
 
-## 定义在相同 crate 其他文件中的类型
+## 定义在相同 crate 中不同文件里的类型
 
 `use` 语句可以正常使用。例如：添加 `use crate::data::{MyEnum, MyStruct};`后，你可以正常的使用 `MyEnum` 和
 `MyStruct`。
@@ -24,19 +24,20 @@ Future<void> useImportedThings({required MyStruct myStruct, required MyEnum myEn
 
 ## 其他 crate 中的类型
 
-这个功能被称为 "镜像". 简单来说，对于你想使用的外部类型，你需要重新编写该类型作为镜像。这个镜像只会在代码生成时负责告知
+这个功能被称为 "镜像 (mirror)". 简单来说，对于你想使用的外部类型，你需要重新编写一次作为镜像。这个镜像只会在代码生成时负责告知
 `flutter_rust_bridge` 所需的类型信息。下面的例子里有详细的语法。
 
-不用担心它会打破 DRY (Don’t Repeat Yourself)
-原则，或者是你可能偶然写下一个错误的字段。因为如果镜像和原始类型不完全一致就会导致编译错误。
+不用担心它会打破 DRY (Don’t Repeat Yourself) 原则，也不用担心你可能写错一个字段。因为如果镜像和原始类型不完全一致就会导致编译错误。
 
 更多信息： [#352](https://github.com/fzyzcjy/flutter_rust_bridge/pull/352)
 
-当多个结构体有相同的字段时，你可以使用下面的语法只镜像一遍。
+当多个结构体有相同的字段时，你可以使用下面的语法只重写一遍。
 `#[frb(mirror(FirstStruct, SecondStruct, ThirdStruct))]`.
 ([#619](https://github.com/fzyzcjy/flutter_rust_bridge/pull/619))
 
-### Example
+### 示例
+
+<!-- TODO! -->
 
 ```rust,noplayground
 // Mirroring example:
@@ -86,7 +87,7 @@ pub fn is_app_embedded(app_settings: ApplicationSettings) -> bool {
 用一个结构体去镜像多个结构体：
 
 ```rust,noplayground
-// *no* need to do these
+// *不* 需要这样做
 #[frb(mirror(MessageId))]
 pub struct MId(pub [u8; 32]);
 #[frb(mirror(BlobId))]
@@ -94,7 +95,7 @@ pub struct BId(pub [u8; 32]);
 #[frb(mirror(FeedId))]
 pub struct FId(pub [u8; 32]);
 
-// simply do this is sufficient
+// 只要编写一次就足够了
 #[frb(mirror(MessageId, BlobId, FeedId))]
 pub struct Id(pub [u8; 32]);
 ```

@@ -12,27 +12,27 @@ _High-level memory-safe binding generator for Flutter/Dart <-> Rust_
 ![Logo](https://github.com/fzyzcjy/flutter_rust_bridge/raw/master/book/logo.png)
 
 想把 [Flutter](https://flutter.dev/)（一个跨平台的热重载快速开发 UI 工具包）和
-[Rust](https://www.rust-lang.org/)（一种使每个人都能构建可靠和高效软件的语言）之间的优点结合起来？它来了！
+[Rust](https://www.rust-lang.org/)（一种使每个人都能构建可靠和高效软件的语言）的优点结合起来？它来了！
 
-## 🚀 Advantages
+## 🚀 优势
 
-- **内存安全**: 完全不用考虑 malloc/free.
-- **特性丰富**: 带有值的 `enum`, 根据平台优化的 `Vec`, 可能递归的 `struct`, 大数组零拷贝，`流数据` (迭代器)
-  抽象，错误处理 (`Result`), 可取消的任务，并发控制，等。你可以在
+- **内存安全**: 完全不用考虑 malloc 和 free.
+- **特性丰富**:支持类似 Rust 的枚举，根据平台自动优化的 `Vec`, 可以递归的 `struct`, 大数组零拷贝，`流数据` (迭代器)
+  抽象，错误处理 (`Result`), 可取消的任务，并发控制，等。在
   [这里](https://fzyzcjy.github.io/flutter_rust_bridge/feature.html) 查看所有特性。
-- **异步支持**: Rust 代码永远不会阻塞 Flutter. 从 Flutter 的主隔离区（线程）`main isolate (thread)`
+- **异步支持**: Rust 代码永远不会阻塞 Flutter. 在 Flutter 的主隔离区 `main isolate (或者说 thread)`
   中自然的调用 Rust 代码。
-- **轻量级**: 这不是一个巨大的包含所有东西框架，所以你可以自由的使用你喜欢的 Flutter 和 Rust 第三方库。<sub>例如，使用
-  Flutter 库（比如 MobX）进行状态管理更加优雅简单（相比于在 Rust 中实现）; 使用 Rust 实现一个照片处理的算法更加快速和安全
-  (相比于在 Flutter 中实现).</sub>
+- **轻量级**: 这不是一个全面的框架，你可以自由的使用你喜欢的 Flutter 和 Rust 第三方库。<sub>例如，使用 Flutter 库（比如
+  MobX）进行状态管理更加优雅简单（相比于在 Rust 中实现）; 使用 Rust 实现一个照片处理的算法更加快速和安全 (相比于在 Flutter
+  中实现).</sub>
 - **跨平台**: 支持 Android, iOS, Windows, Linux, MacOS
   ([Web](https://github.com/fzyzcjy/flutter_rust_bridge/issues/315) coming soon)
-- **易于代码审查 & 方便**: 这个库简单地模拟了人类如何编写模板代码，一点也不神奇！如果你想让说服你自己（或你的团队）相信它是安全的，
+- **方便 & 易于代码审查**: 这个库只是简单地模拟了人类编写的模板代码，一点也不神奇！如果你想让说服你自己（或你的团队）相信它是安全的，
   没有多少代码可看。 ([更多](https://fzyzcjy.github.io/flutter_rust_bridge/safety.html)
   safety concerns.)
-- **快速**: 它只是一层浅层次的包装（尽管功能丰富），没有想 pritobuf 序列化的开销，因此高性能。(更多的
+- **快速**: 这个库只做了一个浅层次的包装（尽管功能丰富），没有 pritobuf 序列化的开销，因此高性能。(更多的
   [benchmarks](https://github.com/fzyzcjy/flutter_rust_bridge/issues/318#issuecomment-1034536815)
-  之后带来) <small>(扔掉了像线程池这样的组件，让它更快)</small>
+  即将到来) <small>(扔掉了像线程池这样的组件，使它更快)</small>
 - **与纯 Dart 兼容:** 尽管名字里包含了 Rust，这个库 100% 兼容
   [Pure Dart](https://github.com/fzyzcjy/flutter_rust_bridge/blob/master/frb_example/pure_dart/README.md)
 

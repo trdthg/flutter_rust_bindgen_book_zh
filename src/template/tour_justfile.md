@@ -1,10 +1,10 @@
 # `justfile`
 
-这个文件定义了 [just] 命令的 "配方"，它们和 `make` 与 MakeFile 类似。[just] 使用 Rust 构建，并在传统的
-Makefile 语法基础上改进，更好地支持条件语句、参数、跨平台兼容性等。
+这个文件定义了 [just] 命令的 "配方"，它和 `make` 与 MakeFile 类似。[just] 使用 Rust 构建，并在传统的
+Makefile 语法基础上做了改进，更好地支持条件语句、参数、跨平台兼容性等。
 
 在某些设置中，通过 `brew install llvm` 安装不会使 LLVM 库对其他可执行文件可见，这会给 `ffigen` 带来了问题。
-`flutter_rust_bridge_codegen` 使用它作为 C-to-Dart 代码生成器。
+`flutter_rust_bridge_codegen` 使用它作为 C-to-Dart 的代码生成器。
 
 运行 `just` 默认会运行 `gen` 和 `lint` 任务。
 
